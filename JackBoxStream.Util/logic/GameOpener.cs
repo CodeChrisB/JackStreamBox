@@ -143,13 +143,18 @@ namespace JackBoxStream.Util.logic
             WindowNavigator navigator = new WindowNavigator(windowName);
 
             string[] inputs = InputGenerator.Generate(game);
-            foreach (string input in inputs)
+            for(int i=0;i<inputs.Length;i++)
             {
 ;
-                Console.WriteLine($"Performed ${input};Now waiting");
+                Console.WriteLine($"Performed ${inputs[i]};Now waiting");
 
-                navigator.SendInput(input);
-                await Task.Delay(Time.SECOND * 8);
+                navigator.SendInput(inputs[i]);
+                int time = 3;
+                //enter press to open menu
+                if (i == 0) time = 5;
+                //enter presses for game start
+                if (i >= inputs.Length - 2) time = 8;
+                await Task.Delay(Time.SECOND * time);
             }
             return true;
         }

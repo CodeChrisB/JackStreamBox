@@ -10,9 +10,9 @@ namespace JackBoxStream.Util.data
     {
         Ydkj2015,
         Fibbagexl,
-        Drawful,
-        Wordspud,
         Lieswatter,
+        Wordspud,
+        Drawful,
         Fibbage2,
         Earwax,
         Bidiots,

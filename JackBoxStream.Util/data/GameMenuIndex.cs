@@ -13,9 +13,9 @@ namespace JackBoxStream.Util.data
         private static Dictionary<string,int> Index = new Dictionary<string,int>() {
         {"Ydkj2015" ,0},
         {"Fibbagexl" ,1},
-        {"Drawful" ,2},
+        {"Lieswatter" ,2},
         {"Wordspud" ,3},
-        {"Lieswatter" ,4},
+        {"Drawful" ,4},
         {"Fibbage2" ,0},
         {"Earwax" ,1},
         {"Bidiots" ,2},

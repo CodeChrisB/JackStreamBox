@@ -18,13 +18,33 @@ namespace JackBoxStream.Util.logic
         public static string[] Generate(Game game)
         {
             int menuIndex = GameMenuIndex.GetIndex(game);
-            string[] inputs = new string[3+menuIndex];
 
-            Array.Fill(inputs, Input.ARROW_DOWN);
-            inputs[0] = Input.ENTER;
-            inputs[inputs.Length-2] = Input.ENTER;
-            inputs[inputs.Length-1] = Input.ENTER;
-            return inputs;
+            
+            List<string> inputs = new List<string>{Input.ENTER};
+            //0 nothing
+            //1 down
+            if(menuIndex == 1) inputs.Add(Input.ARROW_DOWN);
+            //2 down down
+            if (menuIndex == 2)
+            {
+                inputs.Add(Input.ARROW_DOWN);
+                inputs.Add(Input.ARROW_DOWN);
+            }
+
+            //3 up
+            if (menuIndex == 3)
+            {
+                inputs.Add(Input.ARROW_UP);
+                inputs.Add(Input.ARROW_UP);
+            }
+
+            //4 up up
+            if (menuIndex == 4) inputs.Add(Input.ARROW_UP);
+
+            //2x enter press => open game , start game
+            inputs.Add(Input.ENTER);
+            inputs.Add(Input.ENTER);
+            return inputs.ToArray();
         }
     }
 }
