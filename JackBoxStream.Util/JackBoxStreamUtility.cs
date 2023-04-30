@@ -1,5 +1,6 @@
 ﻿using JackBoxStream.Util.data;
 using JackBoxStream.Util.logic;
+using System.Threading.Tasks;
 
 namespace JackBoxStream.Util
 {

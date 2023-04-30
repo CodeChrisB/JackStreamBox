@@ -45,10 +45,10 @@ namespace JackBoxStream.Util.logic
 
                 // Wait until the program is fully launched
                 if(process == null) return false;
-                await Task.Delay(Time.SECOND * 1);
+                await Task.Delay(Time.SECOND * 15);
 
                 // Return true if the process was started successfully
-                return true;
+                return NavigateToPack(game);
             }
             catch (Exception ex)
             {
@@ -56,6 +56,13 @@ namespace JackBoxStream.Util.logic
                 Console.WriteLine("Failed to start process: " + ex.Message);
                 return false;
             }
+        }
+
+        private static bool NavigateToPack(Game game)
+        {
+            WindowNavigator navigator = new WindowNavigator("The Jackbox Party Pack 8");
+            navigator.SendInput(Input.ENTER);
+            return true;
         }
     }
 }
