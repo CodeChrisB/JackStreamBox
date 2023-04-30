@@ -32,7 +32,7 @@ namespace JackBoxStream.Util.logic
 
         static async Task<bool> OpenPack(Game game)
         {
-            string path = "D:\\SteamLibrary\\steamapps\\common\\The Jackbox Party Pack 8\\The Jackbox Party Pack 8.exe";
+            string path = PackPath(getPackByEnum(game));
             
             // Create a new process start info object
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -45,10 +45,10 @@ namespace JackBoxStream.Util.logic
 
                 // Wait until the program is fully launched
                 if(process == null) return false;
-                await Task.Delay(Time.SECOND * 15);
+                await Task.Delay(Time.SECOND * 20);
 
                 // Return true if the process was started successfully
-                return NavigateToPack(game);
+                return await NavigateToGame(game);
             }
             catch (Exception ex)
             {
@@ -58,10 +58,99 @@ namespace JackBoxStream.Util.logic
             }
         }
 
-        private static bool NavigateToPack(Game game)
+        private static string PackPath(int pack)
         {
-            WindowNavigator navigator = new WindowNavigator("The Jackbox Party Pack 8");
-            navigator.SendInput(Input.ENTER);
+
+            string path = "The Jackbox Party Pack";
+            path += pack > 1 ? " " + pack : "";
+            string packName = path;
+
+            path += "\\" + packName + ".exe";
+            path = GetSteamPath() + path;
+            return path;
+        }
+        private static int getPackByEnum(Game game)
+        {
+            switch (game)
+            {
+                case Game.Ydkj2015:
+                case Game.Fibbagexl:
+                case Game.Drawful:
+                case Game.Wordspud:
+                case Game.Lieswatter:
+                    return 1;
+                case Game.Fibbage2:
+                case Game.Earwax:
+                case Game.Bidiots:
+                case Game.Quipplashxl:
+                case Game.Bombcorp:
+                    return 2;
+                case Game.Quipplash2:
+                case Game.Triviamurderparty:
+                case Game.Guesspionage:
+                case Game.Teeko:
+                case Game.Fakeinit:
+                    return 3;
+                case Game.Fibbage3:
+                case Game.Surivetheinternet:
+                case Game.Monstermingle:
+                case Game.Bracketeering:
+                case Game.Civic:
+                    return 4;
+                case Game.Ydkj2018:
+                case Game.Splittheroom:
+                case Game.Madversecity:
+                case Game.Patentlystupid:
+                case Game.Zeepledoome:
+                    return 5;
+                case Game.Triviamurderparty2:
+                case Game.Dictionarium:
+                case Game.Pushthebutton:
+                case Game.Jokeboat:
+                case Game.Rolemodels:
+                    return 6;
+                case Game.Quipplash3:
+                case Game.Devilsandthedetails:
+                case Game.Champedup:
+                case Game.Talkingpoints:
+                case Game.Blatherround:
+                    return 7;
+                case Game.DrawfulAnimate:
+                case Game.WheelOfEnormousProportions:
+                case Game.Jobjob:
+                case Game.Pollmine:
+                case Game.WeaponsDrawn:
+                    return 8;
+                case Game.Fibbage4:
+                case Game.Quixort:
+                case Game.Junktopia:
+                case Game.Nonesensory:
+                case Game.Roomerang:
+                    return 9;
+            }
+            throw new KeyNotFoundException();
+        }
+
+        private static string GetSteamPath()
+        {
+            return "D:\\SteamLibrary\\steamapps\\common\\";
+        }
+
+        static async Task<bool> NavigateToGame(Game game)
+        {
+            string windowName = "The Jackbox Party Pack";
+            windowName += getPackByEnum(game) > 1 ? " " + getPackByEnum(game) : "";
+            WindowNavigator navigator = new WindowNavigator(windowName);
+
+            string[] inputs = InputGenerator.Generate(game);
+            foreach (string input in inputs)
+            {
+;
+                Console.WriteLine($"Performed ${input};Now waiting");
+
+                navigator.SendInput(input);
+                await Task.Delay(Time.SECOND * 8);
+            }
             return true;
         }
     }

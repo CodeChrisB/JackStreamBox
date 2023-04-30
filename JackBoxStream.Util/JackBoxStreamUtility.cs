@@ -16,7 +16,7 @@ namespace JackBoxStream.Util
         {
             GameOpener opener = new GameOpener();
 
-            var task = opener.Open(Game.Bidiots);
+            var task = opener.Open(game);
             await task;
             return task.Result;
 
