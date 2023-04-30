@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "JackBoxStream.ConApp/1.0.0": {
+        "dependencies": {
+          "JackBoxStream.Util": "1.0.0"
+        },
+        "runtime": {
+          "JackBoxStream.ConApp.dll": {}
+        }
+      },
+      "JackBoxStream.Util/1.0.0": {
+        "runtime": {
+          "JackBoxStream.Util.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "JackBoxStream.ConApp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "JackBoxStream.Util/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
