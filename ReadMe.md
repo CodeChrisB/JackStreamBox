@@ -12,4 +12,12 @@ After a game players can vote for the next game, after the voting the next game 
 |---------|-------------|
 | JackStreamBox.ConApp        | A console application used for testing the JackStreamBox.Util Library            |
 | JackStreamBox.Util        |  A library containing all the functions to automatically Open, Close and Restart Jackbox Games           |
-| TBD        |   I want a cookie 🍪          |
+| **Todo** JackStreamBox.DiscordBot        | The discord bot that will host all the Jackbox games using the JackStreamBox.Util Library        |
+
+
+
+### JackStreamBox.Util Public Interface
+- OpenGame(Game game)
+  - Opens a 
+- CloseGame
+- SetSteamPath(string path)
