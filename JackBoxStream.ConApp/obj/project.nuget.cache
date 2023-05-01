@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CpcmZ1JhdSBsYoJyTI1mo3WAYP3HUlWFTd2Mru8M0KioYZ82rNmGq80s80YDhN0Av/HAhWh++V0+zOMXOQKhyw==",
+  "dgSpecHash": "63tUJy0SCmdCiL1NE0fHJSZ+IWhUOQsvznlC1b5YzZbFuhfV3mWgbfxMTmK4FFor3Z12NWSrO+C2cBvwcCq4Xw==",
   "success": true,
-  "projectFilePath": "D:\\Git\\JackBoxStream\\JackBoxStream.ConApp\\JackBoxStream.ConApp.csproj",
+  "projectFilePath": "D:\\Git\\JackBoxStream\\JackBoxStream.ConApp\\JackStreamBox.ConApp.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

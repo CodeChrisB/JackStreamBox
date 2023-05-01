@@ -14,9 +14,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackBoxStream.Util.csproj",
-      "projectName": "JackBoxStream.Util",
-      "projectPath": "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackBoxStream.Util.csproj",
+      "projectUniqueName": "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackStreamBox.Util.csproj",
+      "projectName": "JackStreamBox.Util",
+      "projectPath": "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackStreamBox.Util.csproj",
       "packagesPath": "C:\\Users\\cocop\\.nuget\\packages\\",
       "outputPath": "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\obj\\",
       "projectStyle": "PackageReference",

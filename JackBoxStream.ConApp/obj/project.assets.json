@@ -14,6 +14,19 @@
         "frameworkReferences": [
           "Microsoft.WindowsDesktop.App"
         ]
+      },
+      "JackStreamBox.Util/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/JackStreamBox.Util.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/JackStreamBox.Util.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App"
+        ]
       }
     }
   },
@@ -22,11 +35,17 @@
       "type": "project",
       "path": "../JackBoxStream.Util/JackBoxStream.Util.csproj",
       "msbuildProject": "../JackBoxStream.Util/JackBoxStream.Util.csproj"
+    },
+    "JackStreamBox.Util/1.0.0": {
+      "type": "project",
+      "path": "../JackBoxStream.Util/JackStreamBox.Util.csproj",
+      "msbuildProject": "../JackBoxStream.Util/JackStreamBox.Util.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
-      "JackBoxStream.Util >= 1.0.0"
+      "JackBoxStream.Util >= 1.0.0",
+      "JackStreamBox.Util >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -36,9 +55,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git\\JackBoxStream\\JackBoxStream.ConApp\\JackBoxStream.ConApp.csproj",
-      "projectName": "JackBoxStream.ConApp",
-      "projectPath": "D:\\Git\\JackBoxStream\\JackBoxStream.ConApp\\JackBoxStream.ConApp.csproj",
+      "projectUniqueName": "D:\\Git\\JackBoxStream\\JackBoxStream.ConApp\\JackStreamBox.ConApp.csproj",
+      "projectName": "JackStreamBox.ConApp",
+      "projectPath": "D:\\Git\\JackBoxStream\\JackBoxStream.ConApp\\JackStreamBox.ConApp.csproj",
       "packagesPath": "C:\\Users\\cocop\\.nuget\\packages\\",
       "outputPath": "D:\\Git\\JackBoxStream\\JackBoxStream.ConApp\\obj\\",
       "projectStyle": "PackageReference",
@@ -62,6 +81,9 @@
           "projectReferences": {
             "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackBoxStream.Util.csproj": {
               "projectPath": "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackBoxStream.Util.csproj"
+            },
+            "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackStreamBox.Util.csproj": {
+              "projectPath": "D:\\Git\\JackBoxStream\\JackBoxStream.Util\\JackStreamBox.Util.csproj"
             }
           }
         }

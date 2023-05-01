@@ -1,11 +1,11 @@
-﻿using JackBoxStream.Util.data;
-using JackBoxStream.Util.logic;
+﻿using JackStreamBox.Util.data;
+using JackStreamBox.Util.logic;
 using System;
 using System.Threading.Tasks;
 
-namespace JackBoxStream.Util
+namespace JackStreamBox.Util
 {
-    public class JackBoxStreamUtility
+    public class JackStreamBoxUtility
     {
 
         /// <summary>

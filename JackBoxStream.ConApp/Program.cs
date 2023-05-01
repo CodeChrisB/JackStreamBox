@@ -1,7 +1,6 @@
-﻿using JackBoxStream.Util;
-using JackBoxStream.Util.data;
-
-namespace JackBoxStream.ConApp
+﻿using JackStreamBox.Util;
+using JackStreamBox.Util.data;
+namespace JackStreamBox.ConApp
 {
     internal class Program
     {
@@ -16,12 +15,12 @@ namespace JackBoxStream.ConApp
 
             Console.WriteLine("JackStreamBox");
             Console.WriteLine("Waiting 20 Second to open the game");
-            var task = JackBoxStreamUtility.OpenGame(game);
+            var task = JackStreamBoxUtility.OpenGame(game);
             Console.WriteLine($"Result: {task.Result}");
 
             Task.Delay(3000);
             Console.WriteLine("Closing Game Game");
-            JackBoxStreamUtility.CloseGame();
+            JackStreamBoxUtility.CloseGame();
         }
 
     }

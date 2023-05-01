@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JackBoxStream.Util.data
+namespace JackStreamBox.Util.data
 {
     public enum Game
     {

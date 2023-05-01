@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JackBoxStream.Util\JackBoxStream.Util.csproj" />
+    <ProjectReference Include="..\JackBoxStream.Util\JackStreamBox.Util.csproj" />
   </ItemGroup>
 
 </Project>
