@@ -1,14 +1,14 @@
-﻿using JackBoxStream.Util;
-using JackBoxStream.Util.data;
+﻿using JackStreamBox.Util;
+using JackStreamBox.Util.data;
 
-namespace JackBoxStream.ConApp
+namespace JackStreamBox.ConApp
 {
     internal class Program
     {
         static async void Main(string[] args)
         {
             Console.WriteLine("JackStreamBox");
-            var task = JackBoxStreamUtility.OpenGame(Game.Bidiots);
+            var task = JackStreamBoxUtility.OpenGame(Game.Bidiots);
             await task;
 
             Console.WriteLine($"Result: {task.Result}");

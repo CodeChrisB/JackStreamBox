@@ -1,5 +1,5 @@
-D:\Git\JackBoxStream\JackBoxStream\obj\Debug\net6.0\JackBoxStream.ConApp.csproj.AssemblyReference.cache
-D:\Git\JackBoxStream\JackBoxStream\obj\Debug\net6.0\JackBoxStream.ConApp.GeneratedMSBuildEditorConfig.editorconfig
-D:\Git\JackBoxStream\JackBoxStream\obj\Debug\net6.0\JackBoxStream.ConApp.AssemblyInfoInputs.cache
-D:\Git\JackBoxStream\JackBoxStream\obj\Debug\net6.0\JackBoxStream.ConApp.AssemblyInfo.cs
-D:\Git\JackBoxStream\JackBoxStream\obj\Debug\net6.0\JackBoxStream.ConApp.csproj.CoreCompileInputs.cache
+D:\Git\JackStreamBox\JackStreamBox\obj\Debug\net6.0\JackStreamBox.ConApp.csproj.AssemblyReference.cache
+D:\Git\JackStreamBox\JackStreamBox\obj\Debug\net6.0\JackStreamBox.ConApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git\JackStreamBox\JackStreamBox\obj\Debug\net6.0\JackStreamBox.ConApp.AssemblyInfoInputs.cache
+D:\Git\JackStreamBox\JackStreamBox\obj\Debug\net6.0\JackStreamBox.ConApp.AssemblyInfo.cs
+D:\Git\JackStreamBox\JackStreamBox\obj\Debug\net6.0\JackStreamBox.ConApp.csproj.CoreCompileInputs.cache

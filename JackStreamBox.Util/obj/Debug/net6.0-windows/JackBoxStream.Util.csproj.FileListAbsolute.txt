@@ -1,0 +1,12 @@
+D:\Git\JackStreamBox\JackStreamBox.Util\bin\Debug\net6.0-windows\JackStreamBox.Util.deps.json
+D:\Git\JackStreamBox\JackStreamBox.Util\bin\Debug\net6.0-windows\JackStreamBox.Util.dll
+D:\Git\JackStreamBox\JackStreamBox.Util\bin\Debug\net6.0-windows\JackStreamBox.Util.pdb
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\JackStreamBox.Util.csproj.AssemblyReference.cache
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\JackStreamBox.Util.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\JackStreamBox.Util.AssemblyInfoInputs.cache
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\JackStreamBox.Util.AssemblyInfo.cs
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\JackStreamBox.Util.csproj.CoreCompileInputs.cache
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\JackStreamBox.Util.dll
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\refint\JackStreamBox.Util.dll
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\JackStreamBox.Util.pdb
+D:\Git\JackStreamBox\JackStreamBox.Util\obj\Debug\net6.0-windows\ref\JackStreamBox.Util.dll
