@@ -3,7 +3,8 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
-using JackStreamBox.DiscordBot.Logic.Config;
+using JackStreamBox.Bot.Logic.Commands;
+using JackStreamBox.Bot.Logic.Config;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JackStreamBox.DiscordBot
+namespace JackStreamBox.Bot
 {
     public class Bot
     {
@@ -23,7 +24,6 @@ namespace JackStreamBox.DiscordBot
         public async Task RunAsync()
         {
             var json = String.Empty;
-
             using (var fs = File.OpenRead("config.json"))
             using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
                 json = await sr.ReadToEndAsync();
@@ -31,6 +31,7 @@ namespace JackStreamBox.DiscordBot
 
             var config = new DiscordConfiguration()
             {
+                Intents = DiscordIntents.All,
                 Token = configJson.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true
@@ -46,8 +47,13 @@ namespace JackStreamBox.DiscordBot
             var commandsConfig = new CommandsNextConfiguration()
             {
                 StringPrefixes = new string[] { configJson.Prefix },
-                EnableMentionPrefix = true
+                EnableMentionPrefix = true,
+                EnableDefaultHelp = false,
             };
+
+            Commands = Client.UseCommandsNext(commandsConfig);
+
+            Commands.RegisterCommands<StartGame>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1);
