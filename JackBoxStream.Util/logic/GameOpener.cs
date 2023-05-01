@@ -19,9 +19,8 @@ namespace JackBoxStream.Util.logic
 
 
         //Todo do we need any info to open
-        public GameOpener() { }
 
-        public async Task<bool> Open(Game game)
+        public static async Task<bool> Open(Game game)
         {
             var task = OpenPack(game);
 
@@ -57,7 +56,10 @@ namespace JackBoxStream.Util.logic
                 return false;
             }
         }
-
+        static async Task<bool> Close()
+        {
+            throw new NotImplementedException();
+        }
         private static string PackPath(int pack)
         {
 
@@ -131,6 +133,7 @@ namespace JackBoxStream.Util.logic
             throw new KeyNotFoundException();
         }
 
+        //Todo save get SteamPath from SettingsFile
         private static string GetSteamPath()
         {
             return "D:\\SteamLibrary\\steamapps\\common\\";
@@ -140,15 +143,16 @@ namespace JackBoxStream.Util.logic
         {
             string windowName = "The Jackbox Party Pack";
             windowName += getPackByEnum(game) > 1 ? " " + getPackByEnum(game) : "";
-            WindowNavigator navigator = new WindowNavigator(windowName);
+
+            WindowNavigator.SetWindow(windowName);
+
 
             string[] inputs = InputGenerator.Generate(game);
             for(int i=0;i<inputs.Length;i++)
             {
-;
                 Console.WriteLine($"Performed ${inputs[i]};Now waiting");
 
-                navigator.SendInput(inputs[i]);
+                WindowNavigator.SendInput(inputs[i]);
                 int time = 3;
                 //enter press to open menu
                 if (i == 0) time = 5;
@@ -158,5 +162,7 @@ namespace JackBoxStream.Util.logic
             }
             return true;
         }
+
+
     }
 }

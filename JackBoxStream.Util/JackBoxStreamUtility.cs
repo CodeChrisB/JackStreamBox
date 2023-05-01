@@ -1,26 +1,49 @@
 ﻿using JackBoxStream.Util.data;
 using JackBoxStream.Util.logic;
+using System;
 using System.Threading.Tasks;
 
 namespace JackBoxStream.Util
 {
     public class JackBoxStreamUtility
     {
+
         /// <summary>
-        /// The public function to open a specific
+        /// The public function to open a specificm game
         /// </summary>
         /// <param name="game"></param> An enum value indicating which game should be opend
         /// <returns></returns>
         /// A bool value indicating the sucess of the
         public static async Task<bool> OpenGame(Game game)
         {
-            GameOpener opener = new GameOpener();
-
-            var task = opener.Open(game);
+            var task = GameOpener.Open(game);
             await task;
             return task.Result;
-
-            //D:\SteamLibrary\steamapps\common\The Jackbox Party Pack 
         }
+
+
+        /// <summary>
+        /// The public function close the current game
+        /// </summary>
+        /// <param name="game"></param> An enum value indicating which game should be opend
+        /// <returns></returns>
+        /// A bool value indicating the sucess of the
+        public static bool CloseGame() 
+        {
+            return WindowNavigator.Close();
+        }
+
+        /// <summary>
+        /// Used to set the Steampath the tool uses to open the games.
+        /// </summary>
+        /// <param name="path"></param> The Given Steam Path
+        /// <exception cref="NotImplementedException"></exception>
+        public static void SetSteamPath(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
     }
 }

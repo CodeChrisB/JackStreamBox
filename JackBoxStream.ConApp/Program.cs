@@ -18,6 +18,10 @@ namespace JackBoxStream.ConApp
             Console.WriteLine("Waiting 20 Second to open the game");
             var task = JackBoxStreamUtility.OpenGame(game);
             Console.WriteLine($"Result: {task.Result}");
+
+            Task.Delay(3000);
+            Console.WriteLine("Closing Game Game");
+            JackBoxStreamUtility.CloseGame();
         }
 
     }

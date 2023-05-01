@@ -15,10 +15,10 @@ namespace JackBoxStream.Util.logic
         [DllImport("User32.dll")]
         static extern IntPtr SetForegroundWindow(IntPtr point);
 
-        private string WindowName {get;set;}
-        private Process GameProcess { get;set;}
+        private static string WindowName {get;set;}
+        private static Process GameProcess { get;set;}
 
-        public WindowNavigator(string windowName)
+        public static void SetWindow(string windowName)
         {
             WindowName = windowName;
             Process[] ps = Process.GetProcessesByName(windowName);
@@ -26,7 +26,7 @@ namespace JackBoxStream.Util.logic
             GameProcess = ps.FirstOrDefault();
         }
 
-        public bool SendInput(String input)
+        public static bool SendInput(String input)
         {
             
             if (GameProcess == null) return false;
@@ -39,6 +39,16 @@ namespace JackBoxStream.Util.logic
             return true;
         }
 
-
+        public static bool Close()
+        {
+            if (GameProcess == null) return false;
+            try { 
+                GameProcess.Kill();
+                return true;
+            } 
+            catch { 
+                return false;
+            }
+        }
     }
 }
