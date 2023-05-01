@@ -16,8 +16,7 @@ After a game players can vote for the next game, after the voting the next game 
 
 
 
-### JackStreamBox.Util Public Interface
-- OpenGame(Game game)
-  - Opens a 
-- CloseGame
-- SetSteamPath(string path)
+## JackStreamBox.Util Public Interface
+- OpenGame(Game game) -> return boolean 
+- CloseGame() -> return boolean
+- SetSteamPath(string path) -> return void
