@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/55576076/235513595-2d362132-5695-427b-a9a0-53fedfb53f38.png)
+![image](https://user-images.githubusercontent.com/55576076/235742815-f471e12a-7e11-45ee-aad4-25b1b0aa38ab.png)
 
 ### A 24/7 Jackbox Party Pack Bot.
 
@@ -17,6 +17,10 @@ After a game players can vote for the next game, after the voting the next game 
 
 
 ## JackStreamBox.Util Public Interface
-- OpenGame(Game game) -> return boolean 
-- CloseGame() -> return boolean
-- SetSteamPath(string path) -> return void
+```cs
+OpenGame(Game game) -> return boolean 
+CloseGame() -> return boolean
+SetSteamPath(string path) -> return void
+GetSteamPath() -> return string
+StartStream() -> return void
+```
