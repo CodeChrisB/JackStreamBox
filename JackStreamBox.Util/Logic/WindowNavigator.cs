@@ -11,8 +11,8 @@ namespace JackStreamBox.Util.logic
         [DllImport("User32.dll")]
         static extern IntPtr SetForegroundWindow(IntPtr point);
 
-        private static string WindowName {get;set;}
-        private static Process GameProcess { get;set;}
+        public static string WindowName {get;private set;}
+        public static Process GameProcess { get;private set;}
 
         public static void SetWindow(string windowName)
         {

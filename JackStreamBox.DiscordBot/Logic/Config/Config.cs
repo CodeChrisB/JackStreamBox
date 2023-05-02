@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JackStreamBox.DiscordBot.Logic.Config
+namespace JackStreamBox.Bot.Logic.Config
 {
-    internal struct Config
+    public struct BotConfig
     {
         [JsonProperty("token")]
         public string Token { get; private set; }

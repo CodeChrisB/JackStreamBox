@@ -22,16 +22,20 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net6.0-windows"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
-            "projectReferences": {}
+          "net6.0-windows7.0": {
+            "targetAlias": "net6.0-windows",
+            "projectReferences": {
+              "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\JackStreamBox.Util.csproj": {
+                "projectPath": "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\JackStreamBox.Util.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -41,20 +45,36 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows",
           "dependencies": {
-            "DSharpPlus": {
+            "Discord.Addons.Hosting": {
               "target": "Package",
-              "version": "[4.4.0, )"
+              "version": "[5.2.0, )"
             },
-            "DSharpPlus.CommandsNext": {
+            "Discord.Net": {
               "target": "Package",
-              "version": "[4.4.0, )"
+              "version": "[3.10.0, )"
             },
-            "DSharpPlus.Interactivity": {
+            "Discord.Net.Commands": {
               "target": "Package",
-              "version": "[4.4.0, )"
+              "version": "[3.10.0, )"
+            },
+            "Discord.Net.Core": {
+              "target": "Package",
+              "version": "[3.10.0, )"
+            },
+            "Discord.Net.WebSocket": {
+              "target": "Package",
+              "version": "[3.10.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[7.0.1, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -75,6 +95,68 @@
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\JackStreamBox.Util.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\JackStreamBox.Util.csproj",
+        "projectName": "JackStreamBox.Util",
+        "projectPath": "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\JackStreamBox.Util.csproj",
+        "packagesPath": "C:\\Users\\cocop\\.nuget\\packages\\",
+        "outputPath": "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\cocop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://www.nuget.org/api/v2/": {}
+        },
+        "frameworks": {
+          "net6.0-windows7.0": {
+            "targetAlias": "net6.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App": {
+              "privateAssets": "none"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
