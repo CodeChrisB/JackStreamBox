@@ -43,6 +43,12 @@ namespace JackStreamBox.Util.logic
                 if(process == null) return false;
                 await Task.Delay(Time.SECOND * 20);
 
+                WindowNavigator.SetDiscord();
+                
+                //Need to override so that only require 1  P press so that we cant get into a bad cycle...
+                WindowNavigator.SendDiscordInput(Input.P); //Toggle On
+                WindowNavigator.SendDiscordInput(Input.P); //Toggle Off
+
                 // Return true if the process was started successfully
                 return await NavigateToGame(game);
             }
@@ -136,16 +142,17 @@ namespace JackStreamBox.Util.logic
         {
             string windowName = "The Jackbox Party Pack";
             windowName += getPackByEnum(game) > 1 ? " " + getPackByEnum(game) : "";
-
+            
             WindowNavigator.SetWindow(windowName);
-
-
+            
+            
+            
             string[] inputs = InputGenerator.Generate(game);
             for(int i=0;i<inputs.Length;i++)
             {
                 Console.WriteLine($"Performed ${inputs[i]};Now waiting");
-
-                WindowNavigator.SendInput(inputs[i]);
+            
+                WindowNavigator.SendeGameInput(inputs[i]);
                 int time = 3;
                 //enter press to open menu
                 if (i == 0) time = 5;
