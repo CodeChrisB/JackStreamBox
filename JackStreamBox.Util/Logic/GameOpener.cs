@@ -44,10 +44,7 @@ namespace JackStreamBox.Util.logic
                 await Task.Delay(Time.SECOND * 20);
 
                 WindowNavigator.SetDiscord();
-                
-                //Need to override so that only require 1  P press so that we cant get into a bad cycle...
-                WindowNavigator.SendDiscordInput(Input.P); //Toggle On
-                WindowNavigator.SendDiscordInput(Input.P); //Toggle Off
+                WindowNavigator.SendDiscordInput(Input.P);
 
                 // Return true if the process was started successfully
                 return await NavigateToGame(game);

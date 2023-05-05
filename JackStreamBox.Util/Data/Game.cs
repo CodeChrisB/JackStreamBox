@@ -1,6 +1,6 @@
 ﻿namespace JackStreamBox.Util.Data
 {
-    public enum Game
+    public enum  Game
     {
         Ydkj2015,
         Fibbagexl,

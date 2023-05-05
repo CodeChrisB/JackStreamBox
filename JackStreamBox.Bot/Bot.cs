@@ -53,7 +53,9 @@ namespace JackStreamBox.Bot
 
             Commands = Client.UseCommandsNext(commandsConfig);
 
-            Commands.RegisterCommands<StartGame>();
+            Commands.RegisterCommands<StartGameCommand>();
+            Commands.RegisterCommands<PackCommand>();
+            Commands.RegisterCommands<VotingCommand>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1);

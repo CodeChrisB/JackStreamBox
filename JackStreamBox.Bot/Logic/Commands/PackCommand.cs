@@ -1,8 +1,7 @@
-﻿using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
+﻿using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using JackStreamBox.Bot.Logic.Data;
-using JackStreamBox.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +10,12 @@ using System.Threading.Tasks;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
-    public class StartGame : BaseCommandModule
+    internal class PackCommand : BaseCommandModule
     {
-        [Command("start")]
-        public async Task OpenGame(CommandContext context)
-        {
-            await context.Channel.SendMessageAsync("Test");
-            var task = JackStreamBoxUtility.OpenGame(Util.Data.Game.Jobjob);
-            await task;
-        }
-
         [Command("pack")]
-        public async Task DisplayPack(CommandContext context,int pack)
+        public async Task DisplayPack(CommandContext context, int pack)
         {
-            if(pack>0 && pack < 10)
+            if (pack > 0 && pack < 10)
             {
                 DiscordMessage command = context.Message;
                 string[] emoji = new string[5] {
@@ -52,7 +43,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Command("pack")]
         public async Task DisplayPack(CommandContext context)
         {
-           await context.Channel.SendMessageAsync("Try !pack 1");
+            await context.Channel.SendMessageAsync("Try !pack 1");
         }
     }
 }
