@@ -4,6 +4,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.EventHandling;
 using DSharpPlus.Interactivity.Extensions;
+using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Data;
 using JackStreamBox.Util;
 using JackStreamBox.Util.Data;
@@ -20,8 +21,13 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
         private DiscordClient? _client;
         [Command("startvote")]
+        [Description("Starts a new voting. !Closes the current game if there is one!  Execution requires level 4.")]
         public async Task StartVote(CommandContext context)
         {
+
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED)) return;
+
+            
             TimeSpan span = TimeSpan.FromSeconds(3);
             //End Game
             JackStreamBoxUtility.CloseGame();
@@ -45,37 +51,35 @@ namespace JackStreamBox.Bot.Logic.Commands
             {
                 await pollMessage.CreateReactionAsync(emoji).ConfigureAwait(false);
             }
-
+            //Get Reactions
             var interactivty = context.Client.GetInteractivity();
             var result = await interactivty.CollectReactionsAsync(pollMessage, span);
             var distinct = result.Distinct();
 
             Reaction[] results = result.Where(x => x.Total == result.Max(obj => obj.Total)).ToArray();
 
-
+            //Pick Game               
             var random = new Random();
             var pollWinner = results[random.Next(results.Length)];
             PackGame Winner = ReactionToId(games, pollWinner);
-
-            await context.Channel.SendMessageAsync($"Winner is {Winner.Name}\n Starting now.");
+            await context.Channel.SendMessageAsync($"```Winner is {Winner.Name}\n Starting now.");
 
             await JackStreamBoxUtility.OpenGame(Winner.Id);
 
-            //Get Reactions
-            //Pick Game
+            
+            
         }
 
         private PackGame ReactionToId(PackGame[] games, Reaction pollWinner)
         {
             int index = 0;
-            switch (pollWinner.Emoji)
+            DiscordEmoji[] emojis = GetEmojis();
+
+            for(int i = 0; i < emojis.Length;i++)
             {
-                case ":one:": index = 0; break;
-                case ":two:": index = 1; break;
-                case ":three:": index = 2; break;
-                case ":four:": index = 3; break;
-                case ":five:": index = 4; break;
+                if (emojis[i].Name == pollWinner.Emoji.Name) index = i;
             }
+
             return games[index];
         }
 
