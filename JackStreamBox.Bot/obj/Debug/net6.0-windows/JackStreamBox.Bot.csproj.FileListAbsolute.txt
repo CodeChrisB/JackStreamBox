@@ -25,3 +25,9 @@ D:\Git\JackBoxStream\JackStreamBox.Bot\obj\Debug\net6.0-windows\refint\JackStrea
 D:\Git\JackBoxStream\JackStreamBox.Bot\obj\Debug\net6.0-windows\JackStreamBox.Bot.pdb
 D:\Git\JackBoxStream\JackStreamBox.Bot\obj\Debug\net6.0-windows\JackStreamBox.Bot.genruntimeconfig.cache
 D:\Git\JackBoxStream\JackStreamBox.Bot\obj\Debug\net6.0-windows\ref\JackStreamBox.Bot.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PacketDotNet.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PcapDotNet.Base.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PcapDotNet.Core.Extensions.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PcapDotNet.Core.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PcapDotNet.Packets.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\SharpPcap.dll

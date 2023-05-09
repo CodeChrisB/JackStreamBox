@@ -1,7 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="Pcap.Net.x64" Version="1.0.4.1" />
+	  <PackageReference Include="PcapDotNet" Version="0.10.2" />
+	  <PackageReference Include="PcapDotNet.Base" Version="1.0.4.1" />
+	  <PackageReference Include="PcapDotNet.Packets" Version="1.0.4.1" />
+	  <PackageReference Include="SharpPcap" Version="6.2.5" />
+	</ItemGroup>
 </Project>

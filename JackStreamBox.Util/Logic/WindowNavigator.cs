@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JackStreamBox.Util.Logic;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -65,5 +66,13 @@ namespace JackStreamBox.Util.logic
                 return false;
             }
         }
+
+        public static string getMemory()
+        {
+            Sniffer.SetUp();
+            return "";
+        }
+
+
     }
 }

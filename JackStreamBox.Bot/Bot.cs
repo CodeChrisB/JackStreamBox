@@ -48,6 +48,7 @@ namespace JackStreamBox.Bot
             {
                 StringPrefixes = new string[] { configJson.Prefix },
                 EnableMentionPrefix = true,
+                EnableDefaultHelp = false,
             };
 
             Commands = Client.UseCommandsNext(commandsConfig);
@@ -55,7 +56,15 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<StartGameCommand>();
             Commands.RegisterCommands<PackCommand>();
             Commands.RegisterCommands<VotingCommand>();
+            Commands.RegisterCommands<HelpCommand>();
             Commands.RegisterCommands<CommandLevel>();
+
+
+            BotCommand.Register<StartGameCommand>();
+            BotCommand.Register<PackCommand>();
+            BotCommand.Register<VotingCommand>();
+            BotCommand.Register<HelpCommand>();
+            BotCommand.Register<CommandLevel>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1);

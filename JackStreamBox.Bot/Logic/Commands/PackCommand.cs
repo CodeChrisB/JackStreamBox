@@ -7,14 +7,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JackStreamBox.Bot.Logic.Config;
+using JackStreamBox.Bot.Logic.Attributes;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
     internal class PackCommand : BaseCommandModule
     {
         [Command("pack")]
+        [Description("Let's you checkout all the packs and their games use !pack 1 for pack 1 !pack 2 for pack 2 etc...")]
+        [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context, int pack)
         {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             if (pack > 0 && pack < 10)
             {
                 DiscordMessage command = context.Message;
@@ -40,9 +45,11 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
         }
 
+        //DO NOT ADD REQUIRES ATTRIBUTE OTHERWISE IT WILL SHOWUP IN THE HELP COMMAND
         [Command("pack")]
         public async Task DisplayPack(CommandContext context)
         {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await context.Channel.SendMessageAsync("Try !pack 1");
         }
     }

@@ -14,9 +14,9 @@ namespace JackStreamBox.Util
         /// <param name="game"></param> An enum value indicating which game should be opend
         /// <returns></returns>
         /// A bool value indicating the sucess of the
-        public static async Task<bool> OpenGame(Game game)
+        public static async Task<bool> OpenGame(Game game, Func<string, Task> Logger)
         {
-            var task = GameOpener.Open(game);
+            var task = GameOpener.Open(game,Logger);
             await task;
             return task.Result;
         }

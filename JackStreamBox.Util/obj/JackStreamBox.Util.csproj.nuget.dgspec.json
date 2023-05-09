@@ -43,6 +43,28 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
+          "dependencies": {
+            "Pcap.Net.x64": {
+              "target": "Package",
+              "version": "[1.0.4.1, )"
+            },
+            "PcapDotNet": {
+              "target": "Package",
+              "version": "[0.10.2, )"
+            },
+            "PcapDotNet.Base": {
+              "target": "Package",
+              "version": "[1.0.4.1, )"
+            },
+            "PcapDotNet.Packets": {
+              "target": "Package",
+              "version": "[1.0.4.1, )"
+            },
+            "SharpPcap": {
+              "target": "Package",
+              "version": "[6.2.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

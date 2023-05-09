@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
 namespace JackStreamBox.Util.logic
 {
 
@@ -17,23 +16,23 @@ namespace JackStreamBox.Util.logic
 
         //Todo do we need any info to open
 
-        public static async Task<bool> Open(Game game)
+        public static async Task<bool> Open(Game game, Func<string, Task> Logger)
         {
-            var task = OpenPack(game);
+            var task = OpenPack(game,Logger);
 
             await task;
             return task.Result;
         }
 
 
-        static async Task<bool> OpenPack(Game game)
+        static async Task<bool> OpenPack(Game game, Func<string, Task> Logger)
         {
             string path = PackPath(getPackByEnum(game));
             
             // Create a new process start info object
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = path;
-
+            int time = 20;
             try
             {
                 // Start the process
@@ -41,13 +40,11 @@ namespace JackStreamBox.Util.logic
 
                 // Wait until the program is fully launched
                 if(process == null) return false;
-                await Task.Delay(Time.SECOND * 20);
-
-                WindowNavigator.SetDiscord();
-                WindowNavigator.SendDiscordInput(Input.P);
+                await Logger(BotMessage.StartingGamePack);
+                await Task.Delay(Time.SECOND * time);
 
                 // Return true if the process was started successfully
-                return await NavigateToGame(game);
+                return await NavigateToGame(game, Logger);
             }
             catch (Exception ex)
             {
@@ -132,18 +129,19 @@ namespace JackStreamBox.Util.logic
         //Todo save get SteamPath from SettingsFile
         private static string GetSteamPath()
         {
-            return "D:\\SteamLibrary\\steamapps\\common\\";
+            return "C:\\Program Files (x86)\\Steam\\steamapps\\common\\";
         }
 
-        static async Task<bool> NavigateToGame(Game game)
+        static async Task<bool> NavigateToGame(Game game,Func<string, Task> Logger)
         {
             string windowName = "The Jackbox Party Pack";
             windowName += getPackByEnum(game) > 1 ? " " + getPackByEnum(game) : "";
             
             WindowNavigator.SetWindow(windowName);
-            
-            
-            
+            await Logger(BotMessage.OpenedGamePack);
+            await Logger(BotMessage.StartingGame);
+
+
             string[] inputs = InputGenerator.Generate(game);
             for(int i=0;i<inputs.Length;i++)
             {
@@ -157,6 +155,15 @@ namespace JackStreamBox.Util.logic
                 if (i >= inputs.Length - 2) time = 8;
                 await Task.Delay(Time.SECOND * time);
             }
+
+            await Logger(BotMessage.GameOpend);
+            await Logger(BotMessage.StartingStream);
+
+            WindowNavigator.SetDiscord();
+            WindowNavigator.SendDiscordInput(Input.P);
+
+            await Logger(BotMessage.AllFinished);
+
             return true;
         }
 

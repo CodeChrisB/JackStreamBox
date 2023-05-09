@@ -7,21 +7,34 @@ using JackStreamBox.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using JackStreamBox.Bot.Logic.Attributes;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
     public class StartGameCommand : BaseCommandModule
     {
         [Command("start")]
-        [Description("Opens any game you want. Uses the game position.\nMad Verse city is the 3rd game in the 5th pack it's position is (5*5+3=28)\n  !closes any game that currently is held! Execution requires level 3")]
+        [Description("Opens any game you want. Uses the game position.\nMad Verse city is the 3rd game in the 5th pack it's position is (5*5+3=28)\n  !closes any game that currently is held")]
+        [Requires(PermissionRole.STAFF)]
         public async Task OpenGame(CommandContext context, int game)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             await context.Channel.SendMessageAsync("Test");
-            var task = JackStreamBoxUtility.OpenGame((Util.Data.Game)game-1);
+
+            async Task Logger(string message)
+            { 
+                await context.Channel.SendMessageAsync(message);
+            };
+
+
+            var task = JackStreamBoxUtility.OpenGame((Util.Data.Game)game-1,Logger);
             await task;
         }
+
+
     }
 }

@@ -45,6 +45,8 @@ namespace JackStreamBox.Bot.Logic.Data
                 result[i] = games[new Random().Next(games.Length + 1)];
             }
 
+            result = result.Distinct().ToArray();
+            if (result.Length < amount) result = GetRandomGames(amount);
             return result;
 
 
