@@ -52,7 +52,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 sb.AppendLine($"!{ciItem.Name}  - [Level {(int)ciItem.Role}]");
                 if(appendDescription)
                 {
-                    sb.AppendLine(ciItem.Description);
+                    sb.AppendLine("--> "+ciItem.Description);
                 }
             }
 

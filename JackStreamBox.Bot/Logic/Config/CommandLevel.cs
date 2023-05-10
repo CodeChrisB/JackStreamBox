@@ -15,7 +15,7 @@ namespace JackStreamBox.Bot.Logic.Config
     public class CommandLevel : BaseCommandModule
     {
         [Command("level")]
-        [Description("Checks what permission level you have. Execution requires level 0.")]
+        [Description("Checks what permission level you have.")]
         [Requires(PermissionRole.NOBOT)]
         public async Task WhatLevelAmI(CommandContext context)
         {
@@ -27,12 +27,12 @@ namespace JackStreamBox.Bot.Logic.Config
             switch (grantedLevel)
             {
                 case 0: message = "You can not use this bot. All acesss besides this command is removed from your permissions.:skull:"; break;
-                case 1: message = "Level 0: Besides of voting you don't have alot of permissions"; break;
-                case 2: message = "Level 1: Besides of voting you don't have alot of permissions"; break;
-                case 3: message = "Level 2: You can use !startvote"; break;
-                case 4: message = "Level 3: You can use !startvote"; break;
-                case 5: message = "Level 4: You can do anything :crown:"; break;
-                default: message = "Level 0: Besides of voting you don't have alot of permissions"; break;
+                case 1: message = "Level 1: Besides of voting you don't have alot of permissions"; break;
+                case 2: message = "Level 2: Besides of voting you don't have alot of permissions"; break;
+                case 3: message = "Level 3: You can use !startvote"; break;
+                case 4: message = "Level 4: You can use !startvote"; break;
+                case 5: message = "Level 5: You can do anything :crown:"; break;
+                default: message = "Level N/A: could not find your level"; break;
             }
             string memberName = context.Member.DisplayName;
             await context.Channel.SendMessageAsync($"{memberName} \n{message}");

@@ -23,7 +23,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
         private DiscordClient? _client;
         [Command("startvote")]
-        [Description("Starts a new voting. !Closes the current game if there is one!  Execution requires level 4.")]
+        [Description("Starts a new voting. !Closes the current game if there is one!")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task StartVote(CommandContext context)
         {

@@ -43,6 +43,15 @@ namespace JackStreamBox.Util
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Sends the join command to the account to the lobby
+        /// </summary>
+        public static void JoinLobby()
+        {
+            WindowNavigator.SetDiscord();
+            WindowNavigator.SendDiscordInput(Input.DiscordKey);
+        }
+
 
 
     }

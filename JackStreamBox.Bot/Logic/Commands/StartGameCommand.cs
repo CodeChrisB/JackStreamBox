@@ -21,7 +21,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     public class StartGameCommand : BaseCommandModule
     {
         [Command("start")]
-        [Description("Opens any game you want. Uses the game position.\nMad Verse city is the 3rd game in the 5th pack it's position is (5*5+3=28)\n  !closes any game that currently is held")]
+        [Description("Opens any game you want. Uses the game position.\nMad Verse city is the 3rd game in the 5th pack it's position is (5*5+3=28)\n  !closes any game that currently is held.")]
         [Requires(PermissionRole.STAFF)]
         public async Task OpenGame(CommandContext context)
         {
@@ -69,6 +69,19 @@ namespace JackStreamBox.Bot.Logic.Commands
             //var task = JackStreamBoxUtility.OpenGame((Util.Data.Game)game-1,Logger);
             //await task;
         }
+
+        [Command("join")]
+        [Description("Let the streamer join the VC.")]
+        [Requires(PermissionRole.HIGHLYTRUSTED)]
+        public async Task Join(CommandContext context)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED)) return;
+
+            JackStreamBoxUtility.JoinLobby();
+            await context.Channel.SendMessageAsync("Done.");
+        }
+
+        //HELPERS
 
         private DiscordMessageBuilder OpenPack(string id)
         {
