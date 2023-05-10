@@ -27,16 +27,6 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
 
-            var myButton = new DiscordButtonComponent(
-                ButtonStyle.Primary,
-                "my_very_cool_button",
-                "Very cool button!",
-                false,
-                new DiscordComponentEmoji("😀")
-            );
-
-
-
 
             var row1 = genRow(new int[] { 1, 2, 3, 4, 5 },"Choose a pack");
             var message1 = await context.Channel.SendMessageAsync(row1).ConfigureAwait(false);
