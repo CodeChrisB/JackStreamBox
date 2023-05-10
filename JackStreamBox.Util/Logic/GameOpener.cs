@@ -31,7 +31,7 @@ namespace JackStreamBox.Util.logic
             // Create a new process start info object
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = path;
-            int time = 20;
+            int time = 25;
             try
             {
                 // Start the process
@@ -147,11 +147,8 @@ namespace JackStreamBox.Util.logic
                 Console.WriteLine($"Performed ${inputs[i]};Now waiting");
             
                 WindowNavigator.SendeGameInput(inputs[i]);
-                int time = 3;
+                int time = 8;
                 //enter press to open menu
-                if (i == 0) time = 5;
-                //enter presses for game start
-                if (i >= inputs.Length - 2) time = 8;
                 await Task.Delay(Time.SECOND * time);
             }
 

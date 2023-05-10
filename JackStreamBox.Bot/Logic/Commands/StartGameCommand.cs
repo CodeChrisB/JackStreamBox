@@ -42,12 +42,13 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             Bot.Client.ComponentInteractionCreated += async (s, e) =>
             {
+                if(e.User.Id != context.User.Id) return;
+
                 string[] command = e.Id.ToString().Split("-");
 
                 switch (command[0])
                 {
                     case "pack":
-                        await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
                         await message1.DeleteAsync().ConfigureAwait(false);
                         await message2.DeleteAsync().ConfigureAwait(false);
                         var gamePicker = OpenPack(command[1]);
@@ -55,7 +56,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                         break;
                     case "game":
                         Game gameId = (Game)Enum.Parse(typeof(Game), command[1]);
-                        await gamePickerMessage.DeleteAsync();
+                        if(gamePickerMessage != null) await gamePickerMessage.DeleteAsync();
                         await JackStreamBoxUtility.OpenGame(gameId, Logger);
                         break;
                 }
