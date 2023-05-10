@@ -24,7 +24,6 @@ namespace JackStreamBox.Util.logic
             return task.Result;
         }
 
-
         static async Task<bool> OpenPack(Game game, Func<string, Task> Logger)
         {
             string path = PackPath(getPackByEnum(game));
@@ -126,7 +125,7 @@ namespace JackStreamBox.Util.logic
             throw new KeyNotFoundException();
         }
 
-        //Todo save get SteamPath from SettingsFile
+        //Todo save & get SteamPath from SettingsFile
         private static string GetSteamPath()
         {
             return "C:\\Program Files (x86)\\Steam\\steamapps\\common\\";
@@ -160,7 +159,7 @@ namespace JackStreamBox.Util.logic
             await Logger(BotMessage.StartingStream);
 
             WindowNavigator.SetDiscord();
-            WindowNavigator.SendDiscordInput(Input.P);
+            WindowNavigator.SendDiscordInput(Input.DiscordKey);
 
             await Logger(BotMessage.AllFinished);
 

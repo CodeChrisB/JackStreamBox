@@ -8,6 +8,6 @@
         public static string ARROW_DOWN = "{Down}";
         public static string ARROW_RIGHT = "{Right}";
         public static string ENTER = "{Enter}";
-        public static string P = "p";
+        public static string DiscordKey = "-";//event -> Slash
     }
 }

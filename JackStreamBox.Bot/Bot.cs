@@ -16,7 +16,7 @@ namespace JackStreamBox.Bot
 {
     public class Bot
     {
-        public DiscordClient Client {  get; private set; }
+        public static DiscordClient Client {  get; private set; }
         public InteractivityExtension Interactivity { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
 

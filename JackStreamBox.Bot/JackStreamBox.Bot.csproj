@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JackStreamBox.ConApp\JackStreamBox.ConApp.csproj" />
     <ProjectReference Include="..\JackStreamBox.Util\JackStreamBox.Util.csproj" />
   </ItemGroup>
 

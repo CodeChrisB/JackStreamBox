@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace JackStreamBox.Util.logic
 {
-    internal class WindowNavigator
+    public class WindowNavigator
     {
         [DllImport("User32.dll")]
         static extern IntPtr SetForegroundWindow(IntPtr point);
@@ -33,6 +33,7 @@ namespace JackStreamBox.Util.logic
         public static bool SendeGameInput(String input)
         {
             
+            if (GameProcess == null) SetDiscord();
             if (GameProcess == null) return false;
 
             //bring the window to the foreground
@@ -48,8 +49,9 @@ namespace JackStreamBox.Util.logic
 
             if (DiscordProcess == null) return false;
 
-            //We send the input to every instance of discord hoping we hit the correct one, but we dont know...
-            SetForegroundWindow(DiscordProcess.MainWindowHandle);
+            IntPtr h = DiscordProcess.MainWindowHandle;
+
+            SetForegroundWindow(h);
             SendKeys.SendWait(input);
 
             return true;

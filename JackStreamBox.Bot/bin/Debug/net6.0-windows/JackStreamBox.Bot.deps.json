@@ -11,6 +11,7 @@
           "DSharpPlus": "4.4.0",
           "DSharpPlus.CommandsNext": "4.4.0",
           "DSharpPlus.Interactivity": "4.4.0",
+          "JackStreamBox.ConApp": "1.0.0",
           "JackStreamBox.Util": "1.0.0",
           "Newtonsoft.Json": "13.0.3"
         },
@@ -759,6 +760,14 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "JackStreamBox.ConApp/1.0.0": {
+        "dependencies": {
+          "JackStreamBox.Util": "1.0.0"
+        },
+        "runtime": {
+          "JackStreamBox.ConApp.dll": {}
+        }
+      },
       "JackStreamBox.Util/1.0.0": {
         "dependencies": {
           "Pcap.Net.x64": "1.0.4.1",
@@ -1366,6 +1375,11 @@
       "sha512": "sha512-Z6YfyYTCg7lOZjJzBjONJTFKGN9/NIYKSxhU5GRd+DTwHSZyvWp1xuI5aR+dLg+ayyC5Xv57KiY4oJ0tMO89fQ==",
       "path": "system.threading.timer/4.3.0",
       "hashPath": "system.threading.timer.4.3.0.nupkg.sha512"
+    },
+    "JackStreamBox.ConApp/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "JackStreamBox.Util/1.0.0": {
       "type": "project",

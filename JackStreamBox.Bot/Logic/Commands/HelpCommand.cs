@@ -40,7 +40,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             var helpEmbed = new DiscordEmbedBuilder
             {
                 Title = "Help Page",
-                Description = $"Todo add info"
+                Description = "If u see this message something went wrong"
             };
 
             CommandInfo[] ci = BotCommand.GetCommands();
