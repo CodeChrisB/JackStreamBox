@@ -64,7 +64,7 @@ namespace JackStreamBox.Bot.Logic.Config
         }
 
 
-        private static int RoleToLevel(IEnumerable<DiscordRole> roles)
+        public static int RoleToLevel(IEnumerable<DiscordRole> roles)
         {
             int level = (int)PermissionRole.ANYONE;
             bool hasNegativeRole = false;
@@ -74,16 +74,31 @@ namespace JackStreamBox.Bot.Logic.Config
             {
                 switch (role.Name) {
                     //Trusted
-                        //idk not used atm
+                    case "Level 3":
+                    case "Level 4":
+                    case "Level 5":
+                    case "Level 6":
+                    case "Level 7":
+                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
+                        break;
                     //Highly
-                    case "Top hosts": level = Math.Max(level,(int)PermissionRole.HIGHLYTRUSTED); break;
-                    case "Captain Server-Booster🌟🌟": level = Math.Max(level, (int)PermissionRole.HIGHLYTRUSTED); break;
+                    case "Top hosts":
+                    case "Captain Server-Booster🌟🌟": 
+                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
+                        break;
                     //Staff
-                    case "Jack": level = Math.Max(level, (int)PermissionRole.STAFF); break;
+                    case "Jack": 
+                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
+                        break;
                     //Developer
-                    case "Developer": level = Math.Max(level, (int)PermissionRole.DEVELOPER); break;
+                    case "Developer": 
+                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
+                        break;
                     //Negative Roles
-                    case "Quitter": hasNegativeRole = true;break;
+                    case "Quitter":
+                    case "NoBot":
+                        hasNegativeRole = true;
+                       break;
 
                 }
             }

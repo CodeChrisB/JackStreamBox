@@ -16,7 +16,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
 
         [Command("help")]
-        [Description("Use this command to get information about every command you can use")]
+        [Description("List all commands you can use")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context)
         {
@@ -24,8 +24,8 @@ namespace JackStreamBox.Bot.Logic.Commands
             await DisplayPackWithDescription(context, false);
         }
 
-        [Command("extrahelp")]
-        [Description("Use this command to get information about every command you can use")]
+        [Command("help+")]
+        [Description("Get information about every command you can use")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack2(CommandContext context)
         {
@@ -46,13 +46,16 @@ namespace JackStreamBox.Bot.Logic.Commands
             CommandInfo[] ci = BotCommand.GetCommands();
 
             StringBuilder sb = new StringBuilder();
-
+            int level = CommandLevel.RoleToLevel(context.Member.Roles);
             foreach (var ciItem in ci)
             {
-                sb.AppendLine($"!{ciItem.Name}  - [Level {(int)ciItem.Role}]");
-                if(appendDescription)
+                if(level >= (int)ciItem.Role)
                 {
-                    sb.AppendLine("--> "+ciItem.Description);
+                    sb.AppendLine($"**!{ciItem.Name}**  - [Level {(int)ciItem.Role}]");
+                    if (appendDescription)
+                    {
+                        sb.AppendLine("--> " + ciItem.Description + "\n");
+                    }
                 }
             }
 

@@ -21,16 +21,68 @@ namespace JackStreamBox.Bot.Logic.Commands
 {
     internal class VotingCommand : BaseCommandModule
     {
+
+        private const int TIME = 3;
+        #region Vote Declaration
+        private const int REQUIRED_VOTES = 3;
+        private List<string> CURRENT_VOTES = new();
+        public void AddVote(string str) {
+            if (CURRENT_VOTES.Contains(str)) return;
+            CURRENT_VOTES.Add(str); 
+        }
+        public void ResetVote() => CURRENT_VOTES = new List<string>();
+        private async Task LogVoteText(CommandContext context) { await context.Channel.SendMessageAsync($"Start Vote {CURRENT_VOTES.Count()}/{REQUIRED_VOTES}"); }
+        #endregion
+
         private DiscordClient? _client;
         [Command("startvote")]
         [Description("Starts a new voting. !Closes the current game if there is one!")]
-        [Requires(PermissionRole.HIGHLYTRUSTED)]
+        [Requires(PermissionRole.ANYONE)]
         public async Task StartVote(CommandContext context)
         {
 
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
 
-            TimeSpan span = TimeSpan.FromSeconds(3);
+            int level = CommandLevel.RoleToLevel(context.Member.Roles);
+
+            
+            if(level >= (int)PermissionRole.HIGHLYTRUSTED)
+            {
+                //Tophost and higher
+                await LogVoteText(context);
+                await StartVoteNow(context);
+
+            }
+            else if(level >= (int)PermissionRole.TRUSTED)
+            {
+                //Level 3 and higher
+                AddVote(context.Member.Id.ToString());
+                if (CURRENT_VOTES.Count() >= REQUIRED_VOTES)
+                {
+                    await LogVoteText(context);
+                    await StartVoteNow(context);
+                    ResetVote();
+                }
+                else
+                {
+                    await LogVoteText(context);
+                }
+
+            }else
+            {
+                //Low trusted users
+                await context.Channel.SendMessageAsync("Reach 'Level 3' Role to gain acess to this command\n(Gain Level 3 by being active in voice or text chat usually takes a week for an active user.)");
+            }
+
+            
+
+            
+            
+        }
+
+        private async Task StartVoteNow(CommandContext context)
+        {
+            TimeSpan span = TimeSpan.FromSeconds(TIME);
             //End Game
             JackStreamBoxUtility.CloseGame();
             //Start Vote 60 sec
@@ -44,11 +96,11 @@ namespace JackStreamBox.Bot.Logic.Commands
                 Description = $"What game will be played next?\n{GameText(games)}"
             };
 
-            
 
-            var pollMessage  = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
 
-          
+            var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
+
+
 
 
 
@@ -57,7 +109,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 //Set New Poll Data
                 pollEmbed.Description = $"{pollEmbed.Description}\n{message}";
                 //Delete Poll
-                await pollMessage.ModifyAsync(null, pollEmbed.Build());       
+                await pollMessage.ModifyAsync(null, pollEmbed.Build());
                 return;
             }
 
@@ -77,17 +129,14 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             //Pick Game               
             var random = new Random();
-            var pollWinner =  results.Length==1 ? results[0] : results[random.Next(results.Length)];
+            var pollWinner = results.Length == 1 ? results[0] : results[random.Next(results.Length)];
 
             PackGame Winner = ReactionToId(games, pollWinner);
 
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
             await Logger($"Winner is {Winner.Name}\n");
 
-            await JackStreamBoxUtility.OpenGame(Winner.Id,Logger );
-
-            
-            
+            await JackStreamBoxUtility.OpenGame(Winner.Id, Logger);
         }
 
         private PackGame ReactionToId(PackGame[] games, Reaction pollWinner)
