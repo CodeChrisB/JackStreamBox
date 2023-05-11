@@ -68,7 +68,8 @@ namespace JackStreamBox.Bot.Logic.Commands
                     await LogVoteText(context);
                 }
 
-            }else
+            }
+            else
             {
                 //Low trusted users
                 await context.Channel.SendMessageAsync("Reach 'Level 3' Role to gain acess to this command\n(Gain Level 3 by being active in voice or text chat usually takes a week for an active user.)");
