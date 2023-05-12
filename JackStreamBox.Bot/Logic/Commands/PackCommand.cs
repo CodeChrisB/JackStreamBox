@@ -22,7 +22,6 @@ namespace JackStreamBox.Bot.Logic.Commands
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             if (pack > 0 && pack < 10)
             {
-                DiscordMessage command = context.Message;
                 string[] emoji = new string[5] {
                 ":one:",
                 ":two:",
@@ -37,7 +36,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 for (int i = 0; i < 5; i++)
                 {
                     stringBuilder.AppendLine($"{emoji[i]} {packInfo.games[i].Name}");
-                    stringBuilder.AppendLine($"  -> {packInfo.games[i].Description}");
+                    stringBuilder.AppendLine($"*{packInfo.games[i].Description}*\n");
 
                 }
 

@@ -29,8 +29,8 @@ namespace JackStreamBox.Bot.Logic.Config
                 case 0: message = "You can not use this bot. All acesss besides this command is removed from your permissions.:skull:"; break;
                 case 1: message = "Level 1: Besides of voting you don't have alot of permissions"; break;
                 case 2: message = "Level 2: Besides of voting you don't have alot of permissions"; break;
-                case 3: message = "Level 3: You can use !startvote"; break;
-                case 4: message = "Level 4: You can use !startvote"; break;
+                case 3: message = "Level 3: You can use !startvote to try to start a game vote"; break;
+                case 4: message = "Level 4: You can use !startvote to instantly start a vote"; break;
                 case 5: message = "Level 5: You can do anything :crown:"; break;
                 default: message = "Level N/A: could not find your level"; break;
             }
@@ -47,8 +47,8 @@ namespace JackStreamBox.Bot.Logic.Config
             //if(grantedLevel < (int)PermissionRole.DEVELOPER) return false;
 
 
-            //Check if inside the Jackbot VC
-            if (context.Channel.Id.ToString() != "1105184748701229066") return false;
+            //Check if inside the Jackbot VC or if developer used the command
+            if (context.Channel.Id.ToString() != "1105184748701229066" && grantedLevel < (int)PermissionRole.DEVELOPER) return false;
 
             bool canExecute = grantedLevel >= requiredLevel;
 
@@ -84,11 +84,11 @@ namespace JackStreamBox.Bot.Logic.Config
                     //Highly
                     case "Top hosts":
                     case "Captain Server-Booster🌟🌟": 
-                        level = Math.Max(level, (int)PermissionRole.HIGHLYTRUSTED); 
+                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
                         break;
                     //Staff
                     case "Jack": 
-                        level = Math.Max(level, (int)PermissionRole.STAFF); 
+                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
                         break;
                     //Developer
                     case "Developer": 
