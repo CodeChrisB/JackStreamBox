@@ -84,11 +84,11 @@ namespace JackStreamBox.Bot.Logic.Config
                     //Highly
                     case "Top hosts":
                     case "Captain Server-Booster🌟🌟": 
-                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
+                        level = Math.Max(level, (int)PermissionRole.HIGHLYTRUSTED); 
                         break;
                     //Staff
                     case "Jack": 
-                        level = Math.Max(level, (int)PermissionRole.TRUSTED); 
+                        level = Math.Max(level, (int)PermissionRole.STAFF); 
                         break;
                     //Developer
                     case "Developer": 
