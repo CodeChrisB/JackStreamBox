@@ -18,7 +18,10 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task MakeRizz(CommandContext context)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED))
+            {
+                await context.Channel.SendMessageAsync("Wanna hear a joke? You can't use this command.");
+            }
             await context.Channel.SendMessageAsync(Joke.GetJoke());
         }
     }
