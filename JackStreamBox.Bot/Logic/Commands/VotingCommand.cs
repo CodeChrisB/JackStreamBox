@@ -1,6 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
+using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.EventHandling;
 using DSharpPlus.Interactivity.Extensions;
@@ -23,6 +24,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
 
         private const int TIME = 20;
+        private int CURRENT_TIME = 20;
         #region Vote Declaration
         private const int REQUIRED_VOTES = 3;
         private int? CURRENT_PACK = null;
@@ -46,19 +48,28 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         private DiscordClient? _client;
         [Command("startvote")]
+        public async Task StartVote(CommandContext context, int pack,int time)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+            await StartVoteWithPack(context, pack,time);
+        }
+
+        [Command("startvote")]
         [Description("Starts a new voting. !Closes the current game if there is one!")]
         [Requires(PermissionRole.ANYONE)]
         public async Task StartVote(CommandContext context, int pack)
         {
-            await StartVoteWithPack(context, pack);
+            await StartVoteWithPack(context, pack, TIME);
         }
 
         [Command("startvote")]
         public async Task StartVote(CommandContext context)
         {
-            await StartVoteWithPack(context, -1);
+            await StartVoteWithPack(context, -1,TIME);
         }
-        private async Task StartVoteWithPack(CommandContext context, int pack)
+
+        //Vote but requires members to accept the voting process
+        private async Task StartVoteWithPack(CommandContext context, int pack,int time)
         {
             int level = CommandLevel.RoleToLevel(context.Member.Roles);
 
@@ -68,6 +79,8 @@ namespace JackStreamBox.Bot.Logic.Commands
             if (level >= (int)PermissionRole.HIGHLYTRUSTED)
             {
                 //Tophost and higher
+                if(time>60) time = 60;
+                CURRENT_TIME = time;
                 await StartVoteNow(context, games);
                 ResetVote();
 
@@ -90,9 +103,11 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
         }
+        //Vote without members to accept it
         private async Task StartVoteNow(CommandContext context, PackGame[] games)
         {
-            TimeSpan span = TimeSpan.FromSeconds(TIME);
+            TimeSpan span = TimeSpan.FromSeconds(CURRENT_TIME);
+            
             //End Game
             JackStreamBoxUtility.CloseGame();
             //Start Vote 60 sec
@@ -102,7 +117,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             var pollEmbed = new DiscordEmbedBuilder
             {
                 Title = "Game Vote",
-                Description = $"*What game will be played next?*\n(You have {TIME} seconds.---)\n\n{GameText(games)}"
+                Description = $"*What game will be played next?*\n(You have {CURRENT_TIME} seconds.)\n\n{GameText(games)}"
             };
 
 
@@ -135,6 +150,12 @@ namespace JackStreamBox.Bot.Logic.Commands
             var distinct = result.Distinct();
 
             Reaction[] results = result.Where(x => x.Total == result.Max(obj => obj.Total)).ToArray();
+            if(!result.Any()) 
+            {
+                await pollMessage.DeleteAsync().ConfigureAwait(false);
+                await context.Channel.SendMessageAsync("No Votes !\nCancel voting process :sob:");
+                return;
+            }
 
             //Pick Game               
             var random = new Random();
@@ -145,6 +166,8 @@ namespace JackStreamBox.Bot.Logic.Commands
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
             await Logger($"Winner is {Winner.Name}\n");
 
+            //Reset Timer
+            CURRENT_TIME = TIME;
             await JackStreamBoxUtility.OpenGame(Winner.Id, Logger);
         }
         private PackGame ReactionToId(PackGame[] games, Reaction pollWinner)

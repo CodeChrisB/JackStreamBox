@@ -36,3 +36,4 @@ D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.Co
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.exe
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.dll
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.pdb
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Logic\Data\Jokes.txt

@@ -58,13 +58,15 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<VotingCommand>();
             Commands.RegisterCommands<HelpCommand>();
             Commands.RegisterCommands<CommandLevel>();
+            Commands.RegisterCommands<JokeCommand>();
 
 
             BotCommand.Register<StartGameCommand>();
             BotCommand.Register<PackCommand>();
             BotCommand.Register<VotingCommand>();
             BotCommand.Register<HelpCommand>();
-            BotCommand.Register<CommandLevel>();
+            BotCommand.Register<JokeCommand>();
+            
 
             await Client.ConnectAsync();
             await Task.Delay(-1);
