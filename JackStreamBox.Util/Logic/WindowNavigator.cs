@@ -30,7 +30,7 @@ namespace JackStreamBox.Util.logic
             DiscordProcess = ps.FirstOrDefault();
         }
 
-        public static bool SendeGameInput(String input)
+        public static bool SendGameInput(String input)
         {
             
             if (GameProcess == null) SetDiscord();
@@ -57,15 +57,20 @@ namespace JackStreamBox.Util.logic
             return true;
         }
 
-        public static bool Close()
+        public static void Close()
         {
-            if (GameProcess == null) return false;
-            try { 
-                GameProcess.Kill();
-                return true;
-            } 
-            catch { 
-                return false;
+            for(int i = 1; i < 11; i++)
+            {
+                string windowName = "The Jackbox Party Pack";
+                if (i > 1) windowName += $" {i}";
+                Process game = Process.GetProcessesByName(windowName).FirstOrDefault();
+                if(game != null)
+                {
+                    //Usually just killing the gameProcess is enough but after and crash or something
+                    //Multiple jackbox party games could be opend so killing all of them will prevent anything like this.
+                    game.Kill();
+                }
+
             }
         }
 

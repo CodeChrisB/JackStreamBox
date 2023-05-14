@@ -15,4 +15,14 @@ namespace JackStreamBox.Util.Data
         public static string StartingStream = "Starting the stream.";
         public static string AllFinished = "Everything done, have a nice game !";
     }
+
+    public enum VoteStatus
+    {
+        OnStartingGamePack,
+        OnOpendGamePack,
+        OnStartingGame,
+        OnGameOpend,
+        OnStartingStream,
+        OnAllFinished
+    }
 }

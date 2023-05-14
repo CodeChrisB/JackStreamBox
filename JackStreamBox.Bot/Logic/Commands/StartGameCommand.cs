@@ -34,9 +34,9 @@ namespace JackStreamBox.Bot.Logic.Commands
             var message2 = await context.Channel.SendMessageAsync(row2).ConfigureAwait(false);
             DiscordMessage gamePickerMessage = null;
 
-            async Task Logger(string message)
+            async Task Logger(VoteStatus status)
             {
-                await context.Channel.SendMessageAsync(message).ConfigureAwait(false);
+                //await context.Channel.SendMessageAsync(message).ConfigureAwait(false);
             }
 
 

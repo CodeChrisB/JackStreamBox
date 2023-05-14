@@ -1,13 +1,13 @@
 ﻿namespace JackStreamBox.Util.Data
 {
-    internal class Input
+    public class Input
     {
-        public static string ESCAPE = "ESC";
-        public static string ARROW_UP = "{Up}";
-        public static string ARROW_LEFT = "{Left}";
-        public static string ARROW_DOWN = "{Down}";
-        public static string ARROW_RIGHT = "{Right}";
-        public static string ENTER = "{Enter}";
-        public static string DiscordKey = "-";//event -> Slash
+        public static readonly string ESCAPE = "{escape}";
+        public static readonly string ARROW_UP = "{Up}";
+        public static readonly string ARROW_LEFT = "{Left}";
+        public static readonly string ARROW_DOWN = "{Down}";
+        public static readonly string ARROW_RIGHT = "{Right}";
+        public static readonly string ENTER = "{Enter}";
+        public static readonly string DiscordKey = "-";//event -> Slash
     }
 }

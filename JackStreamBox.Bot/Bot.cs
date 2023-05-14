@@ -2,6 +2,7 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using JackStreamBox.Bot.Logic.Commands;
 using JackStreamBox.Bot.Logic.Config;
@@ -41,7 +42,8 @@ namespace JackStreamBox.Bot
             Client = new DiscordClient(config);
             Client.UseInteractivity(new InteractivityConfiguration()
             {
-                Timeout = TimeSpan.FromMinutes(2)
+                PollBehaviour = PollBehaviour.KeepEmojis,
+                Timeout = TimeSpan.FromMinutes(1)
             });
 
             var commandsConfig = new CommandsNextConfiguration()
@@ -59,6 +61,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<HelpCommand>();
             Commands.RegisterCommands<CommandLevel>();
             Commands.RegisterCommands<JokeCommand>();
+            Commands.RegisterCommands<InputCommand>();
 
 
             BotCommand.Register<StartGameCommand>();
@@ -66,7 +69,9 @@ namespace JackStreamBox.Bot
             BotCommand.Register<VotingCommand>();
             BotCommand.Register<HelpCommand>();
             BotCommand.Register<JokeCommand>();
-            
+            BotCommand.Register<InputCommand>();
+
+
 
             await Client.ConnectAsync();
             await Task.Delay(-1);

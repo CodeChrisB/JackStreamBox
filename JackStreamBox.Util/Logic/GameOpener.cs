@@ -16,7 +16,7 @@ namespace JackStreamBox.Util.logic
 
         //Todo do we need any info to open
 
-        public static async Task<bool> Open(Game game, Func<string, Task> Logger)
+        public static async Task<bool> Open(Game game, Func<VoteStatus, Task> Logger)
         {
             var task = OpenPack(game,Logger);
 
@@ -24,7 +24,7 @@ namespace JackStreamBox.Util.logic
             return task.Result;
         }
 
-        static async Task<bool> OpenPack(Game game, Func<string, Task> Logger)
+        static async Task<bool> OpenPack(Game game, Func<VoteStatus, Task> Logger)
         {
             string path = PackPath(getPackByEnum(game));
             
@@ -39,7 +39,7 @@ namespace JackStreamBox.Util.logic
 
                 // Wait until the program is fully launched
                 if(process == null) return false;
-                await Logger(BotMessage.StartingGamePack);
+                await Logger(VoteStatus.OnStartingGamePack);
                 await Task.Delay(Time.SECOND * time);
 
                 // Return true if the process was started successfully
@@ -131,14 +131,14 @@ namespace JackStreamBox.Util.logic
             return "C:\\Program Files (x86)\\Steam\\steamapps\\common\\";
         }
 
-        static async Task<bool> NavigateToGame(Game game,Func<string, Task> Logger)
+        static async Task<bool> NavigateToGame(Game game,Func<VoteStatus, Task> Logger)
         {
             string windowName = "The Jackbox Party Pack";
             windowName += getPackByEnum(game) > 1 ? " " + getPackByEnum(game) : "";
             
             WindowNavigator.SetWindow(windowName);
-            await Logger(BotMessage.OpenedGamePack);
-            await Logger(BotMessage.StartingGame);
+            await Logger(VoteStatus.OnOpendGamePack);
+            await Logger(VoteStatus.OnStartingGame);
 
 
             string[] inputs = InputGenerator.Generate(game);
@@ -146,19 +146,19 @@ namespace JackStreamBox.Util.logic
             {
                 Console.WriteLine($"Performed ${inputs[i]};Now waiting");
             
-                WindowNavigator.SendeGameInput(inputs[i]);
+                WindowNavigator.SendGameInput(inputs[i]);
                 int time = 8;
                 //enter press to open menu
                 await Task.Delay(Time.SECOND * time);
             }
 
-            await Logger(BotMessage.GameOpend);
-            await Logger(BotMessage.StartingStream);
+            await Logger(VoteStatus.OnGameOpend);
+            await Logger(VoteStatus.OnStartingStream);
 
             WindowNavigator.SetDiscord();
             WindowNavigator.SendDiscordInput(Input.DiscordKey);
 
-            await Logger(BotMessage.AllFinished);
+            await Logger(VoteStatus.OnAllFinished);
 
             return true;
         }

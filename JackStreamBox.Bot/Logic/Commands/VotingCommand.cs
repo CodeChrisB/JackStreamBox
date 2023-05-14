@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 
 namespace JackStreamBox.Bot.Logic.Commands
@@ -40,11 +41,35 @@ namespace JackStreamBox.Bot.Logic.Commands
             CURRENT_VOTES = new List<string>();
             CURRENT_PACK = null;
             games = null;
+            ResetGameStartSteps();
         }
-
-
         private async Task LogVoteText(CommandContext context) { await context.Channel.SendMessageAsync($"Start Vote {CURRENT_VOTES.Count()}/{REQUIRED_VOTES}"); }
         #endregion
+
+        #region Step
+        public struct Step {
+            public string Text;
+            public bool Completed;
+        }
+
+        Step[] GameStartSteps = new Step[1];
+        private string Winner = "";
+
+        private void ResetGameStartSteps()
+        {
+            GameStartSteps = new Step[]
+            {
+                new Step { Text = BotMessage.StartingGamePack
+                , Completed = false },
+                new Step { Text = BotMessage.OpenedGamePack, Completed = false },
+                new Step { Text = BotMessage.StartingGame, Completed = false },
+                new Step { Text = BotMessage.GameOpend, Completed = false },
+                new Step { Text = BotMessage.StartingStream, Completed = false },
+                new Step { Text = BotMessage.AllFinished, Completed = false },
+            };
+        }
+        #endregion
+
 
         private DiscordClient? _client;
         [Command("startvote")]
@@ -72,6 +97,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         private async Task StartVoteWithPack(CommandContext context, int pack,int time)
         {
             int level = CommandLevel.RoleToLevel(context.Member.Roles);
+            ResetGameStartSteps();
 
             games = pack == -1 ? PackInfo.GetRandomGames(5) : PackInfo.GetPackInfo(pack).games;
 
@@ -121,54 +147,65 @@ namespace JackStreamBox.Bot.Logic.Commands
             };
 
 
-
             var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
 
 
-
-
-
-            async Task Logger(string message)
+            async Task Logger(VoteStatus status)
             {
-                //Set New Poll Data
-                pollEmbed.Description = $"{pollEmbed.Description}\n{message}";
-                //Delete Poll
+                GameStartSteps[(int)status].Completed = true;
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"Winner is {Winner}\n");
+                foreach(Step step in GameStartSteps)
+                {
+                    sb.AppendLine($"{StatusEmoji(step.Completed)} - {step.Text}");
+                }
+
+                pollEmbed.Description = sb.ToString();
                 await pollMessage.ModifyAsync(null, pollEmbed.Build());
-                return;
             }
 
+            string StatusEmoji(bool status)
+            {
+                if (status) return ":thumbsup:";
+                return ":x:";
+            }
 
 
             DiscordEmoji[] emojis = GetEmojis();
             foreach (var emoji in emojis)
             {
-                await pollMessage.CreateReactionAsync(emoji).ConfigureAwait(false);
+                await pollMessage.CreateReactionAsync(emoji);
             }
             //Get Reactions
-            var interactivty = context.Client.GetInteractivity();
-            var result = await interactivty.CollectReactionsAsync(pollMessage, span);
+            var interactivity = context.Client.GetInteractivity();
+            //Maybe override the function so we can use callback to resume with ALL the reactions
+            var result = await interactivity.CollectReactionsAsync(pollMessage, TimeSpan.FromSeconds(CURRENT_TIME)).ConfigureAwait(false);
+            
+            var x = 1;
             var distinct = result.Distinct();
-
+            
             Reaction[] results = result.Where(x => x.Total == result.Max(obj => obj.Total)).ToArray();
-            if(!result.Any()) 
+            if(!results.Any()) 
             {
                 await pollMessage.DeleteAsync().ConfigureAwait(false);
                 await context.Channel.SendMessageAsync("No Votes !\nCancel voting process :sob:");
                 return;
             }
-
+            
             //Pick Game               
             var random = new Random();
             var pollWinner = results.Length == 1 ? results[0] : results[random.Next(results.Length)];
-
-            PackGame Winner = ReactionToId(games, pollWinner);
-
+            
+            PackGame GameWinner = ReactionToId(games, pollWinner);
+            
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
-            await Logger($"Winner is {Winner.Name}\n");
-
+            Winner = GameWinner.Name;
+            
             //Reset Timer
             CURRENT_TIME = TIME;
-            await JackStreamBoxUtility.OpenGame(Winner.Id, Logger);
+            pollEmbed.Title = "**Preparing your next game**";
+            await Logger(VoteStatus.OnStartingGamePack);
+            await JackStreamBoxUtility.OpenGame(GameWinner.Id, Logger);
         }
         private PackGame ReactionToId(PackGame[] games, Reaction pollWinner)
         {
