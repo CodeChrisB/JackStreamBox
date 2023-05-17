@@ -75,6 +75,8 @@ namespace JackStreamBox.Bot.Logic.Commands
                 case "enter":
                     internalInput = Input.ENTER; break;
             }
+            //No setting requires more than 20 presses (I dont think more than 10 are needed)
+            if (times > 20) times = 20;
             for(int i = 0; i < times && internalInput != null; i++)
             {
                 WindowNavigator.SendGameInput(internalInput);

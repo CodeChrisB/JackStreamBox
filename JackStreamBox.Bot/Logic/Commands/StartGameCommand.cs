@@ -21,8 +21,9 @@ namespace JackStreamBox.Bot.Logic.Commands
     public class StartGameCommand : BaseCommandModule
     {
         [Command("start")]
-        [Description("Opens any game you want. Uses the game position.\nMad Verse city is the 3rd game in the 5th pack it's position is (5*5+3=28)\n  !closes any game that currently is held.")]
-        [Requires(PermissionRole.STAFF)]
+        [Description("Starts any game you want to.\n  !closes any game that currently is held.")]
+        //Dont docuemnt this command
+        //[Requires(PermissionRole.STAFF)]
         public async Task OpenGame(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;

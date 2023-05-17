@@ -14,20 +14,45 @@ namespace JackStreamBox.Bot.Logic.Commands
 {
     internal class HelpCommand : BaseCommandModule
     {
-
         [Command("help")]
         [Description("List all commands you can use")]
         [Requires(PermissionRole.ANYONE)]
-        public async Task DisplayPack(CommandContext context)
+        public async Task DisplayHelp(CommandContext context)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            var helpEmbed = new DiscordEmbedBuilder
+            {
+                Title = "**How to use the bot?**",
+                Description = ""
+            };
+
+            
+            StringBuilder sb = new StringBuilder();                                     
+            sb.AppendLine("");
+            sb.AppendLine("The bot is using a voting system. Members of the server will have to use **!startvote** when enough people did that the bot will start the voting phase.");
+            sb.AppendLine("\nAfter the voting phase the game with the most reaction will get picked and the game gets started.");
+            sb.AppendLine("\n");
+            sb.AppendLine("For more information about all the diffrent commands use **\n");  
+            sb.AppendLine($"**!commands+**");
+
+
+            helpEmbed.Description = sb.ToString();
+            await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
+        }
+
+        [Command("commands")]
+        [Description("List all commands you can use")]
+        [Requires(PermissionRole.ANYONE)]
+        public async Task DisplayCommands(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await DisplayPackWithDescription(context, false);
         }
 
-        [Command("help+")]
+        [Command("commands+")]
         [Description("Get information about every command you can use")]
         [Requires(PermissionRole.ANYONE)]
-        public async Task DisplayPack2(CommandContext context)
+        public async Task DisplayCommandsWithDescription(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await DisplayPackWithDescription(context, true);

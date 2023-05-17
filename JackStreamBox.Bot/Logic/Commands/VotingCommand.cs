@@ -139,17 +139,25 @@ namespace JackStreamBox.Bot.Logic.Commands
             //Start Vote 60 sec
             _client = context.Client;
 
-
+            //----Create embed
             var pollEmbed = new DiscordEmbedBuilder
             {
                 Title = "Game Vote",
-                Description = $"*What game will be played next?*\n(You have {CURRENT_TIME} seconds.)\n\n{GameText(games)}"
+                Description = $"Setting up the Poll"
             };
-
-
             var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
 
+            //Add Reactions
+            DiscordEmoji[] emojis = GetEmojis();
+            foreach (var emoji in emojis)
+            {
+                await pollMessage.CreateReactionAsync(emoji);
+            }
+            //----Show votable games
+            pollEmbed.Description = $"*What game will be played next?*\n(You have {CURRENT_TIME} seconds.)\n\n{GameText(games)}";
+            await pollMessage.ModifyAsync(null, pollEmbed.Build());
 
+            //----Voting Phase
             async Task Logger(VoteStatus status)
             {
                 GameStartSteps[(int)status].Completed = true;
@@ -171,17 +179,11 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
 
-            DiscordEmoji[] emojis = GetEmojis();
-            foreach (var emoji in emojis)
-            {
-                await pollMessage.CreateReactionAsync(emoji);
-            }
+
             //Get Reactions
             var interactivity = context.Client.GetInteractivity();
             //Maybe override the function so we can use callback to resume with ALL the reactions
             var result = await interactivity.CollectReactionsAsync(pollMessage, TimeSpan.FromSeconds(CURRENT_TIME)).ConfigureAwait(false);
-            
-            var x = 1;
             var distinct = result.Distinct();
             
             Reaction[] results = result.Where(x => x.Total == result.Max(obj => obj.Total)).ToArray();
@@ -191,7 +193,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 await context.Channel.SendMessageAsync("No Votes !\nCancel voting process :sob:");
                 return;
             }
-            
+            //Startingphase
             //Pick Game               
             var random = new Random();
             var pollWinner = results.Length == 1 ? results[0] : results[random.Next(results.Length)];
