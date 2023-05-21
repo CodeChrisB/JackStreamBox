@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "tPLYiwEtbycd6UgYtmsQx9j27Ut7TfU+UgjGWpiQaziE9hAl3E5b+aQayx2cpZ+D2rQNVU5rdygGUG0FbZFB7Q==",
+  "dgSpecHash": "vEi3MF3QJhPd+tcgBXDe77mWY1zt2JgJ6vc98mTfO5S47Q9cjQ61q0XuNZFycj/LOsj38QXEcBZPfnuGWn7AVA==",
   "success": true,
   "projectFilePath": "D:\\Git\\JackBoxStream\\JackStreamBox.Bot\\JackStreamBox.Bot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\cocop\\.nuget\\packages\\concurrenthashset\\1.3.0\\concurrenthashset.1.3.0.nupkg.sha512",
-    "C:\\Users\\cocop\\.nuget\\packages\\dsharpplus\\4.4.0\\dsharpplus.4.4.0.nupkg.sha512",
-    "C:\\Users\\cocop\\.nuget\\packages\\dsharpplus.commandsnext\\4.4.0\\dsharpplus.commandsnext.4.4.0.nupkg.sha512",
-    "C:\\Users\\cocop\\.nuget\\packages\\dsharpplus.interactivity\\4.4.0\\dsharpplus.interactivity.4.4.0.nupkg.sha512",
+    "C:\\Users\\cocop\\.nuget\\packages\\dsharpplus\\4.4.1\\dsharpplus.4.4.1.nupkg.sha512",
+    "C:\\Users\\cocop\\.nuget\\packages\\dsharpplus.commandsnext\\4.4.1\\dsharpplus.commandsnext.4.4.1.nupkg.sha512",
+    "C:\\Users\\cocop\\.nuget\\packages\\dsharpplus.interactivity\\4.4.1\\dsharpplus.interactivity.4.4.1.nupkg.sha512",
     "C:\\Users\\cocop\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\5.0.1\\microsoft.extensions.dependencyinjection.5.0.1.nupkg.sha512",
     "C:\\Users\\cocop\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\cocop\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512",

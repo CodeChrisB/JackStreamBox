@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace JackStreamBox.Bot
 {
@@ -53,8 +54,11 @@ namespace JackStreamBox.Bot
                 EnableDefaultHelp = false,
             };
 
+
+
             Commands = Client.UseCommandsNext(commandsConfig);
 
+            //text commands
             Commands.RegisterCommands<StartGameCommand>();
             Commands.RegisterCommands<PackCommand>();
             Commands.RegisterCommands<VotingCommand>();
@@ -62,14 +66,16 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<CommandLevel>();
             Commands.RegisterCommands<JokeCommand>();
             Commands.RegisterCommands<InputCommand>();
+            Commands.RegisterCommands<SayCommand>();
 
-
+            //Register for Help Page
             BotCommand.Register<StartGameCommand>();
             BotCommand.Register<PackCommand>();
             BotCommand.Register<VotingCommand>();
             BotCommand.Register<HelpCommand>();
             BotCommand.Register<JokeCommand>();
             BotCommand.Register<InputCommand>();
+            BotCommand.Register<SayCommand>();
 
 
 

@@ -59,7 +59,6 @@ namespace JackStreamBox.Bot.Logic.Commands
             Destroyer.Message(context.Message, DestroyTime.NORMAL);
         }
 
-
         public async Task DisplayPackWithDescription(CommandContext context, bool appendDescription)
         {
             
@@ -99,6 +98,46 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             var pollMessage = await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
             Destroyer.Message(pollMessage, DestroyTime.REALLYSLOW);
+        }
+
+        [Command("rules")]
+        [Description("View the rules")]
+        [Requires(PermissionRole.ANYONE)]
+        public async Task Rules(CommandContext context)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            var ruleEmbed = new DiscordEmbedBuilder
+            {
+                Title = "Help Page",
+                Description = ""
+            };
+            string[] rules = new string[]
+            {
+                "No Racism or Discrimination of Any Kind",
+                "Follow the discord tos",
+                "Respect for All Participants",
+                "No Mid-game quitting",
+                "No doxxing",
+                "No spamming in game or chat",
+                "Staff members may introduce other rules which will apply next to the listed rules above",
+            };
+
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("**JackStreamBox Rules**");
+            int i = 1;
+            foreach (var rule in rules)
+            {
+                sb.AppendLine($"[{i}] - {rule}");
+                i++;
+            }
+
+            sb.AppendLine("\nIf you **break rules** you risk getting the @NoBot Role, which will prohibt you interacting with the bot ever again.");
+            ruleEmbed.Description = sb.ToString();
+            var ruleMessage = await context.Channel.SendMessageAsync(embed: ruleEmbed).ConfigureAwait(false);
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+            Destroyer.Message(ruleMessage, DestroyTime.REALLYSLOW);
         }
 
     }

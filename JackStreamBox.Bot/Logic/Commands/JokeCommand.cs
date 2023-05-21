@@ -24,6 +24,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
             var message = await context.Channel.SendMessageAsync(Joke.GetJoke());
 
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
             Destroyer.Message(message, DestroyTime.REALLYSLOW);
         }
     }
