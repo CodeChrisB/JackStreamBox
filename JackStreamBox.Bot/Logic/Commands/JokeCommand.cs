@@ -22,7 +22,9 @@ namespace JackStreamBox.Bot.Logic.Commands
             {
                 await context.Channel.SendMessageAsync("Wanna hear a joke? You can't use this command.");
             }
-            await context.Channel.SendMessageAsync(Joke.GetJoke());
+            var message = await context.Channel.SendMessageAsync(Joke.GetJoke());
+
+            Destroyer.Message(message, DestroyTime.REALLYSLOW);
         }
     }
 }

@@ -23,19 +23,21 @@ namespace JackStreamBox.Bot.Logic.Config
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.NOBOT)) return;
 
             int grantedLevel = RoleToLevel(context.Member.Roles);
-            string message= "";
+            string text= "";
             switch (grantedLevel)
             {
-                case 0: message = "You can not use this bot. All acesss besides this command is removed from your permissions.:skull:"; break;
-                case 1: message = "Level 1: Besides of voting you don't have alot of permissions"; break;
-                case 2: message = "Level 2: Besides of voting you don't have alot of permissions"; break;
-                case 3: message = "Level 3: You can use !startvote to try to start a game vote"; break;
-                case 4: message = "Level 4: You can use !startvote to instantly start a vote"; break;
-                case 5: message = "Level 5: You can do anything :crown:"; break;
-                default: message = "Level N/A: could not find your level"; break;
+                case 0: text = "You can not use this bot. All acesss besides this command is removed from your permissions.:skull:"; break;
+                case 1: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: Besides of voting you don't have alot of permissions"; break;
+                case 2: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: Besides of voting you don't have alot of permissions"; break;
+                case 3: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: You can use !startvote to try to start a game vote"; break;
+                case 4: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: Start games; make pee breaks; let the bot rejoin and more"; break;
+                case 5: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: You can do anything :crown:"; break;
+                default: text = "Level N/A: could not find your level"; break;
             }
             string memberName = context.Member.DisplayName;
-            await context.Channel.SendMessageAsync($"{memberName} \n{message}");
+            var message = await context.Channel.SendMessageAsync($"\n{memberName} \n{text}");
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+            Destroyer.Message(message, DestroyTime.SLOW);
         }
 
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel)
@@ -53,12 +55,10 @@ namespace JackStreamBox.Bot.Logic.Config
             bool canExecute = grantedLevel >= requiredLevel;
 
 
-
             if(!canExecute)
             {
                 context.Channel.SendMessageAsync("You can not execute this");
             }
-
 
             return canExecute;
         }
@@ -83,11 +83,13 @@ namespace JackStreamBox.Bot.Logic.Config
                         break;
                     //Highly
                     case "Top hosts":
-                    case "Captain Server-Booster🌟🌟": 
+                    case "Captain Server-Booster🌟🌟":
+                    case "VIP Members":
                         level = Math.Max(level, (int)PermissionRole.HIGHLYTRUSTED); 
                         break;
                     //Staff
-                    case "Jack": 
+                    case "Jack":
+                    case "Box":
                         level = Math.Max(level, (int)PermissionRole.STAFF); 
                         break;
                     //Developer
@@ -108,6 +110,19 @@ namespace JackStreamBox.Bot.Logic.Config
             //Rage Quitter
             //NoBot
             return level;
+        }
+
+        public static string RoleName(PermissionRole role)
+        {
+            switch (role)
+            {
+                case PermissionRole.ANYONE: return "Open";
+                case PermissionRole.TRUSTED: return "Trust";
+                case PermissionRole.HIGHLYTRUSTED: return "Elite";
+                case PermissionRole.STAFF: return "Crew";
+                case PermissionRole.DEVELOPER: return "Code";
+                default: return "Banned";
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ namespace JackStreamBox.Bot.Logic.Config
 
         public static CommandInfo[] GetCommands()
         {
-            return CommandInfoList.OrderBy(x => x.Name).ToArray();
+            return CommandInfoList.OrderBy(x => (int)x.Role).ThenBy(x=>x.Name).ToArray();
         }
         public static void Register<T>()
         {

@@ -31,8 +31,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             sb.AppendLine("");
             sb.AppendLine("The bot is using a voting system. Members of the server will have to use **!startvote** when enough people did that the bot will start the voting phase.");
             sb.AppendLine("\nAfter the voting phase the game with the most reaction will get picked and the game gets started.");
-            sb.AppendLine("\n");
-            sb.AppendLine("For more information about all the diffrent commands use **\n");  
+            sb.AppendLine("\n**For more information about all the diffrent commands use **\n");  
             sb.AppendLine($"**!commands+**");
 
 
@@ -47,6 +46,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await DisplayPackWithDescription(context, false);
+            Destroyer.Message(context.Message, DestroyTime.NORMAL);
         }
 
         [Command("commands+")]
@@ -56,6 +56,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await DisplayPackWithDescription(context, true);
+            Destroyer.Message(context.Message, DestroyTime.NORMAL);
         }
 
 
@@ -70,13 +71,23 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             CommandInfo[] ci = BotCommand.GetCommands();
 
+
+
             StringBuilder sb = new StringBuilder();
             int level = CommandLevel.RoleToLevel(context.Member.Roles);
+            int currentlevel =0;
             foreach (var ciItem in ci)
             {
                 if(level >= (int)ciItem.Role)
                 {
-                    sb.AppendLine($"**!{ciItem.Name}**  - [Level {(int)ciItem.Role}]");
+
+                    if(currentlevel < (int)ciItem.Role)
+                    {
+                        sb.AppendLine($"**===[ Level {(int)ciItem.Role} - {CommandLevel.RoleName(ciItem.Role)} ]===**");
+                        currentlevel = (int)ciItem.Role;
+                    }
+
+                    sb.AppendLine($"**!{ciItem.Name}**");
                     if (appendDescription)
                     {
                         sb.AppendLine($"{ciItem.Description}\n");
@@ -87,6 +98,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             helpEmbed.Description = sb.ToString();
 
             var pollMessage = await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
+            Destroyer.Message(pollMessage, DestroyTime.REALLYSLOW);
         }
 
     }

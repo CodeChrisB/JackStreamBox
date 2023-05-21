@@ -15,6 +15,7 @@ using JackStreamBox.Bot.Logic.Attributes;
 using DSharpPlus;
 using static System.Net.Mime.MediaTypeNames;
 using JackStreamBox.Util.Data;
+using System.Windows.Forms;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
@@ -23,7 +24,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Command("start")]
         [Description("Starts any game you want to.\n  !closes any game that currently is held.")]
         //Dont docuemnt this command
-        //[Requires(PermissionRole.STAFF)]
+        [Requires(PermissionRole.STAFF)]
         public async Task OpenGame(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
@@ -61,15 +62,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                         await JackStreamBoxUtility.OpenGame(gameId, Logger);
                         break;
                 }
-            };
-
-
-
-
-
-
-            //var task = JackStreamBoxUtility.OpenGame((Util.Data.Game)game-1,Logger);
-            //await task;
+            }; 
         }
 
         [Command("join")]
@@ -80,12 +73,21 @@ namespace JackStreamBox.Bot.Logic.Commands
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED)) return;
 
             JackStreamBoxUtility.JoinLobby();
-            await context.Channel.SendMessageAsync("Done.");
+            var message = await context.Channel.SendMessageAsync("Done.");
+            Destroyer.Message(message, DestroyTime.REALLYSLOW);
         }
 
-        //HELPERS
+        [Command("close")]
+        [Description("Starts any game you want to.\n  !closes any game that currently is held.")]
+        //Dont docuemnt this command
+        [Requires(PermissionRole.DEVELOPER)]
+        public async Task Close(CommandContext context)
+        {
+            //todo
+        }
+            //HELPERS
 
-        private DiscordMessageBuilder OpenPack(string id)
+            private DiscordMessageBuilder OpenPack(string id)
         {
             Pack chosenPack = PackInfo.GetPackInfo(int.Parse(id));
 

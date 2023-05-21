@@ -40,7 +40,9 @@ namespace JackStreamBox.Bot.Logic.Commands
 
                 }
 
-                await context.Channel.SendMessageAsync(stringBuilder.ToString());
+                var message = await context.Channel.SendMessageAsync(stringBuilder.ToString());
+                Destroyer.Message(message, DestroyTime.REALLYSLOW);
+
             }
         }
 
@@ -48,7 +50,6 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Command("pack")]
         public async Task DisplayPack(CommandContext context)
         {
-            //if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await context.Channel.SendMessageAsync("https://media.discordapp.net/attachments/1066085138791932005/1070771921643372564/image.png?width=674&height=902");
         }
     }

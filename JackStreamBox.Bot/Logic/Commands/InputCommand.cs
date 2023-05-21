@@ -42,7 +42,8 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task RealInput(CommandContext context,string input)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
-            DoInput(input, 1);   
+            DoInput(input, 1);
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
         }
 
         [Command("input")]
@@ -50,6 +51,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
             DoInput(input, times);
+            Destroyer.Message(context.Message,DestroyTime.INSTANT);
         }
 
         private void DoInput(string input, int times )
@@ -81,6 +83,8 @@ namespace JackStreamBox.Bot.Logic.Commands
             {
                 WindowNavigator.SendGameInput(internalInput);
             }
+
+           
 
         }
 
