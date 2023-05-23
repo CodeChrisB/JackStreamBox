@@ -14,7 +14,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     public class SayCommand : BaseCommandModule
     {
         [Command("say")]
-        [Description("Use the bot to speak")]
+        [Description("Use the bot to speak.")]
         [Requires(PermissionRole.DEVELOPER)]
         public async Task Tell(CommandContext context,string message)
         {

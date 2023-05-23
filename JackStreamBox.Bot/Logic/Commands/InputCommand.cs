@@ -16,7 +16,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
 
         [Command("break")]
-        [Description("Pauses the game for one minute")]
+        [Description("Pauses the game for 1 minute.")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task PeeBreak(CommandContext context)
         {
@@ -38,10 +38,10 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         [Command("input")]
         [Description("Let's you navigate the game yourself. Used to change settings.")]
-        [Requires(PermissionRole.HIGHLYTRUSTED)]
+        [Requires(PermissionRole.STAFF)]
         public async Task RealInput(CommandContext context,string input)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             DoInput(input, 1);
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
         }
@@ -49,7 +49,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Command("input")]
         public async Task RealInput(CommandContext context, string input,int times)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             DoInput(input, times);
             Destroyer.Message(context.Message,DestroyTime.INSTANT);
         }

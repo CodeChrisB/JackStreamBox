@@ -75,6 +75,7 @@ namespace JackStreamBox.Bot
             BotCommand.Register<HelpCommand>();
             BotCommand.Register<JokeCommand>();
             BotCommand.Register<InputCommand>();
+            BotCommand.Register<CommandLevel>();
             BotCommand.Register<SayCommand>();
 
 

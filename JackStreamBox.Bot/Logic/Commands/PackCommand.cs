@@ -15,7 +15,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     internal class PackCommand : BaseCommandModule
     {
         [Command("pack")]
-        [Description("Let's you checkout all the packs and their games use !pack 1 for pack 1 !pack 2 for pack 2 etc...")]
+        [Description("View a pack and it's games. **E.g !pack 5**")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context, int pack)
         {

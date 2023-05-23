@@ -13,7 +13,10 @@ namespace JackStreamBox.Bot.Logic.Config
         public static async void Message(DiscordMessage message,TimeSpan seconds)
         {
             Task.Delay(seconds).Wait();
-            await message.DeleteAsync();
+            if (message == null) return;
+            try { 
+                await message.DeleteAsync();
+            }catch (Exception ex) { }
         }
     }
 }

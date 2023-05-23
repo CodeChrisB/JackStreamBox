@@ -14,11 +14,11 @@ namespace JackStreamBox.Bot.Logic.Commands
     public class JokeCommand : BaseCommandModule 
     {
         [Command("joke")]
-        [Description("Get a bad jackbox related pun (Using ChatGPT)")]
-        [Requires(PermissionRole.HIGHLYTRUSTED)]
+        [Description("Get a bad jackbox related pun. (Using ChatGPT)")]
+        [Requires(PermissionRole.TRUSTED)]
         public async Task MakeRizz(CommandContext context)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED))
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED))
             {
                 await context.Channel.SendMessageAsync("Wanna hear a joke? You can't use this command.");
             }

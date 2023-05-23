@@ -22,7 +22,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     public class StartGameCommand : BaseCommandModule
     {
         [Command("start")]
-        [Description("Starts any game you want to.\n  !closes any game that currently is held.")]
+        [Description("Starts any game you want to. Be aware this instantly closes any current game!")]
         //Dont docuemnt this command
         [Requires(PermissionRole.STAFF)]
         public async Task OpenGame(CommandContext context)
@@ -78,12 +78,13 @@ namespace JackStreamBox.Bot.Logic.Commands
         }
 
         [Command("close")]
-        [Description("Starts any game you want to.\n  !closes any game that currently is held.")]
+        [Description("Will close the bot. Use in emergency such as the bot streaming a wrong window.")]
         //Dont docuemnt this command
         [Requires(PermissionRole.DEVELOPER)]
         public async Task Close(CommandContext context)
         {
             //todo
+            Environment.Exit(0);
         }
             //HELPERS
 

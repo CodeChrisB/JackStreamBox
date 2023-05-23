@@ -16,12 +16,11 @@ namespace JackStreamBox.Bot.Logic.Config
     {
         [Command("level")]
         [Description("Checks what permission level you have.")]
-        [Requires(PermissionRole.NOBOT)]
+        [Requires(PermissionRole.ANYONE)]
         public async Task WhatLevelAmI(CommandContext context)
         {
 
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.NOBOT)) return;
-
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             int grantedLevel = RoleToLevel(context.Member.Roles);
             string text= "";
             switch (grantedLevel)
@@ -118,9 +117,9 @@ namespace JackStreamBox.Bot.Logic.Config
             {
                 case PermissionRole.ANYONE: return "Open";
                 case PermissionRole.TRUSTED: return "Trust";
-                case PermissionRole.HIGHLYTRUSTED: return "Elite";
-                case PermissionRole.STAFF: return "Crew";
-                case PermissionRole.DEVELOPER: return "Code";
+                case PermissionRole.HIGHLYTRUSTED: return "High";
+                case PermissionRole.STAFF: return "Staff";
+                case PermissionRole.DEVELOPER: return "Devs";
                 default: return "Banned";
             }
         }

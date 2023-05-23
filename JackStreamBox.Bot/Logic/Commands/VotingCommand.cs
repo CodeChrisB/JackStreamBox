@@ -80,8 +80,8 @@ namespace JackStreamBox.Bot.Logic.Commands
         }
 
         [Command("startvote")]
-        [Description("Starts a new voting. !Closes the current game if there is one!")]
-        [Requires(PermissionRole.ANYONE)]
+        [Description("Starts a new voting. Level 2 can start a poll for a new vote. Level 4 can instantly start a new vote.")]
+        [Requires(PermissionRole.TRUSTED)]
         public async Task StartVote(CommandContext context, int pack)
         {
             await StartVoteWithPack(context, pack, TIME);
@@ -102,7 +102,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             games = pack == -1 ? PackInfo.GetRandomGames(5) : PackInfo.GetPackInfo(pack).games;
 
 
-            if (level >= (int)PermissionRole.HIGHLYTRUSTED)
+            if (level >= (int)PermissionRole.STAFF)
             {
                 //Tophost and higher
                 if(time>60) time = 60;

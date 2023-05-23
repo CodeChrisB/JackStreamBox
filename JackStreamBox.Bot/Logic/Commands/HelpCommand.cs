@@ -9,13 +9,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
     internal class HelpCommand : BaseCommandModule
     {
         [Command("help")]
-        [Description("List all commands you can use")]
+        [Description("Explains what the bot does and how to get further help.")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayHelp(CommandContext context)
         {
@@ -36,11 +37,13 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
             helpEmbed.Description = sb.ToString();
-            await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
+            var message = await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+            Destroyer.Message(message, DestroyTime.REALLYSLOW);
         }
 
         [Command("commands")]
-        [Description("List all commands you can use")]
+        [Description("List all commands you can use.")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayCommands(CommandContext context)
         {
@@ -50,7 +53,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         }
 
         [Command("commands+")]
-        [Description("Get information about every command you can use")]
+        [Description("Get information about every command you can use.")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayCommandsWithDescription(CommandContext context)
         {
@@ -64,7 +67,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             
             var helpEmbed = new DiscordEmbedBuilder
             {
-                Title = "Help Page",
+                Title = "Help Page™",
                 Description = "If u see this message something went wrong"
             };
 
@@ -74,7 +77,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             StringBuilder sb = new StringBuilder();
             int level = CommandLevel.RoleToLevel(context.Member.Roles);
-            int currentlevel =0;
+            int currentlevel =-1;
             foreach (var ciItem in ci)
             {
                 if(level >= (int)ciItem.Role)
@@ -82,17 +85,18 @@ namespace JackStreamBox.Bot.Logic.Commands
 
                     if(currentlevel < (int)ciItem.Role)
                     {
-                        sb.AppendLine($"**===[ Level {(int)ciItem.Role} - {CommandLevel.RoleName(ciItem.Role)} ]===**");
+                        sb.AppendLine($"**===========╣ Level {(int)ciItem.Role} - {CommandLevel.RoleName(ciItem.Role)} ╠==========**");
                         currentlevel = (int)ciItem.Role;
                     }
 
-                    sb.AppendLine($"**!{ciItem.Name}**");
+                    sb.AppendLine($" **!{ciItem.Name}**");
                     if (appendDescription)
                     {
-                        sb.AppendLine($"{ciItem.Description}\n");
+                        sb.AppendLine($"{ciItem.Description}");
                     }
                 }
             }
+            sb.AppendLine($"**=========╣ End of commands ╠=========**");
 
             helpEmbed.Description = sb.ToString();
 
@@ -101,7 +105,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         }
 
         [Command("rules")]
-        [Description("View the rules")]
+        [Description("View the rules.")]
         [Requires(PermissionRole.ANYONE)]
         public async Task Rules(CommandContext context)
         {
