@@ -28,7 +28,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
 
             // Execute "git stash && git pull" commands
-            //ExecuteShellCommand("git stash");
+            ExecuteShellCommand("git stash");
             ExecuteShellCommand("git pull");
 
             // Restart the bot
