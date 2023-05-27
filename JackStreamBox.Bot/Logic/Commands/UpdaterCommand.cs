@@ -41,7 +41,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task Utest(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
-            await context.Channel.SendMessageAsync("V0.4.1");
+            await context.Channel.SendMessageAsync("V0.4.2");
         }
 
         static void ExecuteShellCommand(string command)
