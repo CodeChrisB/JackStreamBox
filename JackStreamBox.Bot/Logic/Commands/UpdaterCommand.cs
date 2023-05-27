@@ -28,8 +28,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
 
             // Execute "git stash && git pull" commands
-            ExecuteShellCommand("git stash");
-            ExecuteShellCommand("git pull");
+            ExecuteShellCommand("git stash && git pull");
 
             // Restart the bot
             RestartBot();
@@ -41,7 +40,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task Utest(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
-            await context.Channel.SendMessageAsync("V0.4.2");
+            await context.Channel.SendMessageAsync("V0.4.1");
         }
 
         static void ExecuteShellCommand(string command)
