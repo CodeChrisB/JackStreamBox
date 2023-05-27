@@ -9,8 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using JackStreamBox.Bot.Logic.Config;
 
-namespace JackStreamBox.Bot.Logic.Config
+namespace JackStreamBox.Bot.Logic.Commands
 {
     internal class UpdaterCommand : BaseCommandModule
     {
@@ -24,12 +25,23 @@ namespace JackStreamBox.Bot.Logic.Config
         [Requires(PermissionRole.DEVELOPER)]
         public async Task Update(CommandContext context)
         {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+
             // Execute "git stash && git pull" commands
             //ExecuteShellCommand("git stash");
             ExecuteShellCommand("git pull");
 
             // Restart the bot
             RestartBot();
+        }
+
+        [Command("utest")]
+        [Description("Test updater")]
+        [Requires(PermissionRole.DEVELOPER)]
+        public async Task Utest(CommandContext context)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+            await context.Channel.SendMessageAsync("V0.4.1");
         }
 
         static void ExecuteShellCommand(string command)
