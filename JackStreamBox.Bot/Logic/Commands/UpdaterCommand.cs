@@ -30,6 +30,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             // Execute "git stash && git pull" commands
             ExecuteShellCommand("git stash && git pull");
 
+            RebuildApplication();
             // Restart the bot
             RestartBot();
         }
@@ -74,6 +75,35 @@ namespace JackStreamBox.Bot.Logic.Commands
             Console.WriteLine("Errors: " + errors);
         }
 
+        static void RebuildApplication()
+        {
+            Console.WriteLine("Rebuilding the application...");
+
+            // Get the current working directory
+            string currentDirectory = Environment.CurrentDirectory;
+
+            // Search for the project file within the current directory and its subdirectories
+            string projectFilePath = SearchForProjectFile(currentDirectory);
+
+            if (projectFilePath != null)
+            {
+                // Rebuild the project using dotnet build command
+                ExecuteShellCommand("dotnet build \"" + projectFilePath + "\"");
+            }
+            else
+            {
+                Console.WriteLine("No project file found in the current directory and its subdirectories.");
+            }
+        }
+
+        static string SearchForProjectFile(string directory)
+        {
+            // Search for files with .csproj extension within the directory
+            var projectFiles = Directory.GetFiles(directory, "*.csproj", SearchOption.AllDirectories);
+
+            // Return the first project file found, if any
+            return projectFiles.FirstOrDefault();
+        }
 
         static void RestartBot()
         {
