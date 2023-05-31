@@ -150,8 +150,8 @@ namespace JackStreamBox.Util.logic
                 //enter press to open menu
                 //todo only the last 2 inputs should use StartGame others should use NavigateToGame
                 //int time = Time.NavigateToGame;
-                int time = 8;
-                
+                int time = 8000;
+                 
 
                 await Task.Delay(time);
             }
