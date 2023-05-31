@@ -102,8 +102,6 @@ namespace JackStreamBox.Bot.Logic.Config
                        break;
 
                 }
-
-                return level;
             }
 
             //todo negative roles
