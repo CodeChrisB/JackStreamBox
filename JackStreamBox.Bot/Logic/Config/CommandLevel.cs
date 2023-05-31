@@ -49,7 +49,7 @@ namespace JackStreamBox.Bot.Logic.Config
 
 
             //Check if inside the Jackbot VC or if developer used the command
-            if (context.Channel.Id.ToString() != "1105184748701229066" && grantedLevel < (int)PermissionRole.DEVELOPER) return false;
+            //if (context.Channel.Id.ToString() != "1105184748701229066" && grantedLevel < (int)PermissionRole.DEVELOPER) return false;
 
             bool canExecute = grantedLevel >= requiredLevel;
 
@@ -102,6 +102,8 @@ namespace JackStreamBox.Bot.Logic.Config
                        break;
 
                 }
+
+                return level;
             }
 
             //todo negative roles
