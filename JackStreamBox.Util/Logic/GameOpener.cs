@@ -149,9 +149,9 @@ namespace JackStreamBox.Util.logic
                 WindowNavigator.SendGameInput(inputs[i]);
                 //enter press to open menu
                 //todo only the last 2 inputs should use StartGame others should use NavigateToGame
-                int time = Time.NavigateToGame;
-                if(i == 0) time = Time.OpenGamePicker;
-                if (i > inputs.Length - 3) time = Time.StartGame;
+                //int time = Time.NavigateToGame;
+                int time = 8;
+                
 
                 await Task.Delay(time);
             }
