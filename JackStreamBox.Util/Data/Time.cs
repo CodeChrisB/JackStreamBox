@@ -2,7 +2,9 @@
 {
     internal class Time
     {
-        public static int MILLISECOND = 1;
-        public static int SECOND = 1000;
+        public static int OpenSteamGame = 20000;
+        public static int OpenGamePicker = 6000;
+        public static int NavigateToGame = 1000;
+        public static int StartGame = 8000;
     }
 }

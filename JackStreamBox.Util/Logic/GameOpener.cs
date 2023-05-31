@@ -40,7 +40,7 @@ namespace JackStreamBox.Util.logic
                 // Wait until the program is fully launched
                 if(process == null) return false;
                 await Logger(VoteStatus.OnStartingGamePack);
-                await Task.Delay(Time.SECOND * time);
+                await Task.Delay(Time.OpenSteamGame);
 
                 // Return true if the process was started successfully
                 return await NavigateToGame(game, Logger);
@@ -147,9 +147,13 @@ namespace JackStreamBox.Util.logic
                 Console.WriteLine($"Performed ${inputs[i]};Now waiting");
             
                 WindowNavigator.SendGameInput(inputs[i]);
-                int time = 8;
                 //enter press to open menu
-                await Task.Delay(Time.SECOND * time);
+                //todo only the last 2 inputs should use StartGame others should use NavigateToGame
+                int time = Time.NavigateToGame;
+                if(i == 0) time = Time.OpenGamePicker;
+                if (i > inputs.Length - 3) time = Time.StartGame;
+
+                await Task.Delay(time);
             }
 
             await Logger(VoteStatus.OnGameOpend);

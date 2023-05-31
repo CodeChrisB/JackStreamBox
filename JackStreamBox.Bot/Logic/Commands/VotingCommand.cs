@@ -27,7 +27,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         private const int TIME = 20;
         private int CURRENT_TIME = 20;
         #region Vote Declaration
-        private const int REQUIRED_VOTES = 3;
+        private const int REQUIRED_VOTES = 2;
         private int? CURRENT_PACK = null;
         private PackGame[]? games = null;
         private List<string> CURRENT_VOTES = new();
@@ -72,29 +72,30 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
         private DiscordClient? _client;
-        [Command("startvote")]
-        public async Task StartVote(CommandContext context, int pack,int time)
+        [Command("vote")]
+        public async Task vote(CommandContext context, int pack,int time)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
-            await StartVoteWithPack(context, pack,time);
+            await voteWithPack(context, pack,time);
         }
 
-        [Command("startvote")]
+        [Command("vote")]
         [Description("Starts a new voting. Level 2 can start a poll for a new vote. Level 4 can instantly start a new vote.")]
         [Requires(PermissionRole.TRUSTED)]
-        public async Task StartVote(CommandContext context, int pack)
-        {
-            await StartVoteWithPack(context, pack, TIME);
+        public async Task vote(CommandContext context, int pack)
+        { 
+            if(CURRENT_VOTES.Count > 0) return;
+            await voteWithPack(context, pack, TIME);
         }
 
-        [Command("startvote")]
-        public async Task StartVote(CommandContext context)
+        [Command("vote")]
+        public async Task vote(CommandContext context)
         {
-            await StartVoteWithPack(context, -1,TIME);
+            await voteWithPack(context, -1,TIME);
         }
 
         //Vote but requires members to accept the voting process
-        private async Task StartVoteWithPack(CommandContext context, int pack,int time)
+        private async Task voteWithPack(CommandContext context, int pack,int time)
         {
             int level = CommandLevel.RoleToLevel(context.Member.Roles);
             ResetGameStartSteps();
@@ -107,30 +108,41 @@ namespace JackStreamBox.Bot.Logic.Commands
                 //Tophost and higher
                 if(time>60) time = 60;
                 CURRENT_TIME = time;
-                await StartVoteNow(context, games);
+                await voteNow(context, games);
                 ResetVote();
 
             }
             else if (level >= (int)PermissionRole.TRUSTED)
             {
                 //Level 3 and higher
-                if (CURRENT_VOTES.Count == 0)
+                AddVote(context.Member.Id.ToString());
+                if (CURRENT_VOTES.Count == 1)
                 {
-                    AddVote(context.Member.Id.ToString());
+                    //Start a new pre voting process
                     await LogVoteText(context);
-                    string messageStart = pack == -1 ? "Voting for Random games." :  $"Voting for **The Jackbox Party Pack {pack}**";
+                    string messageStart = pack == -1 ? "Voting for Random games." : $"Voting for **The Jackbox Party Pack {pack}**";
                     await context.Channel.SendMessageAsync($"{messageStart}\nUse **!vote** ");
+                    return;
+
+                }else if (CURRENT_VOTES.Count >= REQUIRED_VOTES)
+                {
+                    //agree to a new pre voting process
+                    if (time > 60) time = 60;
+                    CURRENT_TIME = time;
+                    await voteNow(context, games);
+                    ResetVote();
                 }
+
             }
             else
             {
                 //Low trusted users
-                await context.Channel.SendMessageAsync("Reach 'Level 3' Role to gain acess to this command\n(Gain Level 3 by being active in voice or text chat usually takes a week for an active user.)");
+                await context.Channel.SendMessageAsync("Reach 'Level 2' Role to gain acess to this command\n(Gain Level 3 by being active in voice or text chat usually takes a week for an active user.)");
             }
 
         }
         //Vote without members to accept it
-        private async Task StartVoteNow(CommandContext context, PackGame[] games)
+        private async Task voteNow(CommandContext context, PackGame[] games)
         {
             TimeSpan span = TimeSpan.FromSeconds(CURRENT_TIME);
             
