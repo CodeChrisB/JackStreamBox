@@ -39,14 +39,24 @@ namespace JackStreamBox.Bot.Logic.Config
             Destroyer.Message(message, DestroyTime.SLOW);
         }
 
+
+        private static bool IsBotPaused = false;
+        [Command("toggle")]
+        [Description("Toggle the whole bot, used for debugging without needing to access the server.")]
+        [Requires(PermissionRole.DEVELOPER)]
+        public async Task ToggleBot(CommandContext context)
+        {
+            int level = RoleToLevel(context.Member.Roles);
+            if (level < (int)PermissionRole.DEVELOPER) return;
+            CommandLevel.IsBotPaused = !CommandLevel.IsBotPaused;
+            await context.Channel.SendMessageAsync($"The bot is {(IsBotPaused ? "paused" : "resumed")}.");
+        }
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel)
         {
+            if (CommandLevel.IsBotPaused) return false;
+
             int grantedLevel = RoleToLevel(context.Member.Roles);
             int requiredLevel = (int)permissionLevel;
-
-            //Currently only developers can use the bot
-            //if(grantedLevel < (int)PermissionRole.DEVELOPER) return false;
-
 
             //Check if inside the Jackbot VC or if developer used the command
             if (context.Channel.Id.ToString() != "1105184748701229066" && grantedLevel < (int)PermissionRole.DEVELOPER) return false;

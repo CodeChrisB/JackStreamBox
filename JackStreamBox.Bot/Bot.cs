@@ -68,6 +68,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<InputCommand>();
             Commands.RegisterCommands<SayCommand>();
             Commands.RegisterCommands<UpdaterCommand>();
+            Commands.RegisterCommands<ReportCommand>();
 
             //Register for Help Page
             BotCommand.Register<StartGameCommand>();
@@ -79,6 +80,7 @@ namespace JackStreamBox.Bot
             BotCommand.Register<CommandLevel>();
             BotCommand.Register<SayCommand>();
             BotCommand.Register<UpdaterCommand>();
+            BotCommand.Register<ReportCommand>();
 
 
 
