@@ -83,6 +83,7 @@ namespace JackStreamBox.Bot.Logic.Config
             {
                 switch (role.Name) {
                     //Trusted
+                    case "Level 2":
                     case "Level 3":
                     case "Level 4":
                     case "Level 5":
