@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using JackStreamBox.Bot.Logic.Config;
+using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
@@ -27,12 +29,20 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
 
-            // Execute "git stash && git pull" commands
-            ExecuteShellCommand("git stash && git pull");
 
-            RebuildApplication();
-            // Restart the bot
-            RestartBot();
+            // Get the current directory of the application
+            string currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            // Get the root folder path by going up one directory level
+            string rootFolderPath = Directory.GetParent(currentDirectory).FullName;
+            string? projectFolder = null;
+            if(!string.IsNullOrEmpty(rootFolderPath) )
+            {
+                int pathNum = rootFolderPath.Split("\\").Length - 3;
+                projectFolder = string.Join("\\", rootFolderPath.Split("\\").ToList().Take(pathNum).ToArray());
+            }
+
+            Process.Start($"{projectFolder}\\updater.bat");
+            System.Environment.Exit(1);
         }
 
         [Command("utest")]
