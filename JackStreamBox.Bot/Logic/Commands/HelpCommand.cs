@@ -30,7 +30,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             
             StringBuilder sb = new StringBuilder();                                     
             sb.AppendLine("");
-            sb.AppendLine("The bot is using a voting system. Members of the server will have to use **!startvote** when enough people did that the bot will start the voting phase.");
+            sb.AppendLine("The bot is using a voting system. Members of the server will have to use **!vote** when enough people did that the bot will start the voting phase.");
             sb.AppendLine("\nAfter the voting phase the game with the most reaction will get picked and the game gets started.");
             sb.AppendLine("\n**For more information about all the diffrent commands use **\n");  
             sb.AppendLine($"**!commands+**");

@@ -21,7 +21,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
         [Command("update")]
-        [Description("View the rules.")]
+        [Description("Update the bot")]
         [Requires(PermissionRole.DEVELOPER)]
         public async Task Update(CommandContext context)
         {
@@ -36,7 +36,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         }
 
         [Command("utest")]
-        [Description("Test updater")]
+        [Description("Check bot version")]
         [Requires(PermissionRole.DEVELOPER)]
         public async Task Utest(CommandContext context)
         {

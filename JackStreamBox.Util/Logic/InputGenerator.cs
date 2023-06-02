@@ -14,7 +14,7 @@ namespace JackStreamBox.Util.logic
 
             Array.Fill(inputs, Input.ARROW_DOWN);
             inputs[0] = Input.ENTER;
-            inputs[inputs.Length - 3] = Input.ENTER;
+            inputs[inputs.Length - 2] = Input.ENTER;
             inputs[inputs.Length - 1] = Input.ENTER;
             return inputs;
         }
