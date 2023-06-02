@@ -84,7 +84,6 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Requires(PermissionRole.TRUSTED)]
         public async Task vote(CommandContext context, int pack)
         { 
-            if(CURRENT_VOTES.Count > 0) return;
             await voteWithPack(context, pack, TIME);
         }
 
