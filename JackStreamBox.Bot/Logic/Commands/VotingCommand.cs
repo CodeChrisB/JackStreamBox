@@ -25,7 +25,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
 
         private const int TIME = 20;
-        private const int REQUIRED_VOTES = 4;
+        private const int REQUIRED_VOTES = 1;
         #region Vote Declaration
         private PackGame[]? games = null;
         private struct PlayerVote

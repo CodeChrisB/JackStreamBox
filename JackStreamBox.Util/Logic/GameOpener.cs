@@ -14,8 +14,6 @@ namespace JackStreamBox.Util.logic
         private static extern int SetForegroundWindow(IntPtr point);
 
 
-        //Todo do we need any info to open
-
         public static async Task<bool> Open(Game game, Func<VoteStatus, Task> Logger)
         {
             var task = OpenPack(game,Logger);
