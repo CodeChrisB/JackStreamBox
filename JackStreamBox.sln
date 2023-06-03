@@ -10,14 +10,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{264D562D-6176-439A-AAC8-0C66CC6B87F2}"
 	ProjectSection(SolutionItems) = preProject
 		ReadMe.md = ReadMe.md
+		updater.bat = updater.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JackStreamBox.Bot", "JackStreamBox.Bot\JackStreamBox.Bot.csproj", "{4DD21AC0-2F15-4C11-A8E0-EEEF2C0CB57F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DiscordPlugin", "DiscordPlugin", "{0D849EEB-1956-4144-B444-C86B59A265C1}"
 	ProjectSection(SolutionItems) = preProject
-		toggleYourStuff.plugin.js = toggleYourStuff.plugin.js
 		JackStreamBox.plugin.js = JackStreamBox.plugin.js
+		toggleYourStuff.plugin.js = toggleYourStuff.plugin.js
 	EndProjectSection
 EndProject
 Global
