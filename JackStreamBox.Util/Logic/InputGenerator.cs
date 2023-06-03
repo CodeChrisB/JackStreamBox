@@ -10,7 +10,7 @@ namespace JackStreamBox.Util.logic
         public static string[] Generate(Game game)
         {
             int menuIndex = GameMenuIndex.GetIndex(game);
-            string[] inputs = new string[5 + menuIndex];
+            string[] inputs = new string[4 + menuIndex];
 
             Array.Fill(inputs, Input.ARROW_DOWN);
             inputs[0] = Input.ENTER;

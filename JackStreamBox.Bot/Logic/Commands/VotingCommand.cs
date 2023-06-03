@@ -25,7 +25,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
 
         private const int TIME = 20;
-        private const int REQUIRED_VOTES = 1;
+        private const int REQUIRED_VOTES = 4;
         #region Vote Declaration
         private PackGame[]? games = null;
         private struct PlayerVote
@@ -121,7 +121,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         public async Task VoteOrCancel(CommandContext context)
         {
-            await Task.Delay(1000*2);
+            await Task.Delay(1000*30);
             Console.WriteLine("Delayed function called.");
 
             List<PlayerVote> votes = CURRENT_VOTES;

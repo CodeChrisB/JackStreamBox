@@ -140,7 +140,7 @@ namespace JackStreamBox.Util.logic
 
             //Move into visible area the game
             Task.Delay(1000);
-            WindowNavigator.MoveGameWindow(0, 0, 1080, 720, true);
+            WindowNavigator.MoveGameWindow(0, 0, 1280, 750, true);
 
             await Logger(VoteStatus.OnOpendGamePack);
             await Logger(VoteStatus.OnStartingGame);

@@ -9,10 +9,10 @@
         Wordspud,
         Lieswatter,
         //Pack 2
+        Quipplashxl,
         Fibbage2,
         Earwax,
         Bidiots,
-        Quipplashxl,
         Bombcorp,
         //Pack 3
 
@@ -48,7 +48,6 @@
         Talkingpoints,
         Blatherround,
         //Pack 8
-
         DrawfulAnimate,
         WheelOfEnormousProportions,
         Jobjob,
@@ -56,9 +55,9 @@
         WeaponsDrawn,
         //Pack 9
         Fibbage4,
-        Quixort,
+        Roomerang,
         Junktopia,
         Nonesensory,
-        Roomerang
+        Quixort
     }
 }
