@@ -1,6 +1,7 @@
 ﻿using JackStreamBox.Util.Logic;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -11,6 +12,11 @@ namespace JackStreamBox.Util.logic
     {
         [DllImport("User32.dll")]
         static extern IntPtr SetForegroundWindow(IntPtr point);
+
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
 
         public static string WindowName {get;private set;}
         public static Process GameProcess { get;private set;}
@@ -80,6 +86,15 @@ namespace JackStreamBox.Util.logic
             return "";
         }
 
+
+        //Move Window Dll Stuff
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+
+        public static void MoveGameWindow(int X, int Y, int nWidth, int nHeight, bool bRepaint)
+        {
+            MoveWindow(GameProcess.MainWindowHandle, X, Y, nWidth, nHeight, bRepaint);
+        }
 
     }
 }

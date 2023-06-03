@@ -137,6 +137,11 @@ namespace JackStreamBox.Util.logic
             windowName += getPackByEnum(game) > 1 ? " " + getPackByEnum(game) : "";
             
             WindowNavigator.SetWindow(windowName);
+
+            //Move into visible area the game
+            Task.Delay(1000);
+            WindowNavigator.MoveGameWindow(0, 0, 1080, 720, true);
+
             await Logger(VoteStatus.OnOpendGamePack);
             await Logger(VoteStatus.OnStartingGame);
 
@@ -159,8 +164,10 @@ namespace JackStreamBox.Util.logic
             await Logger(VoteStatus.OnGameOpend);
             await Logger(VoteStatus.OnStartingStream);
 
+            //Start Stream
             WindowNavigator.SetDiscord();
             WindowNavigator.SendDiscordInput(Input.DiscordKey);
+
 
             await Logger(VoteStatus.OnAllFinished);
 

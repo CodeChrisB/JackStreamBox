@@ -8,6 +8,7 @@
         public static readonly string ARROW_DOWN = "{Down}";
         public static readonly string ARROW_RIGHT = "{Right}";
         public static readonly string ENTER = "{Enter}";
+        public static readonly string F11 = "{F11}";
         public static readonly string DiscordKey = "-";//event -> Slash
     }
 }

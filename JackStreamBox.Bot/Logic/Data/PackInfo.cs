@@ -167,6 +167,56 @@ namespace JackStreamBox.Bot.Logic.Data
                 };
         }
 
+        internal static PackGame[] GetVotePack(string vote)
+        {
+            if(vote.Length == 1)
+            {
+                int pack = Int32.Parse(vote);
+                return AllPacks()[pack].games;
+            }
 
+            switch (vote)
+            {
+                case "draw":
+                    return GenSelection(Game.Drawful, Game.DrawfulAnimate, Game.Teeko, Game.Champedup, Game.WeaponsDrawn);
+                case "trivia":
+                    return GenSelection(Game.Triviamurderparty2, Game.Fibbage3, Game.Fibbage4, Game.Quixort, Game.WheelOfEnormousProportions);
+                case "fun":
+                    return GenSelection(Game.Jobjob, Game.Earwax, Game.Jobjob, Game.Patentlystupid, Game.Surivetheinternet);
+                case "mic":
+                    return GenSelection(Game.Talkingpoints, Game.Patentlystupid, Game.Pushthebutton, Game.Blatherround, Game.Junktopia);
+            }
+
+            return AllPacks()[7].games;
+        }
+
+        public static string VoteCategories()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("╔════════════════════");
+            sb.AppendLine("║You can vote for any pack itself using **!pack X**");
+            sb.AppendLine("║e.g **!pack 5** or **!pack 8**");
+            sb.AppendLine("╠═ Categories ══");
+            sb.AppendLine("║**!vote draw** Will only pick drawing games");
+            sb.AppendLine("║**!vote trivia** Will only pick triva games");
+            sb.AppendLine("║**!vote fun** Will only pick 'fun' games");
+            sb.AppendLine("║**!vote mic** Will pick games were a mic is required.");
+            sb.AppendLine("╚════════════════════");
+
+
+            return sb.ToString();
+        }
+
+        private static PackGame[] GenSelection(Game g1, Game g2, Game g3, Game g4, Game g5)
+        {
+            return new PackGame[]
+            {
+                GetAllGames()[(int)g1],
+                GetAllGames()[(int)g2],
+                GetAllGames()[(int)g3],
+                GetAllGames()[(int)g4],
+                GetAllGames()[(int)g5]
+            };
+        }
     }
 }

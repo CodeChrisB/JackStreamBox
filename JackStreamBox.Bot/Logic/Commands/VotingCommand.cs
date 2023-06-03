@@ -25,25 +25,26 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
 
         private const int TIME = 20;
-        private int CURRENT_TIME = 20;
+        private const int REQUIRED_VOTES = 1;
         #region Vote Declaration
-        private const int REQUIRED_VOTES = 2;
-        private int? CURRENT_PACK = null;
         private PackGame[]? games = null;
-        private List<string> CURRENT_VOTES = new();
-        public void AddVote(string str)
+        private struct PlayerVote
         {
-            if (CURRENT_VOTES.Contains(str)) return;
-            CURRENT_VOTES.Add(str);
+            public string Player;
+            public string Vote;
+        }
+        private List<PlayerVote> CURRENT_VOTES = new();
+        private void AddVote(PlayerVote vote)
+        {
+            if (CURRENT_VOTES.Contains(vote)) return;
+            CURRENT_VOTES.Add(vote);
         }
         public void ResetVote()
         {
-            CURRENT_VOTES = new List<string>();
-            CURRENT_PACK = null;
+            CURRENT_VOTES = new List<PlayerVote>();
             games = null;
             ResetGameStartSteps();
         }
-        private async Task LogVoteText(CommandContext context) { await context.Channel.SendMessageAsync($"Start Vote {CURRENT_VOTES.Count()}/{REQUIRED_VOTES}"); }
         #endregion
 
         #region Step
@@ -71,84 +72,90 @@ namespace JackStreamBox.Bot.Logic.Commands
         #endregion
 
 
-        private DiscordClient? _client;
+        //*******************
+        //Start Voting Process
+        //*******************
         [Command("vote")]
-        public async Task vote(CommandContext context, int pack,int time)
+        [Description($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ")]
+        [Requires(PermissionRole.TRUSTED)]
+        public async Task Vote(CommandContext context, string voteCategory)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
-            await voteWithPack(context, pack,time);
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
+
+            voteCategory = voteCategory.ToLower();
+            switch (voteCategory)
+            {
+                //Packs
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                case "9":
+                //Categories
+                case "draw":
+                case "trivia":
+                case "talk":
+                case "fun":
+                    AddVote(new PlayerVote { Player = context.Member.Id.ToString(), Vote = voteCategory});
+                    break;
+                default:
+                    await context.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
+                    break;
+
+            }
+
+
+            if (CURRENT_VOTES.Count == 1)
+            {
+                ResetGameStartSteps();
+                Task.Run(() => VoteOrCancel(context));
+                await context.Channel.SendMessageAsync($"Vote now! (**!vote**)\n We need atleast {REQUIRED_VOTES} votes to start. You have 30 seconds!");
+
+            }
         }
 
-        [Command("vote")]
-        [Description("Starts a new voting. Level 2 can start a poll for a new vote. Level 4 can instantly start a new vote.")]
-        [Requires(PermissionRole.TRUSTED)]
-        public async Task vote(CommandContext context, int pack)
-        { 
-            await voteWithPack(context, pack, TIME);
+
+        public async Task VoteOrCancel(CommandContext context)
+        {
+            await Task.Delay(1000*2);
+            Console.WriteLine("Delayed function called.");
+
+            List<PlayerVote> votes = CURRENT_VOTES;
+
+            if(votes.Count >= REQUIRED_VOTES)
+            {
+                PlayerVote vote = CURRENT_VOTES[new Random().Next(CURRENT_VOTES.Count)];
+                games = PackInfo.GetVotePack(vote.Vote);
+                await voteNow(context,games);
+                ResetVote();
+            } 
+            else
+            {
+                await context.Channel.SendMessageAsync("Not enough votes cancel this voting.\nOnly vote after a game, you will be punished if you try to cancel a game just because you dont want to play anymore.");
+            }
         }
+
 
         [Command("vote")]
         public async Task vote(CommandContext context)
         {
-            await voteWithPack(context, -1,TIME);
+            await context.Channel.SendMessageAsync(PackInfo.VoteCategories());
         }
 
-        //Vote but requires members to accept the voting process
-        private async Task voteWithPack(CommandContext context, int pack,int time)
-        {
-            int level = CommandLevel.RoleToLevel(context.Member.Roles);
-            ResetGameStartSteps();
-
-            games = pack == -1 ? PackInfo.GetRandomGames(5) : PackInfo.GetPackInfo(pack).games;
-
-
-            if (level >= (int)PermissionRole.STAFF)
-            {
-                //Tophost and higher
-                if(time>60) time = 60;
-                CURRENT_TIME = time;
-                await voteNow(context, games);
-                ResetVote();
-
-            }
-            else if (level >= (int)PermissionRole.TRUSTED)
-            {
-                //Level 3 and higher
-                AddVote(context.Member.Id.ToString());
-                if (CURRENT_VOTES.Count == 1)
-                {
-                    //Start a new pre voting process
-                    await LogVoteText(context);
-                    string messageStart = pack == -1 ? "Voting for Random games." : $"Voting for **The Jackbox Party Pack {pack}**";
-                    await context.Channel.SendMessageAsync($"{messageStart}\nUse **!vote** ");
-                    return;
-
-                }else if (CURRENT_VOTES.Count >= REQUIRED_VOTES)
-                {
-                    //agree to a new pre voting process
-                    if (time > 60) time = 60;
-                    CURRENT_TIME = time;
-                    await voteNow(context, games);
-                    ResetVote();
-                }
-
-            }
-            else
-            {
-                //Low trusted users
-                await context.Channel.SendMessageAsync("Reach 'Level 2' Role to gain acess to this command\n(Gain Level 3 by being active in voice or text chat usually takes a week for an active user.)");
-            }
-
-        }
-        //Vote without members to accept it
+        //*******************
+        //Real Voting Process
+        //*******************
         private async Task voteNow(CommandContext context, PackGame[] games)
         {
-            TimeSpan span = TimeSpan.FromSeconds(CURRENT_TIME);
+            TimeSpan span = TimeSpan.FromSeconds(TIME);
             
             //End Game
             JackStreamBoxUtility.CloseGame();
             //Start Vote 60 sec
-            _client = context.Client;
 
             //----Create embed
             var pollEmbed = new DiscordEmbedBuilder
@@ -159,13 +166,13 @@ namespace JackStreamBox.Bot.Logic.Commands
             var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
 
             //Add Reactions
-            DiscordEmoji[] emojis = GetEmojis();
+            DiscordEmoji[] emojis = GetEmojis(context);
             foreach (var emoji in emojis)
             {
                 await pollMessage.CreateReactionAsync(emoji);
             }
             //----Show votable games
-            pollEmbed.Description = $"*What game will be played next?*\n(You have {CURRENT_TIME} seconds.)\n\n{GameText(games)}";
+            pollEmbed.Description = $"*What game will be played next?*\n(You have {TIME} seconds.)\n\n{GameText(games, context)}";
             await pollMessage.ModifyAsync(null, pollEmbed.Build());
 
             //----Voting Phase
@@ -194,7 +201,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             //Get Reactions
             var interactivity = context.Client.GetInteractivity();
             //Maybe override the function so we can use callback to resume with ALL the reactions
-            var result = await interactivity.CollectReactionsAsync(pollMessage, TimeSpan.FromSeconds(CURRENT_TIME)).ConfigureAwait(false);
+            var result = await interactivity.CollectReactionsAsync(pollMessage, TimeSpan.FromSeconds(TIME)).ConfigureAwait(false);
             var distinct = result.Distinct();
             
             Reaction[] results = result.Where(x => x.Total == result.Max(obj => obj.Total)).ToArray();
@@ -209,22 +216,20 @@ namespace JackStreamBox.Bot.Logic.Commands
             var random = new Random();
             var pollWinner = results.Length == 1 ? results[0] : results[random.Next(results.Length)];
             
-            PackGame GameWinner = ReactionToId(games, pollWinner);
+            PackGame GameWinner = ReactionToId(games, pollWinner,context);
             
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
             Winner = GameWinner.Name;
             
-            //Reset Timer
-            CURRENT_TIME = TIME;
             pollEmbed.Title = "**Preparing your next game**";
             await Logger(VoteStatus.OnStartingGamePack);
             await JackStreamBoxUtility.OpenGame(GameWinner.Id, Logger);
             Destroyer.Message(pollMessage, DestroyTime.SLOW);
         }
-        private PackGame ReactionToId(PackGame[] games, Reaction pollWinner)
+        private PackGame ReactionToId(PackGame[] games, Reaction pollWinner, CommandContext context)
         {
             int index = 0;
-            DiscordEmoji[] emojis = GetEmojis();
+            DiscordEmoji[] emojis = GetEmojis(context);
 
             for(int i = 0; i < emojis.Length;i++)
             {
@@ -234,24 +239,24 @@ namespace JackStreamBox.Bot.Logic.Commands
             return games[index];
         }
 
-        private DiscordEmoji[] GetEmojis()
+        private DiscordEmoji[] GetEmojis(CommandContext context)
         {
-            if (_client == null) return Array.Empty<DiscordEmoji>(); 
+            
             DiscordEmoji[] emojis =
             {
-                DiscordEmoji.FromName(_client, ":one:"),
-                DiscordEmoji.FromName(_client, ":two:"),
-                DiscordEmoji.FromName(_client, ":three:"),
-                DiscordEmoji.FromName(_client, ":four:"),
-                DiscordEmoji.FromName(_client, ":five:")
+                DiscordEmoji.FromName(context.Client, ":one:"),
+                DiscordEmoji.FromName(context.Client, ":two:"),
+                DiscordEmoji.FromName(context.Client, ":three:"),
+                DiscordEmoji.FromName(context.Client, ":four:"),
+                DiscordEmoji.FromName(context.Client, ":five:")
             };
 
             return emojis;
         }
 
-        private string GameText(PackGame[] games)
+        private string GameText(PackGame[] games, CommandContext context)
         {
-            DiscordEmoji[] emojis = GetEmojis();
+            DiscordEmoji[] emojis = GetEmojis(context);
             StringBuilder sb = new StringBuilder();
 
             for(int i = 0; i < emojis.Length; i++)
