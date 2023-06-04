@@ -182,7 +182,7 @@ namespace JackStreamBox.Bot.Logic.Data
                 case "trivia":
                     return GenSelection(Game.Triviamurderparty2, Game.Fibbage3, Game.Fibbage4, Game.Quixort, Game.WheelOfEnormousProportions);
                 case "fun":
-                    return GenSelection(Game.Jobjob, Game.Earwax, Game.Jobjob, Game.Patentlystupid, Game.Surivetheinternet);
+                    return GenSelection(Game.Jobjob, Game.Earwax, Game.Roomerang, Game.Patentlystupid, Game.Surivetheinternet);
                 case "mic":
                     return GenSelection(Game.Talkingpoints, Game.Patentlystupid, Game.Pushthebutton, Game.Blatherround, Game.Junktopia);
             }

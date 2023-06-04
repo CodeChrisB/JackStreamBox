@@ -205,6 +205,9 @@ namespace JackStreamBox.Bot.Logic.Commands
             var distinct = result.Distinct();
             
             Reaction[] results = result.Where(x => x.Total == result.Max(obj => obj.Total)).ToArray();
+            //Pie Chart URL
+            string pieChartUrl = PieChart.GenerateLink(result,games, GetEmojis(context));
+            pollEmbed.ImageUrl = "https://user-images.githubusercontent.com/55576076/235742815-f471e12a-7e11-45ee-aad4-25b1b0aa38ab.png";
             if(!results.Any()) 
             {
                 await pollMessage.DeleteAsync().ConfigureAwait(false);
