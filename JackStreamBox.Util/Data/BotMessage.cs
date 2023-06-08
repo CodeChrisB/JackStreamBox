@@ -8,12 +8,12 @@ namespace JackStreamBox.Util.Data
 {
     public class BotMessage
     {
-        public static string StartingGamePack = "Starting the party pack.";
-        public static string OpenedGamePack = "Party pack is opened.";
-        public static string StartingGame = "Starting the game.";
-        public static string GameOpend = "Game opened.";
+        public static string StartingGamePack = "Open Pack";
+        public static string OpenedGamePack = "Pack Is Openend";
+        public static string StartingGame = "Picking th game";
+        public static string GameOpend = "Game is started";
         public static string StartingStream = "Starting the stream.";
-        public static string AllFinished = "Everything done, have a nice game !";
+        public static string AllFinished = "Found a bug? use **!report [Your Message]**";
     }
 
     public enum VoteStatus

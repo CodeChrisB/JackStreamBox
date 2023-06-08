@@ -25,7 +25,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
 
         private const int TIME = 20;
-        private const int REQUIRED_VOTES = 1;
+        private const int REQUIRED_VOTES = 4;
         #region Vote Declaration
         private PackGame[]? games = null;
         private struct PlayerVote
@@ -34,10 +34,13 @@ namespace JackStreamBox.Bot.Logic.Commands
             public string Vote;
         }
         private List<PlayerVote> CURRENT_VOTES = new();
+        private DiscordMessage PrePollMessage;
+        private DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
         private void AddVote(PlayerVote vote)
         {
             if (CURRENT_VOTES.Contains(vote)) return;
-            CURRENT_VOTES.Add(vote);
+            CURRENT_VOTES.Add(vote); 
+
         }
         public void ResetVote()
         {
@@ -75,6 +78,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         //*******************
         //Start Voting Process
         //*******************
+
         [Command("vote")]
         [Description($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ")]
         [Requires(PermissionRole.TRUSTED)]
@@ -113,11 +117,31 @@ namespace JackStreamBox.Bot.Logic.Commands
             {
                 ResetGameStartSteps();
                 Task.Run(() => VoteOrCancel(context));
-                await context.Channel.SendMessageAsync($"Vote now! (**!vote**)\n We need atleast {REQUIRED_VOTES} votes to start. You have 30 seconds!");
+                PrePollMessageData = new DiscordEmbedBuilder
+                {
+                    Title = "[=Game Vote]=",
+                    Description = $"Setting up the Poll",
+                    Color = DiscordColor.Green,
 
+                };
+                PrePollMessage = await context.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
+                
             }
+            UpdatePreMessage(context);
         }
 
+        private void UpdatePreMessage(CommandContext context)
+        {
+            StringBuilder sb = new StringBuilder();
+            //%%%% XXXXXXXX
+            foreach(PlayerVote vote in CURRENT_VOTES)
+            {
+                sb.AppendLine($"{vote.Vote} - {context.Member.Nickname}");
+            }
+
+            PrePollMessageData.Description = sb.ToString();
+            PrePollMessage.ModifyAsync(PrePollMessageData.Build());
+        }
 
         public async Task VoteOrCancel(CommandContext context)
         {
