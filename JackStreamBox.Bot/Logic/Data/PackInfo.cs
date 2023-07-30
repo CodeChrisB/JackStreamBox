@@ -186,7 +186,7 @@ namespace JackStreamBox.Bot.Logic.Data
                 case "talk":
                     return GenSelection(Game.Talkingpoints, Game.Patentlystupid, Game.Pushthebutton, Game.Blatherround, Game.Junktopia);
             }
-
+            //Pack 7 is the best
             return AllPacks()[7].games;
         }
 
@@ -195,7 +195,7 @@ namespace JackStreamBox.Bot.Logic.Data
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("╔════════════════════");
             sb.AppendLine("║You can vote for any pack itself using **!pack X**");
-            sb.AppendLine("║e.g **!pack 5** or **!pack 8**");
+            sb.AppendLine("║e.g **!vote 5** or **!vote 8**");
             sb.AppendLine("╠═ Categories ══");
             sb.AppendLine("║**!vote draw** Will only pick drawing games");
             sb.AppendLine("║**!vote trivia** Will only pick triva games");

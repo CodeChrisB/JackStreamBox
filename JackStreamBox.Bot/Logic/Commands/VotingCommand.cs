@@ -24,8 +24,10 @@ namespace JackStreamBox.Bot.Logic.Commands
     internal class VotingCommand : BaseCommandModule
     {
 
-        private const int TIME = 20;
-        private const int REQUIRED_VOTES = 4;
+        private const int TIME_PICK = 5;
+        private const int TIME_VOTE = 5;
+        private const int REQUIRED_VOTES = 1;
+        private int timeTillVoteEnd =0;
         #region Vote Declaration
         private PackGame[]? games = null;
         private struct PlayerVote
@@ -119,7 +121,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 Task.Run(() => VoteOrCancel(context));
                 PrePollMessageData = new DiscordEmbedBuilder
                 {
-                    Title = "[=Game Vote]=",
+                    Title = "Game Vote",
                     Description = $"Setting up the Poll",
                     Color = DiscordColor.Green,
 
@@ -127,25 +129,41 @@ namespace JackStreamBox.Bot.Logic.Commands
                 PrePollMessage = await context.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
                 
             }
-            UpdatePreMessage(context);
+            UpdatePreMessage();
         }
 
-        private void UpdatePreMessage(CommandContext context)
+        private void UpdatePreMessage()
         {
             StringBuilder sb = new StringBuilder();
-            //%%%% XXXXXXXX
-            foreach(PlayerVote vote in CURRENT_VOTES)
+
+            sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
+            sb.AppendLine($"Current Votes: {CURRENT_VOTES.Count}");
+
+            if (timeTillVoteEnd > 0)
             {
-                sb.AppendLine($"{vote.Vote} - {context.Member.Nickname}");
+                PrePollMessageData.Description = sb.ToString();
+                PrePollMessage.ModifyAsync(PrePollMessageData.Build());
+            }
+            else
+            {
+                PrePollMessage.DeleteAsync();
             }
 
-            PrePollMessageData.Description = sb.ToString();
-            PrePollMessage.ModifyAsync(PrePollMessageData.Build());
         }
 
         public async Task VoteOrCancel(CommandContext context)
         {
-            await Task.Delay(1000*30);
+            
+            timeTillVoteEnd = TIME_VOTE;
+            while (timeTillVoteEnd >= 0)
+            {
+                await Task.Delay(1000);
+                UpdatePreMessage();
+                timeTillVoteEnd--;
+            }
+
+
+
             Console.WriteLine("Delayed function called.");
 
             List<PlayerVote> votes = CURRENT_VOTES;
@@ -175,7 +193,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         //*******************
         private async Task voteNow(CommandContext context, PackGame[] games)
         {
-            TimeSpan span = TimeSpan.FromSeconds(TIME);
+            TimeSpan span = TimeSpan.FromSeconds(TIME_PICK);
             
             //End Game
             JackStreamBoxUtility.CloseGame();
@@ -196,8 +214,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 await pollMessage.CreateReactionAsync(emoji);
             }
             //----Show votable games
-            pollEmbed.Description = $"*What game will be played next?*\n(You have {TIME} seconds.)\n\n{GameText(games, context)}";
-            await pollMessage.ModifyAsync(null, pollEmbed.Build());
+
 
             //----Voting Phase
             async Task Logger(VoteStatus status)
@@ -213,7 +230,6 @@ namespace JackStreamBox.Bot.Logic.Commands
                 pollEmbed.Description = sb.ToString();
                 await pollMessage.ModifyAsync(null, pollEmbed.Build());
             }
-
             string StatusEmoji(bool status)
             {
                 if (status) return ":thumbsup:";
@@ -221,17 +237,30 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
 
-
             //Get Reactions
             var interactivity = context.Client.GetInteractivity();
-            //Maybe override the function so we can use callback to resume with ALL the reactions
-            var result = await interactivity.CollectReactionsAsync(pollMessage, TimeSpan.FromSeconds(TIME)).ConfigureAwait(false);
-            var distinct = result.Distinct();
+            var result = interactivity.CollectReactionsAsync(pollMessage,TimeSpan.FromSeconds(TIME_PICK+1));
+
+            //Show the user the poll
+            int timeLeft = TIME_PICK;
+            while (timeLeft >= 0)
+            {
+                pollEmbed.Description = $"*What game will be played next?*\nTime Left: {timeLeft}s\n\n{GameText(games, context)}";
+                await pollMessage.ModifyAsync(null, pollEmbed.Build());
+                timeLeft--;
+                await Task.Delay(1000);
+            }
+
+
+            result.Wait();
+            var waitedResult = result.Result;
+
+            var distinct = waitedResult.Distinct();
             
-            Reaction[] results = result.Where(x => x.Total == result.Max(obj => obj.Total)).ToArray();
+            Reaction[] results = waitedResult.Where(x => x.Total == waitedResult.Max(obj => obj.Total)).ToArray();
             //Pie Chart URL
-            string pieChartUrl = PieChart.GenerateLink(result,games, GetEmojis(context));
-            pollEmbed.ImageUrl = "https://user-images.githubusercontent.com/55576076/235742815-f471e12a-7e11-45ee-aad4-25b1b0aa38ab.png";
+            string pieChartUrl = PieChart.GenerateLink(waitedResult, games, GetEmojis(context));
+            pollEmbed.ImageUrl = "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png";
             if(!results.Any()) 
             {
                 await pollMessage.DeleteAsync().ConfigureAwait(false);
