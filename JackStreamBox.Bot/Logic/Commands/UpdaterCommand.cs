@@ -29,7 +29,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
 
-
+            await context.Channel.SendMessageAsync("Aight, getting newest version");
             // Get the current directory of the application
             string currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             // Get the root folder path by going up one directory level
@@ -42,6 +42,8 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
             Process.Start($"{projectFolder}\\updater.bat");
+            await context.Channel.SendMessageAsync("See ya in a minute when I restart");
+
             System.Environment.Exit(1);
         }
 

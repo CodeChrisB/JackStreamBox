@@ -85,6 +85,9 @@ namespace JackStreamBox.Bot
 
 
             await Client.ConnectAsync();
+
+            var channel  = await Client.GetChannelAsync(1105184748701229066);
+            await channel.SendMessageAsync("Hey JackStreamBox is now online!");
             await Task.Delay(-1);
         }
 
