@@ -30,16 +30,34 @@ namespace JackStreamBox.Bot.Logic.Commands
             
             StringBuilder sb = new StringBuilder();                                     
             sb.AppendLine("");
-            sb.AppendLine("The bot is using a voting system. Members of the server will have to use **!vote** when enough people did that the bot will start the voting phase.");
-            sb.AppendLine("\nAfter the voting phase the game with the most reaction will get picked and the game gets started.");
-            sb.AppendLine("\n**For more information about all the diffrent commands use **\n");  
-            sb.AppendLine($"**!commands+**");
+            string[] lines =
+            {
+                "The bot is using a voting system. Which consists of 3 main phases.",
+                "\n**The vote phase**",
+                "After a game or when there is no game players can use **!vote X**",
+                "After the first person voted there is a timelimit of 30s or 60s in which all players should vote. 4 Votes are required to progress to the next phase.",
+                "**!vote 1** for pack 1 \n**!vote 2** for pack 2 (works for all packs)",
+                "\n**The game pick phase**",
+                "We now have picked the pack we will play",
+                "The bot will create a message with 5 reactions (:one: :two: :three: :four: :five: )",
+                "In the message the bot will explain which number is which game.",
+                "Pick a game or multiple games you want to play, after the time is up the winner will be started",
+                "\n**The game phase**",
+                "The bot will show a message with the current progress of opening the game.",
+                "Then you can play the game, after the game use !vote to start another game.",
+            };
+
+            foreach ( string line in lines )
+            {
+                sb.AppendLine(line);
+            }
 
 
             helpEmbed.Description = sb.ToString();
+            helpEmbed.ImageUrl = "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png";
             var message = await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
-            Destroyer.Message(message, DestroyTime.REALLYSLOW);
+            Destroyer.Message(message, DestroyTime.ULTRASLOW);
         }
 
         [Command("commands")]
@@ -118,7 +136,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             string[] rules = new string[]
             {
                 "No Racism or Discrimination of Any Kind",
-                "Follow the discord tos",
+                "Follow the discord TOS",
                 "Respect for All Participants",
                 "No Mid-game quitting",
                 "No doxxing",

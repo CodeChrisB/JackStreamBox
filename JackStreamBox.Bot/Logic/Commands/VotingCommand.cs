@@ -24,8 +24,6 @@ namespace JackStreamBox.Bot.Logic.Commands
     internal class VotingCommand : BaseCommandModule
     {
 
-        private const int TIME_PICK = 5;
-        private const int TIME_VOTE = 5;
         private const int REQUIRED_VOTES = 1;
         private int timeTillVoteEnd =0;
         #region Vote Declaration
@@ -154,7 +152,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task VoteOrCancel(CommandContext context)
         {
             
-            timeTillVoteEnd = TIME_VOTE;
+            timeTillVoteEnd = BotSetings.ReadData(BotVals.VOTE_TIMER, 30);
             while (timeTillVoteEnd >= 0)
             {
                 await Task.Delay(1000);
@@ -168,7 +166,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             List<PlayerVote> votes = CURRENT_VOTES;
 
-            if(votes.Count >= REQUIRED_VOTES)
+            if(votes.Count >= BotSetings.ReadData(BotVals.REQUIRED_VOTES, 3))
             {
                 PlayerVote vote = CURRENT_VOTES[new Random().Next(CURRENT_VOTES.Count)];
                 games = PackInfo.GetVotePack(vote.Vote);
@@ -193,7 +191,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         //*******************
         private async Task voteNow(CommandContext context, PackGame[] games)
         {
-            TimeSpan span = TimeSpan.FromSeconds(TIME_PICK);
+            TimeSpan span = TimeSpan.FromSeconds(BotSetings.ReadData(BotVals.VOTE_TIMER,30));
             
             //End Game
             JackStreamBoxUtility.CloseGame();
@@ -239,10 +237,10 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             //Get Reactions
             var interactivity = context.Client.GetInteractivity();
-            var result = interactivity.CollectReactionsAsync(pollMessage,TimeSpan.FromSeconds(TIME_PICK+1));
+            var result = interactivity.CollectReactionsAsync(pollMessage,TimeSpan.FromSeconds(BotSetings.ReadData(BotVals.VOTE_TIMER, 30)));
 
             //Show the user the poll
-            int timeLeft = TIME_PICK;
+            int timeLeft = BotSetings.ReadData(BotVals.PICK_TIMER, 30);
             while (timeLeft >= 0)
             {
                 pollEmbed.Description = $"*What game will be played next?*\nTime Left: {timeLeft}s\n\n{GameText(games, context)}";

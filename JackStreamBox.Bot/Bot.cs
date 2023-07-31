@@ -69,6 +69,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<SayCommand>();
             Commands.RegisterCommands<UpdaterCommand>();
             Commands.RegisterCommands<ReportCommand>();
+            Commands.RegisterCommands<SetUpComamd>();
 
             //Register for Help Page
             BotCommand.Register<StartGameCommand>();
@@ -81,13 +82,15 @@ namespace JackStreamBox.Bot
             BotCommand.Register<SayCommand>();
             BotCommand.Register<UpdaterCommand>();
             BotCommand.Register<ReportCommand>();
+            BotCommand.Register<SetUpComamd>();
 
-
-
+            //Load Settings
+            BotSetings.LoadBotSetings();
+            //Send Online Message
             await Client.ConnectAsync();
-
             var channel  = await Client.GetChannelAsync(1105184748701229066);
             await channel.SendMessageAsync("Hey JackStreamBox is now online!");
+
             await Task.Delay(-1);
         }
 
