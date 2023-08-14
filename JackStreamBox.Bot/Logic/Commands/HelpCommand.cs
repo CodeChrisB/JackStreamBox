@@ -35,7 +35,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 "The bot is using a voting system. Which consists of 3 main phases.",
                 "\n**The vote phase**",
                 "After a game or when there is no game players can use **!vote X**",
-                "After the first person voted there is a timelimit of 30s or 60s in which all players should vote. 4 Votes are required to progress to the next phase.",
+                "After the first person voted there is a timelimit 60s* in which all players should vote. 4 Votes are required to progress to the next phase.",
                 "**!vote 1** for pack 1 \n**!vote 2** for pack 2 (works for all packs)",
                 "\n**The game pick phase**",
                 "We now have picked the pack we will play",
@@ -45,6 +45,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 "\n**The game phase**",
                 "The bot will show a message with the current progress of opening the game.",
                 "Then you can play the game, after the game use !vote to start another game.",
+                "\n*Actual time limit might be diffrent*",
             };
 
             foreach ( string line in lines )

@@ -93,6 +93,7 @@ namespace JackStreamBox.Util.logic
 
         public static void MoveGameWindow(int X, int Y, int nWidth, int nHeight, bool bRepaint)
         {
+            if(GameProcess == null) return;
             MoveWindow(GameProcess.MainWindowHandle, X, Y, nWidth, nHeight, bRepaint);
         }
 
