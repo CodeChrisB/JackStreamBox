@@ -21,19 +21,18 @@ namespace JackStreamBox.Bot.Logic.Commands
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
-            int indexOfBadWord = badWords
-            .Select(badWord => message.IndexOf(badWord))
-            .FirstOrDefault();
+            bool containsBadWord = badWords.Any(badWord => message.Contains(badWord));
 
-            if (indexOfBadWord == -1) {
+            if (!containsBadWord) {
                 await context.Channel.SendMessageAsync(message);
             }
             else
             {
-                await context.Channel.SendMessageAsync($"{context.Member.Username} tried to use a bad word. Word Id is : {((indexOfBadWord + 4)*(indexOfBadWord + 1))*(234+ indexOfBadWord * 2)}-e{indexOfBadWord}");
+                var logChannel = await context.Client.GetChannelAsync(1114225698056445992);
+
+                string username = context.Member.Nickname;
+                await logChannel.SendMessageAsync($"{username}\n: Wanted to say {message} using the bot !");
             }
-
-
         }
 
         private string[] badWords = new string[]
@@ -46,7 +45,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             "pussy",
             "cunt",
             "whore",
-            "fuck"
+            "fuck",
         };
     }
 }
