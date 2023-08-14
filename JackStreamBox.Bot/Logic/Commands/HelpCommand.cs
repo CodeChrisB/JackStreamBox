@@ -45,7 +45,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 "\n**The game phase**",
                 "The bot will show a message with the current progress of opening the game.",
                 "Then you can play the game, after the game use !vote to start another game.",
-                "\n:tools: Created by CCB for your joy! :computer: ",
+                "\n:tools: Created by CCB for your joy! :computer:",
             };
 
             foreach ( string line in lines )
