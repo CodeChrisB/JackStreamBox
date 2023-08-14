@@ -15,12 +15,38 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
         [Command("say")]
         [Description("Use the bot to speak.")]
-        [Requires(PermissionRole.DEVELOPER)]
+        [Requires(PermissionRole.STAFF)]
         public async Task Tell(CommandContext context,string message)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
-            await context.Channel.SendMessageAsync(message);
+
+            int indexOfBadWord = badWords
+            .Select(badWord => message.IndexOf(badWord))
+            .FirstOrDefault();
+
+            if (indexOfBadWord == -1) {
+                await context.Channel.SendMessageAsync(message);
+            }
+            else
+            {
+                await context.Channel.SendMessageAsync($"{context.Member.Username} tried to use a bad word. Word Id is : {((indexOfBadWord + 4)*(indexOfBadWord + 1))*(234+ indexOfBadWord * 2)}-e{indexOfBadWord}");
+            }
+
+
         }
+
+        private string[] badWords = new string[]
+        {
+            "test-word-so-that-gray-wont-ban-me",
+            "niger",
+            "nigger",
+            "nigga",
+            "niga",
+            "pussy",
+            "cunt",
+            "whore",
+            "fuck"
+        };
     }
 }

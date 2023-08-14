@@ -23,28 +23,20 @@ namespace JackStreamBox.Bot.Logic.Commands
 {
     internal class VotingCommand : BaseCommandModule
     {
-
-        private const int REQUIRED_VOTES = 1;
         private int timeTillVoteEnd =0;
         #region Vote Declaration
         private PackGame[]? games = null;
-        private struct PlayerVote
-        {
-            public string Player;
-            public string Vote;
-        }
-        private List<PlayerVote> CURRENT_VOTES = new();
+
+        Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
+        bool notStarted = true;
+
         private DiscordMessage PrePollMessage;
         private DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
-        private void AddVote(PlayerVote vote)
-        {
-            if (CURRENT_VOTES.Contains(vote)) return;
-            CURRENT_VOTES.Add(vote); 
 
-        }
+   
         public void ResetVote()
         {
-            CURRENT_VOTES = new List<PlayerVote>();
+            VotesOfPlayers = new Dictionary<string, string>();
             games = null;
             ResetGameStartSteps();
         }
@@ -85,6 +77,8 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task Vote(CommandContext context, string voteCategory)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
+            await context.Message.DeleteAsync();
+
 
             voteCategory = voteCategory.ToLower();
             switch (voteCategory)
@@ -104,7 +98,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 case "trivia":
                 case "talk":
                 case "fun":
-                    AddVote(new PlayerVote { Player = context.Member.Id.ToString(), Vote = voteCategory});
+                    VotesOfPlayers[context.Member.Id.ToString()] = voteCategory;
                     break;
                 default:
                     await context.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
@@ -113,8 +107,9 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
 
-            if (CURRENT_VOTES.Count == 1)
+            if (VotesOfPlayers.Values.ToList().Count == 1 && notStarted)
             {
+                notStarted = false;
                 ResetGameStartSteps();
                 Task.Run(() => VoteOrCancel(context));
                 PrePollMessageData = new DiscordEmbedBuilder
@@ -125,7 +120,6 @@ namespace JackStreamBox.Bot.Logic.Commands
 
                 };
                 PrePollMessage = await context.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
-                
             }
             UpdatePreMessage();
         }
@@ -135,7 +129,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
-            sb.AppendLine($"Current Votes: {CURRENT_VOTES.Count}");
+            sb.AppendLine($"Current Votes: {VotesOfPlayers.Values.Count}");
 
             if (timeTillVoteEnd > 0)
             {
@@ -144,6 +138,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
             else
             {
+                if (PrePollMessage == null) return;
                 PrePollMessage.DeleteAsync();
             }
 
@@ -164,12 +159,12 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             Console.WriteLine("Delayed function called.");
 
-            List<PlayerVote> votes = CURRENT_VOTES;
+            List<string> votes = VotesOfPlayers.Values.ToList();
 
             if(votes.Count >= BotSetings.ReadData(BotVals.REQUIRED_VOTES, 3))
             {
-                PlayerVote vote = CURRENT_VOTES[new Random().Next(CURRENT_VOTES.Count)];
-                games = PackInfo.GetVotePack(vote.Vote);
+                string vote = votes[new Random().Next(votes.Count)];
+                games = PackInfo.GetVotePack(vote);
                 await voteNow(context,games);
                 ResetVote();
             } 
