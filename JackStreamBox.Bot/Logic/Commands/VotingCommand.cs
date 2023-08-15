@@ -74,10 +74,10 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         [Command("vote")]
         [Description($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ")]
-        [Requires(PermissionRole.TRUSTED)]
+        [Requires(PermissionRole.ANYONE)]
         public async Task Vote(CommandContext context, string voteCategory)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await context.Message.DeleteAsync();
 
 

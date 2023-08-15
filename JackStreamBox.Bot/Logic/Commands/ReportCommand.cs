@@ -16,10 +16,10 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
         [Command("report")]
         [Description("!report **\"**Your Issue**\"")]
-        [Requires(PermissionRole.ANYONE)]
+        [Requires(PermissionRole.TRUSTED)]
         public async Task ReportIssue(CommandContext context,string issue)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
 
             var logChannel = await context.Client.GetChannelAsync(1114225698056445992);
 
