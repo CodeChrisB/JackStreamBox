@@ -1,5 +1,6 @@
 0,60
 VOTE_TIMER,60
-vote,15
-pick,20
+vote,5
+pick,6
 require,1
+name,DevBot

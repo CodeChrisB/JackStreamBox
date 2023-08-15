@@ -27,6 +27,14 @@ public static class BotSetings
         return value == null ? defaultvalue :  Int32.Parse(value);
     }
 
+    public static string ReadData(string key, string defaultvalue)
+    {
+        string? value = (string?)dataDictionary.GetValueOrDefault(key);
+
+
+        return value == null ? defaultvalue : value;
+    }
+
     private static void LoadDataFromFile()
     {
         dataDictionary = new Dictionary<string, object>();

@@ -88,8 +88,9 @@ namespace JackStreamBox.Bot
             BotSetings.LoadBotSetings();
             //Send Online Message
             await Client.ConnectAsync();
-            var channel  = await Client.GetChannelAsync(1105184748701229066);
-            await channel.SendMessageAsync("Hey JackStreamBox is now online!");
+            var channel = await Client.GetChannelAsync(1105184748701229066);
+            string name = BotSetings.ReadData(BotVals.BOT_NAME, "TB1");
+            await channel.SendMessageAsync($"Hey JackStreamBox [{name}] is now online!");
 
             await Task.Delay(-1);
         }

@@ -171,7 +171,10 @@ namespace JackStreamBox.Bot.Logic.Data
         {
             if(vote.Length == 1)
             {
-                int pack = Int32.Parse(vote);
+                int pack = Int32.Parse(vote)-1;
+
+                //Save call when people vote for packs that dont exist
+                if(pack>8) return AllPacks()[7].games;
                 return AllPacks()[pack].games;
             }
 

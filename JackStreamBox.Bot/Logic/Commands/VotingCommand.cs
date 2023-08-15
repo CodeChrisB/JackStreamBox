@@ -38,6 +38,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             VotesOfPlayers = new Dictionary<string, string>();
             games = null;
+            PrePollMessage = null;
             ResetGameStartSteps();
         }
         #endregion
@@ -107,7 +108,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
 
-            if (VotesOfPlayers.Values.ToList().Count == 1 && notStarted)
+            if (VotesOfPlayers.Values.ToList().Count == 1 && PrePollMessage == null)
             {
                 notStarted = false;
                 ResetGameStartSteps();
