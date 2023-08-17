@@ -4,3 +4,9 @@ vote,5
 pick,6
 require,1
 name,DevBot
+m1,Feeding the cat
+m2,Talking to M. Bubble
+m3,Drawing a kirby in champed up
+m4,Playing Zeeple Dome Round 68
+m5,Setting up the game you wanted
+m6,Have a great time

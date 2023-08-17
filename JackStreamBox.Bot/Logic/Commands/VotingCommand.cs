@@ -148,7 +148,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task VoteOrCancel(CommandContext context)
         {
             
-            timeTillVoteEnd = BotSetings.ReadData(BotVals.VOTE_TIMER, 30);
+            timeTillVoteEnd = BotData.ReadData(BotVals.VOTE_TIMER, 30);
             while (timeTillVoteEnd >= 0)
             {
                 await Task.Delay(1000);
@@ -162,7 +162,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             List<string> votes = VotesOfPlayers.Values.ToList();
 
-            if(votes.Count >= BotSetings.ReadData(BotVals.REQUIRED_VOTES, 3))
+            if(votes.Count >= BotData.ReadData(BotVals.REQUIRED_VOTES, 3))
             {
                 string vote = votes[new Random().Next(votes.Count)];
                 games = PackInfo.GetVotePack(vote);
@@ -187,7 +187,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         //*******************
         private async Task voteNow(CommandContext context, PackGame[] games)
         {
-            TimeSpan span = TimeSpan.FromSeconds(BotSetings.ReadData(BotVals.VOTE_TIMER,30));
+            TimeSpan span = TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER,30));
             
             //End Game
             JackStreamBoxUtility.CloseGame();
@@ -233,10 +233,10 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             //Get Reactions
             var interactivity = context.Client.GetInteractivity();
-            var result = interactivity.CollectReactionsAsync(pollMessage,TimeSpan.FromSeconds(BotSetings.ReadData(BotVals.VOTE_TIMER, 30)));
+            var result = interactivity.CollectReactionsAsync(pollMessage,TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER, 30)));
 
             //Show the user the poll
-            int timeLeft = BotSetings.ReadData(BotVals.PICK_TIMER, 30);
+            int timeLeft = BotData.ReadData(BotVals.PICK_TIMER, 30);
             while (timeLeft >= 0)
             {
                 pollEmbed.Description = $"*What game will be played next?*\nTime Left: {timeLeft}s\n\n{GameText(games, context)}";

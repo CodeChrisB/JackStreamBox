@@ -6,6 +6,7 @@ using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using JackStreamBox.Bot.Logic.Commands;
 using JackStreamBox.Bot.Logic.Config;
+using JackStreamBox.Util.Data;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -85,11 +86,11 @@ namespace JackStreamBox.Bot
             BotCommand.Register<SetUpComamd>();
 
             //Load Settings
-            BotSetings.LoadBotSetings();
+            BotData.LoadBotSetings();
             //Send Online Message
             await Client.ConnectAsync();
             var channel = await Client.GetChannelAsync(1105184748701229066);
-            string name = BotSetings.ReadData(BotVals.BOT_NAME, "TB1");
+            string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
             await channel.SendMessageAsync($"Hey JackStreamBox [{name}] is now online!");
 
             await Task.Delay(-1);

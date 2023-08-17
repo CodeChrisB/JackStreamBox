@@ -5,6 +5,7 @@ using DSharpPlus.Entities;
 using JackStreamBox.Bot.Logic.Attributes;
 using JackStreamBox.Bot.Logic.Commands;
 using JackStreamBox.Bot.Logic.Data;
+using JackStreamBox.Util.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace JackStreamBox.Bot.Logic.Config
             int level = RoleToLevel(context.Member.Roles);
             if (level < (int)PermissionRole.DEVELOPER) return;
             CommandLevel.IsBotPaused = !CommandLevel.IsBotPaused;
-            string name = BotSetings.ReadData(BotVals.BOT_NAME, "TB1");
+            string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
             await context.Channel.SendMessageAsync($"The bot [{name}] is {(IsBotPaused ? "paused" : "resumed")}.");
         }
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel)

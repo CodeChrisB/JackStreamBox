@@ -9,44 +9,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JackStreamBox.Util.Data;
+using System.Windows.Input;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
 
-    public class BotVals
-    {
-        public static readonly string VOTE_TIMER = "vote";
-        public static readonly string PICK_TIMER = "pick";
-        public static readonly string REQUIRED_VOTES = "require";
-        public static readonly string BOT_NAME = "name";
 
-        public static string[] GetKeys()
-        {
-            return new string[] { VOTE_TIMER, PICK_TIMER, REQUIRED_VOTES,BOT_NAME };
-        }
-
-    }
     internal class SetUpComamd : BaseCommandModule
     {
 
         [Command("set")]
         [Description("Set values of the bot")]
-        [Requires(PermissionRole.DEVELOPER)]
+        [Requires(PermissionRole.STAFF)]
         public async Task Set(CommandContext context,string key, string val)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             if (!BotVals.GetKeys().Where(x => x == key).Any()) return;
 
-            BotSetings.WriteData<string>(key,val);
+            BotData.WriteData<string>(key,val);
             var message = await context.Channel.SendMessageAsync("Done!");
             Destroyer.Message(message, DestroyTime.FAST);
         }
 
         [Command("sethelp")]
         [Description("Set values of the bot")]
-        [Requires(PermissionRole.DEVELOPER)]
+        [Requires(PermissionRole.STAFF)]
         public async Task SetHelp(CommandContext context, string key, string val)
         {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            if (!BotVals.GetKeys().Where(x => x == key).Any()) return;
+
             await context.Channel.SendMessageAsync(
                 "You can use following keys"+
                 $"\nVote Timer: ${BotVals.VOTE_TIMER}"+
@@ -58,17 +51,17 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         [Command("setview")]
         [Description("Set values of the bot")]
-        [Requires(PermissionRole.DEVELOPER)]
+        [Requires(PermissionRole.STAFF)]
         public async Task SetView(CommandContext context)
         {
-            var message  = await context.Channel.SendMessageAsync(
-                "Current Setup Values" +
-                $"\nVote Timer({BotVals.VOTE_TIMER}): {BotSetings.ReadData(BotVals.VOTE_TIMER,30)}s" +
-                $"\nPick Timer({BotVals.PICK_TIMER}): {BotSetings.ReadData(BotVals.PICK_TIMER, 30)}s" +
-                $"\nRequired Votes({BotVals.REQUIRED_VOTES}): {BotSetings.ReadData(BotVals.REQUIRED_VOTES, 4)}"+
-                $"\bBot Name({BotVals.BOT_NAME}): {BotSetings.ReadData(BotVals.BOT_NAME, 4)}"
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+
+            await context.Channel.SendMessageAsync(
+                "\nKeys starting with m are for the startup messages"+
+                "\nThe other keys dictiate how long specifc parts of the voting process takes" +
+                String.Join("\n",BotVals.GetKeys())
                 );
-            Destroyer.Message(message, DestroyTime.SLOW);
+            
         }
     }
 }
