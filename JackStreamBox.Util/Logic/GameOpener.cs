@@ -147,16 +147,21 @@ namespace JackStreamBox.Util.logic
             string[] inputs = InputGenerator.Generate(game);
             for(int i=0;i<inputs.Length;i++)
             {
-                Console.WriteLine($"Performed ${inputs[i]};Now waiting");
+                
             
                 WindowNavigator.SendGameInput(inputs[i]);
-                //enter press to open menu
-                //todo only the last 2 inputs should use StartGame others should use NavigateToGame
-                //int time = Time.NavigateToGame;
-                int time = 8000;
-                 
 
+                int time = Time.NavigateToGame;
+                if (i == 0)
+                {
+                    //menu open
+                    time = Time.OpenGamePicker;
+                }else if(i>= inputs.Length - 2)
+                {
+                    time = Time.StartGame;
+                }
                 await Task.Delay(time);
+                Console.WriteLine($"Performed ${inputs[i]};Now waiting {time}ms");
             }
 
             await Logger(VoteStatus.OnGameOpend);

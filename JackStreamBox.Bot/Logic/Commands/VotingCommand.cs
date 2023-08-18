@@ -252,8 +252,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             var distinct = waitedResult.Distinct();
             
             Reaction[] results = waitedResult.Where(x => x.Total == waitedResult.Max(obj => obj.Total)).ToArray();
-            //Pie Chart URL
-            string pieChartUrl = PieChart.GenerateLink(waitedResult, games, GetEmojis(context));
+
             pollEmbed.ImageUrl = "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png";
             if(!results.Any()) 
             {
