@@ -47,16 +47,30 @@ namespace JackStreamBox.Bot.Logic.Commands
             System.Environment.Exit(1);
         }
 
-        [Command("utest")]
+        [Command("version")]
         [Description("Check bot version")]
-        [Requires(PermissionRole.DEVELOPER)]
+        [Requires(PermissionRole.TRUSTED)]
         public async Task Utest(CommandContext context)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
-            await context.Channel.SendMessageAsync("V0.4.5");
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
+            await context.Channel.SendMessageAsync(GenerateVersionString());
+        }
+
+        private static string GenerateVersionString()
+        {
+            DateTime fixedDate = new DateTime(2023, 7, 1);
+            DateTime currentDate = DateTime.Now;
+
+            int monthsDifference = (currentDate.Year - fixedDate.Year) * 12 + currentDate.Month - fixedDate.Month;
+            int daysDifference = (int)(currentDate - fixedDate).TotalDays;
+
+            int x = monthsDifference + 1;
+            int y = daysDifference % 10 + 1;
+
+            return $"v1.{x}.{y}";
         }
 
 
-     
+
     }
 }
