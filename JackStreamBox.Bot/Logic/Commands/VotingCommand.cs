@@ -154,12 +154,12 @@ namespace JackStreamBox.Bot.Logic.Commands
                 string vote = votes[new Random().Next(votes.Count)];
                 games = PackInfo.GetVotePack(vote);
                 await voteNow(context,games);
-                ResetVote();
             } 
             else
             {
                 await context.Channel.SendMessageAsync("Not enough votes cancel this voting.\nOnly vote after a game, you will be punished if you try to cancel a game just because you dont want to play anymore.");
             }
+            ResetVote();
         }
 
         private async Task voteNow(CommandContext context, PackGame[] games)
