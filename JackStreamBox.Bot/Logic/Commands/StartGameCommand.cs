@@ -77,7 +77,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             Destroyer.Message(message, DestroyTime.REALLYSLOW);
         }
 
-        [Command("close")]
+        [Command("closegame")]
         [Description("Closes the current game.")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task CloseGame(CommandContext context)
