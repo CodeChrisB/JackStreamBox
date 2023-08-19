@@ -129,6 +129,25 @@ namespace JackStreamBox.Util.logic
             return "C:\\Program Files (x86)\\Steam\\steamapps\\common\\";
         }
 
+        private static int width;
+        private static int height;
+
+        public static void CalculateDimensions()
+        {
+            int step = BotData.ReadData("screen", 100);
+
+            if (step > 150) step = 150;
+            if (step < 50) step = 50;
+
+            double scaleFactor = step / 100.0;
+
+            int originalWidth = 1280;
+            int originalHeight = 750;
+
+            width = (int)(originalWidth * scaleFactor);   
+            height = (int)(originalHeight * scaleFactor); 
+        }
+
         static async Task<bool> NavigateToGame(Game game,Func<VoteStatus, Task> Logger)
         {
             string windowName = "The Jackbox Party Pack";
@@ -138,7 +157,11 @@ namespace JackStreamBox.Util.logic
 
             //Move into visible area the game
             Task.Delay(1000);
-            WindowNavigator.MoveGameWindow(0, 0, 1280, 750, true);
+
+
+            CalculateDimensions();
+
+            WindowNavigator.MoveGameWindow(0, 0, width, height, true);
 
             await Logger(VoteStatus.OnOpendGamePack);
             await Logger(VoteStatus.OnStartingGame);
@@ -176,7 +199,5 @@ namespace JackStreamBox.Util.logic
 
             return true;
         }
-
-
     }
 }

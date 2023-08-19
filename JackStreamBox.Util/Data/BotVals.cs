@@ -15,7 +15,7 @@ namespace JackStreamBox.Util.Data
 
         public static string[] GetKeys()
         {
-            return new string[] { VOTE_TIMER, PICK_TIMER, REQUIRED_VOTES, BOT_NAME,"m1","m2","m3","m4","m5","m6" };
+            return new string[] { VOTE_TIMER, PICK_TIMER, REQUIRED_VOTES, BOT_NAME,"m1","m2","m3","m4","m5","m6","screen" };
         }
 
     }
