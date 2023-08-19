@@ -33,22 +33,6 @@ namespace JackStreamBox.Bot.Logic.Commands
             Destroyer.Message(message, DestroyTime.FAST);
         }
 
-        [Command("sethelp")]
-        [Description("Set values of the bot")]
-        [Requires(PermissionRole.STAFF)]
-        public async Task SetHelp(CommandContext context, string key, string val)
-        {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
-            if (!BotVals.GetKeys().Where(x => x == key).Any()) return;
-
-            await context.Channel.SendMessageAsync(
-                "You can use following keys"+
-                $"\nVote Timer: ${BotVals.VOTE_TIMER}"+
-                $"\nPick Timer: ${BotVals.PICK_TIMER}"+
-                $"\nRequired Votes ${BotVals.REQUIRED_VOTES}"+
-                $"\nBot Name ${BotVals.BOT_NAME}"
-                );
-        }
 
         [Command("setview")]
         [Description("Set values of the bot")]

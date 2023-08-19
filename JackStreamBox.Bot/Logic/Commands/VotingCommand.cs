@@ -113,8 +113,14 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
 
-            
-            foreach( var key in voteCategories )
+            int requiredVotes = BotData.ReadData(BotVals.REQUIRED_VOTES, 4);
+            if(VotesOfPlayers.Values.Count<requiredVotes)
+            {//Enough votes
+                sb.AppendLine($"Required Votes: {VotesOfPlayers.Values.Count}/{requiredVotes}");
+            }
+
+
+            foreach ( var key in voteCategories )
             {
                 sb.AppendLine($"**!vote {key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
             }
@@ -224,6 +230,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             //Tellin user we compute the winner
             pollEmbed.Description = $"Computing winner... give me a second\nGames Hosted already :{BotData.ReadData(BotVals.GAMES_HOSTED, "0")}";
+            BotData.WriteData(BotVals.GAMES_HOSTED, BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1);
             await pollMessage.ModifyAsync(null, pollEmbed.Build());
 
 
@@ -268,7 +275,6 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             ResetVote();
             Destroyer.Message(pollMessage, DestroyTime.SLOW);
-            BotData.AddGameHost();
         }
 
         private DiscordEmoji[] GetEmojis(CommandContext context)
