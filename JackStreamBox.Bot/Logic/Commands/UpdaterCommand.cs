@@ -68,7 +68,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
             Process.Start($"{projectFolder}\\restarter.bat");
-            await context.Channel.SendMessageAsync("See ya in a minute when I restart");
+            await context.Channel.SendMessageAsync("See ya in a few seconds when I restart");
 
             System.Environment.Exit(1);
         }
