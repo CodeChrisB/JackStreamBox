@@ -12,10 +12,11 @@ namespace JackStreamBox.Util.Data
         public static readonly string PICK_TIMER = "pick";
         public static readonly string REQUIRED_VOTES = "require";
         public static readonly string BOT_NAME = "name";
+        public static readonly string GAMES_HOSTED = "gamesHosted";
 
         public static string[] GetKeys()
         {
-            return new string[] { VOTE_TIMER, PICK_TIMER, REQUIRED_VOTES, BOT_NAME,"m1","m2","m3","m4","m5","m6","screen" };
+            return new string[] { VOTE_TIMER, PICK_TIMER, REQUIRED_VOTES, BOT_NAME,"m1","m2","m3","m4","m5","m6","screen","gamesPlayed" };
         }
 
     }

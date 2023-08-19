@@ -223,7 +223,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
             //Tellin user we compute the winner
-            pollEmbed.Description = $"Computing winner... give me a second";
+            pollEmbed.Description = $"Computing winner... give me a second\nGames Hosted already :{BotData.ReadData(BotVals.GAMES_HOSTED, "0")}";
             await pollMessage.ModifyAsync(null, pollEmbed.Build());
 
 
@@ -269,6 +269,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             ResetVote();
             Destroyer.Message(pollMessage, DestroyTime.SLOW);
+            BotData.AddGameHost();
         }
 
         private DiscordEmoji[] GetEmojis(CommandContext context)

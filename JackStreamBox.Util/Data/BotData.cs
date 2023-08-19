@@ -72,4 +72,11 @@ public static class BotData
             }
         }
     }
+
+    public static void AddGameHost()
+    {
+        int alreadyPlayed = ReadData(BotVals.GAMES_HOSTED, 0);
+        alreadyPlayed++;
+        WriteData(BotVals.GAMES_HOSTED, alreadyPlayed);
+    }
 }
