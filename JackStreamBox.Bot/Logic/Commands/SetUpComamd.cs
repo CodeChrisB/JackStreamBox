@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using JackStreamBox.Util.Data;
 using System.Windows.Input;
+using System.Windows.Forms;
 
 namespace JackStreamBox.Bot.Logic.Commands
 {
@@ -64,8 +65,14 @@ namespace JackStreamBox.Bot.Logic.Commands
                 sb.AppendLine($"{key}: {BotData.ReadData(key, "!NOT SET!")}");
             }
 
+
+            int size = BotData.ReadData("screen", 100);
+            sb.AppendLine($"Screen Size is {16 * size}x{9 * size}");
+
             await context.Channel.SendMessageAsync(sb.ToString());
             
         }
+
+
     }
 }
