@@ -56,11 +56,15 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
 
-            await context.Channel.SendMessageAsync(
-                "\nKeys starting with m are for the startup messages"+
-                "\nThe other keys dictiate how long specifc parts of the voting process takes" +
-                String.Join("\n",BotVals.GetKeys())
-                );
+            StringBuilder sb = new StringBuilder();
+
+
+            foreach (string key in BotVals.GetKeys())
+            {
+                sb.AppendLine($"{key}: {BotData.ReadData(key, "!NOT SET!")}");
+            }
+
+            await context.Channel.SendMessageAsync(sb.ToString());
             
         }
     }
