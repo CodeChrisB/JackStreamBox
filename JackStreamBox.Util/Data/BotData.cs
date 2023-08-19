@@ -1,4 +1,5 @@
 ﻿using JackStreamBox.Util.Data;
+using JackStreamBox.Util.logic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,7 @@ public static class BotData
 
         //Start Up Messages were edited reload them
         if (key.StartsWith("m") && key.Length == 2) BotMessage.ReloadMessages();
+        else if (key == "screen") GameOpener.SetWindowPos(); 
 
 
         SaveDataToFile();

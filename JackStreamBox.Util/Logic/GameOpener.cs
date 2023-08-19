@@ -132,6 +132,12 @@ namespace JackStreamBox.Util.logic
         private static int width;
         private static int height;
 
+        public static void SetWindowPos()
+        {
+            CalculateDimensions();
+            WindowNavigator.MoveGameWindow(0, 0, width, height, true);
+        }
+
         public static void CalculateDimensions()
         {
             int step = BotData.ReadData("screen", 100);
@@ -148,20 +154,16 @@ namespace JackStreamBox.Util.logic
             height = (int)(originalHeight * scaleFactor); 
         }
 
+
         static async Task<bool> NavigateToGame(Game game,Func<VoteStatus, Task> Logger)
         {
             string windowName = "The Jackbox Party Pack";
             windowName += getPackByEnum(game) > 1 ? " " + getPackByEnum(game) : "";
             
             WindowNavigator.SetWindow(windowName);
+            await Task.Delay(150);
 
-            //Move into visible area the game
-            Task.Delay(1000);
-
-
-            CalculateDimensions();
-
-            WindowNavigator.MoveGameWindow(0, 0, width, height, true);
+            SetWindowPos();
 
             await Logger(VoteStatus.OnOpendGamePack);
             await Logger(VoteStatus.OnStartingGame);
@@ -170,8 +172,6 @@ namespace JackStreamBox.Util.logic
             string[] inputs = InputGenerator.Generate(game);
             for(int i=0;i<inputs.Length;i++)
             {
-                
-            
                 WindowNavigator.SendGameInput(inputs[i]);
 
                 int time = Time.NavigateToGame;
