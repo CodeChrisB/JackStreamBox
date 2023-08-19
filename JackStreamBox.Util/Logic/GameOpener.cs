@@ -142,13 +142,13 @@ namespace JackStreamBox.Util.logic
         {
             int step = BotData.ReadData("screen", 100);
 
-            if (step > 150) step = 150;
+            if (step > 250) step = 250;
             if (step < 50) step = 50;
 
             double scaleFactor = step / 100.0;
 
-            int originalWidth = 1280;
-            int originalHeight = 750;
+            int originalWidth = 640;
+            int originalHeight = 350;
 
             width = (int)(originalWidth * scaleFactor);   
             height = (int)(originalHeight * scaleFactor); 
