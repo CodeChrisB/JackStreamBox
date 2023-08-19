@@ -47,6 +47,32 @@ namespace JackStreamBox.Bot.Logic.Commands
             System.Environment.Exit(1);
         }
 
+
+        [Command("restart")]
+        [Description("Restart the bot")]
+        [Requires(PermissionRole.HIGHLYTRUSTED)]
+        public async Task RestartBot(CommandContext context)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED)) return;
+
+            await context.Channel.SendMessageAsync("Aight, restarting the bot");
+            // Get the current directory of the application
+            string currentDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            // Get the root folder path by going up one directory level
+            string rootFolderPath = Directory.GetParent(currentDirectory).FullName;
+            string? projectFolder = null;
+            if (!string.IsNullOrEmpty(rootFolderPath))
+            {
+                int pathNum = rootFolderPath.Split("\\").Length - 3;
+                projectFolder = string.Join("\\", rootFolderPath.Split("\\").ToList().Take(pathNum).ToArray());
+            }
+
+            Process.Start($"{projectFolder}\\restarter.bat");
+            await context.Channel.SendMessageAsync("See ya in a minute when I restart");
+
+            System.Environment.Exit(1);
+        }
+
         [Command("version")]
         [Description("Check bot version")]
         [Requires(PermissionRole.TRUSTED)]
