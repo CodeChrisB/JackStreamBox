@@ -27,6 +27,8 @@ namespace JackStreamBox.Bot.Logic.Commands
         #region Vote Declaration
         private PackGame[]? games = null;
 
+        private List<string> voteCategories = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", /*"draw", "trivia", "talk", "fun"*/ };
+
         Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
 
         private DiscordMessage PrePollMessage;
@@ -77,30 +79,15 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
             voteCategory = voteCategory.ToLower();
-            switch (voteCategory)
-            {
-                //Packs
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "9":
-                //Categories
-                case "draw":
-                case "trivia":
-                case "talk":
-                case "fun":
-                    VotesOfPlayers[context.Member.Id.ToString()] = voteCategory;
-                    break;
-                default:
-                    await context.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
-                    break;
-            }
 
+            if (voteCategories.IndexOf(voteCategory) > -1)
+            {
+                VotesOfPlayers[context.Member.Id.ToString()] = voteCategory;
+            }
+            else
+            {
+                await context.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
+            }
 
             if (VotesOfPlayers.Values.ToList().Count == 1 && PrePollMessage == null)
             {
@@ -126,10 +113,10 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
 
-            string[] voteCategories = new string[] { "1", "2", "3","4","5","6","7","8","9","draw","trivia","talk","fun" };
+            
             foreach( var key in voteCategories )
             {
-                sb.AppendLine($"**!vote {key}** : {VotesOfPlayers.Count(x => x.Key == key)}");
+                sb.AppendLine($"**!vote {key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
             }
 
             if (timeTillVoteEnd > 0)
