@@ -248,16 +248,15 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             int max = reactionCount.Max();
             Random random = new Random();
-            int[] maxIndices = reactionCount.Select((n, i) => (Number: n, Index: i))
-                                      .Where(pair => pair.Number == max)
-                                      .Select(pair => pair.Index)
-                                      .ToArray();
+            int[] maxIndices = reactionCount
+                .Select((n, i) => (Number: n, Index: i))
+                .Where(pair => pair.Number == max)
+                .Select(pair => pair.Index)
+                .ToArray();
 
             int randomIndex = maxIndices.Length == 1 ? maxIndices[0] : maxIndices[random.Next(0, maxIndices.Length)];
-            pollEmbed.ImageUrl = "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png";
-
-        
-
+            pollEmbed.ImageUrl = CustomBanner.GetRandomBanner();
+                
             PackGame GameWinner = games[randomIndex];
             
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);

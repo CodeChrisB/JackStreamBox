@@ -71,6 +71,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<UpdaterCommand>();
             Commands.RegisterCommands<ReportCommand>();
             Commands.RegisterCommands<SetUpComamd>();
+            Commands.RegisterCommands<BannerCommands>();
 
             //Register for Help Page
             BotCommand.Register<StartGameCommand>();
@@ -84,6 +85,8 @@ namespace JackStreamBox.Bot
             BotCommand.Register<UpdaterCommand>();
             BotCommand.Register<ReportCommand>();
             BotCommand.Register<SetUpComamd>();
+            BotCommand.Register<BannerCommands>();
+
 
             //Load Settings
             BotData.LoadBotSetings();

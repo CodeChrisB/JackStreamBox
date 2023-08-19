@@ -3,10 +3,13 @@ using JackStreamBox.Util.logic;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Xml;
 
 public static class BotData
 {
     private const string FileName = "config.txt";
+    private const string gitIgnorePart = "customConfigData";
     private static Dictionary<string, object> dataDictionary;
 
     public static void LoadBotSetings()
@@ -14,6 +17,7 @@ public static class BotData
         LoadDataFromFile();
     }
 
+    //Read/Write to Default Config File
     public static void WriteData<T>(string key, T value)
     {
         dataDictionary[key] = value;
@@ -23,7 +27,7 @@ public static class BotData
         else if (key == "screen") GameOpener.SetWindowPos(); 
 
 
-        SaveDataToFile();
+        SaveDataToFile(FileName);
     }
 
     public static int ReadData(string key,int defaultvalue)
@@ -41,6 +45,8 @@ public static class BotData
 
         return value == null ? defaultvalue : value;
     }
+
+
 
     private static void LoadDataFromFile()
     {
@@ -62,9 +68,9 @@ public static class BotData
         }
     }
 
-    private static void SaveDataToFile()
+    private static void SaveDataToFile(string filename)
     {
-        using (StreamWriter writer = new StreamWriter(FileName))
+        using (StreamWriter writer = new StreamWriter(filename))
         {
             foreach (var kvp in dataDictionary)
             {
@@ -79,4 +85,40 @@ public static class BotData
         alreadyPlayed++;
         WriteData(BotVals.GAMES_HOSTED, alreadyPlayed);
     }
+
+
+
+    public static void WriteCustomData<T>(string filename, T data)
+    {
+        var serializer = new DataContractSerializer(typeof(T));
+
+        string filePath = $"{gitIgnorePart}{filename}.txt"; // Use correct file extension
+        using (var stream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+        using (var writer = XmlWriter.Create(stream))
+        {
+            serializer.WriteObject(writer, data);
+        }
+    }
+
+
+    public static T ReadCustomData<T>(string filename)
+    {
+        var serializer = new DataContractSerializer(typeof(T));
+
+        try
+        {
+            using (var stream = new FileStream($"{gitIgnorePart}{filename}.txt", FileMode.Open))
+            using (var reader = XmlReader.Create(stream))
+            {
+                return (T)serializer.ReadObject(reader);
+            }
+        }
+        catch
+        {
+            return default(T);
+        }
+
+    }
+
+
 }
