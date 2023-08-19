@@ -78,6 +78,18 @@ namespace JackStreamBox.Bot.Logic.Commands
         }
 
         [Command("close")]
+        [Description("Closes the current game.")]
+        [Requires(PermissionRole.HIGHLYTRUSTED)]
+        public async Task CloseGame(CommandContext context)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.HIGHLYTRUSTED)) return;
+
+            JackStreamBoxUtility.CloseGame();
+            var message = await context.Channel.SendMessageAsync("Closed the game !");
+            Destroyer.Message(message, DestroyTime.FAST);
+        }
+
+        [Command("close")]
         [Description("Will close the bot. Use in emergency such as the bot streaming a wrong window.")]
         //Dont docuemnt this command
         [Requires(PermissionRole.DEVELOPER)]
