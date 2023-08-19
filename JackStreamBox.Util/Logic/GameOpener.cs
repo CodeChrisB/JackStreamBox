@@ -148,7 +148,7 @@ namespace JackStreamBox.Util.logic
             double scaleFactor = step / 100.0;
 
             int originalWidth = 640;
-            int originalHeight = 350;
+            int originalHeight = 390;
 
             width = (int)(originalWidth * scaleFactor);   
             height = (int)(originalHeight * scaleFactor); 
