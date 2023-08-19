@@ -4,7 +4,7 @@ using System.IO;
 
 public static class BotSetings
 {
-    private const string FileName = "changeAbleValues.txt";
+    private const string FileName = "config.txt";
     private static Dictionary<string, object> dataDictionary;
 
     public static void LoadBotSetings()
