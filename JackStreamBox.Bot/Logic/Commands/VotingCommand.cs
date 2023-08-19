@@ -274,6 +274,8 @@ namespace JackStreamBox.Bot.Logic.Commands
             pollEmbed.Title = "**Preparing your next game**";
             await Logger(VoteStatus.OnStartingGamePack);
             await JackStreamBoxUtility.OpenGame(GameWinner.Id, Logger);
+
+            ResetVote();
             Destroyer.Message(pollMessage, DestroyTime.SLOW);
         }
 
