@@ -28,7 +28,6 @@ namespace JackStreamBox.Bot.Logic.Commands
         private PackGame[]? games = null;
 
         Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
-        bool notStarted = true;
 
         private DiscordMessage PrePollMessage;
         private DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
@@ -56,8 +55,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             GameStartSteps = new Step[]
             {
-                new Step { Text = BotMessage.StartingGamePack
-                , Completed = false },
+                new Step { Text = BotMessage.StartingGamePack, Completed = false },
                 new Step { Text = BotMessage.OpenedGamePack, Completed = false },
                 new Step { Text = BotMessage.StartingGame, Completed = false },
                 new Step { Text = BotMessage.GameOpend, Completed = false },
@@ -68,9 +66,6 @@ namespace JackStreamBox.Bot.Logic.Commands
         #endregion
 
 
-        //*******************
-        //Start Voting Process
-        //*******************
 
         [Command("vote")]
         [Description($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ")]
@@ -104,13 +99,11 @@ namespace JackStreamBox.Bot.Logic.Commands
                 default:
                     await context.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
                     break;
-
             }
 
 
             if (VotesOfPlayers.Values.ToList().Count == 1 && PrePollMessage == null)
             {
-                notStarted = false;
                 ResetGameStartSteps();
                 Task.Run(() => VoteOrCancel(context));
                 PrePollMessageData = new DiscordEmbedBuilder
@@ -127,6 +120,8 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         private void UpdatePreMessage()
         {
+            if (PrePollMessage == null) return;
+
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
@@ -175,16 +170,6 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
         }
 
-
-        [Command("vote")]
-        public async Task vote(CommandContext context)
-        {
-            await context.Channel.SendMessageAsync(PackInfo.VoteCategories());
-        }
-
-        //*******************
-        //Real Voting Process
-        //*******************
         private async Task voteNow(CommandContext context, PackGame[] games)
         {
             TimeSpan span = TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER,30));
@@ -245,27 +230,43 @@ namespace JackStreamBox.Bot.Logic.Commands
                 await Task.Delay(1000);
             }
 
+            //Tellin user we compute the winner
+            pollEmbed.Description = $"Computing winner... give me a second";
+            await pollMessage.ModifyAsync(null, pollEmbed.Build());
 
-            result.Wait();
-            var waitedResult = result.Result;
 
-            var distinct = waitedResult.Distinct();
-            
-            Reaction[] results = waitedResult.Where(x => x.Total == waitedResult.Max(obj => obj.Total)).ToArray();
 
-            pollEmbed.ImageUrl = "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png";
-            if(!results.Any()) 
+            //Get Reactions 
+            IReadOnlyList<DiscordUser>[] reactions = new IReadOnlyList<DiscordUser>[] {
+                await pollMessage.GetReactionsAsync(GetEmojis(context)[0]),
+                await pollMessage.GetReactionsAsync(GetEmojis(context)[1]),
+                await pollMessage.GetReactionsAsync(GetEmojis(context)[2]),
+                await pollMessage.GetReactionsAsync(GetEmojis(context)[3]),
+                await pollMessage.GetReactionsAsync(GetEmojis(context)[4])
+            };
+
+            int[] reactionCount = new int[]
             {
-                await pollMessage.DeleteAsync().ConfigureAwait(false);
-                await context.Channel.SendMessageAsync("No Votes !\nCancel voting process :sob:");
-                return;
-            }
-            //Startingphase
-            //Pick Game               
-            var random = new Random();
-            var pollWinner = results.Length == 1 ? results[0] : results[random.Next(results.Length)];
-            
-            PackGame GameWinner = ReactionToId(games, pollWinner,context);
+                reactions[0].Count,
+                reactions[1].Count,
+                reactions[2].Count,
+                reactions[3].Count,
+                reactions[4].Count,
+            };
+
+            int max = reactionCount.Max();
+            Random random = new Random();
+            int[] maxIndices = reactionCount.Select((n, i) => (Number: n, Index: i))
+                                      .Where(pair => pair.Number == max)
+                                      .Select(pair => pair.Index)
+                                      .ToArray();
+
+            int randomIndex = maxIndices.Length == 1 ? maxIndices[0] : maxIndices[random.Next(0, maxIndices.Length)];
+            pollEmbed.ImageUrl = "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png";
+
+        
+
+            PackGame GameWinner = games[randomIndex];
             
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
             Winner = GameWinner.Name;
@@ -274,18 +275,6 @@ namespace JackStreamBox.Bot.Logic.Commands
             await Logger(VoteStatus.OnStartingGamePack);
             await JackStreamBoxUtility.OpenGame(GameWinner.Id, Logger);
             Destroyer.Message(pollMessage, DestroyTime.SLOW);
-        }
-        private PackGame ReactionToId(PackGame[] games, Reaction pollWinner, CommandContext context)
-        {
-            int index = 0;
-            DiscordEmoji[] emojis = GetEmojis(context);
-
-            for(int i = 0; i < emojis.Length;i++)
-            {
-                if (emojis[i].Name == pollWinner.Emoji.Name) index = i;
-            }
-
-            return games[index];
         }
 
         private DiscordEmoji[] GetEmojis(CommandContext context)
@@ -314,6 +303,14 @@ namespace JackStreamBox.Bot.Logic.Commands
             }
 
             return sb.ToString();
+        }
+
+
+        //Basic explaination what vote calls a user can use
+        [Command("vote")]
+        public async Task vote(CommandContext context)
+        {
+            await context.Channel.SendMessageAsync(PackInfo.VoteCategories());
         }
     }
 }
