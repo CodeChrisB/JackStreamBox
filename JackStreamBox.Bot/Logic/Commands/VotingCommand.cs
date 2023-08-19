@@ -125,7 +125,12 @@ namespace JackStreamBox.Bot.Logic.Commands
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
-            sb.AppendLine($"Current Votes: {VotesOfPlayers.Values.Count}");
+
+            string[] voteCategories = new string[] { "1", "2", "3","4","5","6","7","8","9","draw","trivia","talk","fun" };
+            foreach( var key in voteCategories )
+            {
+                sb.AppendLine($"**!vote {key}** : {VotesOfPlayers.Count(x => x.Key == key)}");
+            }
 
             if (timeTillVoteEnd > 0)
             {
