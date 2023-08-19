@@ -145,13 +145,12 @@ namespace JackStreamBox.Util.logic
             if (step > 1000) step = 1000;
             if (step < 100) step = 100;
 
-            double scaleFactor = step / 100.0;
 
             double originalWidth = 16;
             double originalHeight = 9;
 
-            width = (int)(originalWidth * scaleFactor);   
-            height = (int)(originalHeight * scaleFactor);
+            width = (int)(originalWidth * step);   
+            height = (int)(originalHeight * step);
             Console.WriteLine($"Screen Size {width}x{height}");
         }
 
