@@ -179,7 +179,7 @@ namespace JackStreamBox.Util.logic
                 {
                     //menu open
                     time = Time.OpenGamePicker;
-                }else if(i>= inputs.Length - 2)
+                }else if(i>= inputs.Length - 4)
                 {
                     time = Time.StartGame;
                 }
