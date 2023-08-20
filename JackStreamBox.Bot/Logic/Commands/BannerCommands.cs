@@ -33,8 +33,9 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
 
-            CustomBanner.RemoveBanner(index);
-            await context.Channel.SendMessageAsync("Removed banner");
+            bool removed = CustomBanner.RemoveBanner(index);
+            string text = removed ? "Removed banner" : $"There was no index {index}";
+            await context.Channel.SendMessageAsync(text);
 
 
         }

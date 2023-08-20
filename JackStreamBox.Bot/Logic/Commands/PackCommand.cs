@@ -47,9 +47,12 @@ namespace JackStreamBox.Bot.Logic.Commands
         }
 
         //DO NOT ADD REQUIRES ATTRIBUTE OTHERWISE IT WILL SHOWUP IN THE HELP COMMAND
-        [Command("pack")]
+        [Command("packs")]
+        [Description("Displays an image containing all games in all packs")]
+        [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context)
         {
+            if (    CommandLevel.IsBanned(context)) return;
             await context.Channel.SendMessageAsync("https://media.discordapp.net/attachments/1066085138791932005/1070771921643372564/image.png?width=674&height=902");
         }
     }

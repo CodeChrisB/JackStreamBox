@@ -12,41 +12,43 @@ namespace JackStreamBox.Util.Data
 
         public static void AddBanner(string newBanner)
         {
-            List<string> banners = GetBanners();
+            List<string> banners = GetBanners().ToList();
             banners.Add(newBanner);
-            WriteBanners(banners);
+            WriteBanners(banners.ToArray());
             
         }
 
-        public static void RemoveBanner(int index)
+        public static bool RemoveBanner(int index)
         {
-            List<string> banners = GetBanners();
+            List<string> banners = GetBanners().ToList();
+            if (index >= banners.Count) return false;
             banners.RemoveAt(index);
-            WriteBanners(banners);
+            WriteBanners(banners.ToArray());
+            return true;
         }
 
         public static string[] GetAllBanner()
         {
-            return GetBanners().ToArray();
+            return GetBanners();
         }
 
         public static string GetRandomBanner()
         {
-            List<string> banners = GetBanners();
-            return banners[new Random().Next(banners.Count)];
+            string[] banners = GetBanners();
+            return banners[new Random().Next(banners.Length)];
         }
 
-        private static List<string> GetBanners()
+        private static string[] GetBanners()
         {
-            List<string> banners = BotData.ReadCustomData<List<string>>(CBFILENAME);
-            if(banners == null || banners.Count == 0) return new List<string> { "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png" };
+            string[] banners = BotData.ReadCustomData<string[]>(CBFILENAME);
+            if(banners == null || banners.Length == 0) return new string[] { "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png" };
              
             return banners;
         }
 
-        private static void WriteBanners(List<string> banners)
+        private static void WriteBanners(string[] banners)
         {
-            BotData.WriteCustomData<List<string>>(CBFILENAME, banners);
+            BotData.WriteCustomData<string[]>(CBFILENAME, banners);
         }
 
     }

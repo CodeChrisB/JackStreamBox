@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Xml;
+using System.Xml.Serialization;
 
 public static class BotData
 {
@@ -80,30 +81,39 @@ public static class BotData
     }
 
 
-
+    private static string FileNameToCustomFile(string filename)
+    {
+       return  $"{gitIgnorePart}{filename}.txt";
+    }
     public static void WriteCustomData<T>(string filename, T data)
     {
-        var serializer = new DataContractSerializer(typeof(T));
-
-        string filePath = $"{gitIgnorePart}{filename}.txt"; // Use correct file extension
-        using (var stream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
-        using (var writer = XmlWriter.Create(stream))
+        try
         {
-            serializer.WriteObject(writer, data);
-        }
-    }
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
 
+            string filePath = FileNameToCustomFile(filename);
+            using (FileStream stream = new FileStream(filePath, FileMode.Create))
+            {
+                serializer.Serialize(stream, data);
+            }
+        }     
+        catch
+        {
+            
+        }
+
+    }
 
     public static T ReadCustomData<T>(string filename)
     {
-        var serializer = new DataContractSerializer(typeof(T));
+        XmlSerializer serializer = new XmlSerializer(typeof(T));
 
+        string filePath = FileNameToCustomFile(filename);
         try
         {
-            using (var stream = new FileStream($"{gitIgnorePart}{filename}.txt", FileMode.Open))
-            using (var reader = XmlReader.Create(stream))
+            using (FileStream stream = new FileStream(filePath, FileMode.Open))
             {
-                return (T)serializer.ReadObject(reader);
+                return (T)serializer.Deserialize(stream);
             }
         }
         catch

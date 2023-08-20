@@ -54,7 +54,7 @@ namespace JackStreamBox.Bot.Logic.Config
             string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
             await context.Channel.SendMessageAsync($"The bot [{name}] is {(IsBotPaused ? "paused" : "resumed")}.");
         }
-        public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel)
+        public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel,bool ignoreChannel = false)
         {
             if (CommandLevel.IsBotPaused) return false;
 
@@ -62,7 +62,8 @@ namespace JackStreamBox.Bot.Logic.Config
             int requiredLevel = (int)permissionLevel;
 
             //Check if inside the Jackbot VC or if developer used the command
-            if (context.Channel.Id.ToString() != "1105184748701229066" && grantedLevel < (int)PermissionRole.STAFF) return false;
+ 
+            if (!ignoreChannel && context.Channel.Id.ToString() != "1105184748701229066" && grantedLevel < (int)PermissionRole.STAFF) return false;
 
             bool canExecute = grantedLevel >= requiredLevel;
 
@@ -73,6 +74,11 @@ namespace JackStreamBox.Bot.Logic.Config
             }
 
             return canExecute;
+        }
+
+        internal static bool IsBanned(CommandContext context)
+        {
+            return (int)PermissionRole.NOBOT == RoleToLevel(context.Member.Roles);
         }
 
 
@@ -137,5 +143,6 @@ namespace JackStreamBox.Bot.Logic.Config
                 default: return "Banned";
             }
         }
+
     }
 }
