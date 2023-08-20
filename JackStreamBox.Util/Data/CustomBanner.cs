@@ -21,7 +21,6 @@ namespace JackStreamBox.Util.Data
         public static bool RemoveBanner(int index)
         {
             List<string> banners = GetBanners().ToList();
-            if (index >= banners.Count) return false;
             banners.RemoveAt(index);
             WriteBanners(banners.ToArray());
             return true;
