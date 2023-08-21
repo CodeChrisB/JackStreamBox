@@ -21,31 +21,11 @@ namespace JackStreamBox.Bot.Logic.Commands
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
-            bool containsBadWord = badWords.Any(badWord => message.Contains(badWord));
-
-            if (!containsBadWord) {
-                await context.Channel.SendMessageAsync(String.Join(" ",message));
-            }
-            else
-            {
-                var logChannel = await context.Client.GetChannelAsync(1114225698056445992);
-
-                string username = context.Member.Nickname;
-                await logChannel.SendMessageAsync($"{username}\n: Wanted to say {message} using the bot !");
-            }
+            await context.Channel.SendMessageAsync(String.Join(" ",message));
+            var logChannel = await context.Client.GetChannelAsync(1114225698056445992);
+            string username = context.Member.Nickname;
+            await logChannel.SendMessageAsync($"{username}:{message}");
         }
-
-        private string[] badWords = new string[]
-        {
-            "test-word-so-that-gray-wont-ban-me",
-            "niger",
-            "nigger",
-            "nigga",
-            "niga",
-            "pussy",
-            "cunt",
-            "whore",
-            "fuck",
-        };
     }
 }
+
