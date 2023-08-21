@@ -16,7 +16,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Command("say")]
         [Description("Use the bot to speak.")]
         [Requires(PermissionRole.STAFF)]
-        public async Task Tell(CommandContext context, [RemainingText] string message)
+         public async Task Tell(CommandContext context, [RemainingText] string message)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
