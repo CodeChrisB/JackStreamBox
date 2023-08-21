@@ -16,7 +16,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Command("say")]
         [Description("Use the bot to speak.")]
         [Requires(PermissionRole.STAFF)]
-        public async Task Tell(CommandContext context,string message)
+        public async Task Tell(CommandContext context, [RemainingText] string message)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
@@ -24,7 +24,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             bool containsBadWord = badWords.Any(badWord => message.Contains(badWord));
 
             if (!containsBadWord) {
-                await context.Channel.SendMessageAsync(message);
+                await context.Channel.SendMessageAsync(String.Join(" ",message));
             }
             else
             {
