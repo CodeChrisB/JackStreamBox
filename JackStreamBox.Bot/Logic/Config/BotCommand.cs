@@ -12,13 +12,14 @@ namespace JackStreamBox.Bot.Logic.Config
 {
     public static class BotCommand
     {
-        private static List<CommandInfo> CommandInfoList = new List<CommandInfo>();
+        private static List<CommandInfo> UserCommands = new List<CommandInfo>();
+        private static List<CommandInfo> StaffCommands = new List<CommandInfo>();
+        private static List<CommandInfo> DevCommands = new List<CommandInfo>();
 
+        public static CommandInfo[] GetUserCommands() => UserCommands.OrderBy(x => (int)x.Role).ThenBy(x => x.Name).ToArray();
+        public static CommandInfo[] GetStaffCommands()  => StaffCommands.ToArray();
+        public static CommandInfo[] GetDeveloperCommands() => DevCommands.ToArray();
 
-        public static CommandInfo[] GetCommands()
-        {
-            return CommandInfoList.OrderBy(x => (int)x.Role).ThenBy(x=>x.Name).ToArray();
-        }
         public static void Register<T>()
         {
             var type = typeof(T);
@@ -36,18 +37,54 @@ namespace JackStreamBox.Bot.Logic.Config
                 {
                     if (attr.TypeId == typeof(Requires))
                     {
-                        //We found a method that has an required Level Information save its data
-                        AppendAttribute(attributes);
+                        //We found a user command
+                        AppendUserCommand(attributes);
                     }
+
+                    if(attr.TypeId == typeof(ModCommand))
+                    {
+                        //We found a staff/dev command
+                        AppendStaffCommand(attributes);
+                    }
+
                 }
             }
         }
-
-        private static void AppendAttribute(object[] attributes)
+        private static void AppendStaffCommand(object[] attributes)
         {
             string name = String.Empty;
             string description = String.Empty;
-            PermissionRole role = PermissionRole.DEVELOPER;
+            PermissionRole role = PermissionRole.ANYONE;
+            foreach (Attribute attr in attributes)
+            {
+                if (attr.TypeId == typeof(ModCommand))
+                {
+                    //We found a method that has an required Level Information save its data
+                    role = ((ModCommand)attr).RequiredLevel;
+                }
+                else if (attr.TypeId == typeof(DescriptionAttribute))
+                {
+                    description = ((DescriptionAttribute)attr).Description;
+                }
+                else if (attr.TypeId == typeof(CommandAttribute))
+                {
+                    name = ((CommandAttribute)attr).Name;
+                }
+            }
+            CommandInfo ci = new CommandInfo(name, description, role);
+            if(role == PermissionRole.DEVELOPER) {
+                DevCommands.Add(ci);
+            }
+            else
+            {
+                StaffCommands.Add(ci);
+            }
+        }
+        private static void AppendUserCommand(object[] attributes)
+        {
+            string name = String.Empty;
+            string description = String.Empty;
+            PermissionRole role = PermissionRole.ANYONE;
             foreach (Attribute attr in attributes)
             {
                 if (attr.TypeId == typeof(Requires))
@@ -65,7 +102,7 @@ namespace JackStreamBox.Bot.Logic.Config
                 }
            }
             CommandInfo ci = new CommandInfo(name, description,role);
-            CommandInfoList.Add(ci);
+            UserCommands.Add(ci);
         }
     }
 }

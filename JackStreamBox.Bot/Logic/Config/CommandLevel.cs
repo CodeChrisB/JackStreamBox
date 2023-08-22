@@ -45,7 +45,7 @@ namespace JackStreamBox.Bot.Logic.Config
         private static bool IsBotPaused = false;
         [Command("toggle")]
         [Description("Toggle the whole bot, used for debugging without needing to access the server.")]
-        [Requires(PermissionRole.DEVELOPER)]
+        [ModCommand(PermissionRole.DEVELOPER)]
         public async Task ToggleBot(CommandContext context)
         {
             int level = RoleToLevel(context.Member.Roles);

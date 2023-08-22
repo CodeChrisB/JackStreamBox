@@ -5,6 +5,10 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using JackStreamBox.Bot.Logic.Commands;
+using JackStreamBox.Bot.Logic.Commands.DevCommands;
+using JackStreamBox.Bot.Logic.Commands.ScheduledCommands;
+using JackStreamBox.Bot.Logic.Commands.StaffCommand;
+using JackStreamBox.Bot.Logic.Commands.UserCommands;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Util.Data;
 using Newtonsoft.Json;
@@ -70,9 +74,11 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<SayCommand>();
             Commands.RegisterCommands<UpdaterCommand>();
             Commands.RegisterCommands<ReportCommand>();
-            Commands.RegisterCommands<SetUpComamd>();
+            Commands.RegisterCommands<SetValue>();
             Commands.RegisterCommands<BannerCommands>();
-
+            Commands.RegisterCommands<ShowModCommand>();
+            Commands.RegisterCommands<DailyQuestionCommand>();
+            
             //Register for Help Page
             BotCommand.Register<StartGameCommand>();
             BotCommand.Register<PackCommand>();
@@ -84,8 +90,13 @@ namespace JackStreamBox.Bot
             BotCommand.Register<SayCommand>();
             BotCommand.Register<UpdaterCommand>();
             BotCommand.Register<ReportCommand>();
-            BotCommand.Register<SetUpComamd>();
+            BotCommand.Register<SetValue>();
             BotCommand.Register<BannerCommands>();
+
+
+            //Register for ModCommand
+            BotCommand.Register<ShowModCommand>();
+            BotCommand.Register<DailyQuestionCommand>(); 
 
 
             //Load Settings
