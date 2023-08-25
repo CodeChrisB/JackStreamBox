@@ -23,14 +23,15 @@ namespace JackStreamBox.Bot.Logic.Commands
 {
     internal class VotingCommand : BaseCommandModule
     {
-        private int timeTillVoteEnd =0;
         #region Vote Declaration
-        private PackGame[]? games = null;
 
+        //Vote Props
         private List<string> voteCategories = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", /*"draw", "trivia", "talk", "fun"*/ };
-
         Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
+        private PackGame[]? games = null;
+        private int timeTillVoteEnd =0;
 
+        //Discord Props
         private DiscordMessage PrePollMessage;
         private DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
 
@@ -114,16 +115,13 @@ namespace JackStreamBox.Bot.Logic.Commands
             sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
 
             int requiredVotes = BotData.ReadData(BotVals.REQUIRED_VOTES, 4);
+
             if(VotesOfPlayers.Values.Count<requiredVotes)
-            {//Enough votes
                 sb.AppendLine($"Required Votes: {VotesOfPlayers.Values.Count}/{requiredVotes}");
-            }
 
 
             foreach ( var key in voteCategories )
-            {
                 sb.AppendLine($"**!vote {key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
-            }
 
             if (timeTillVoteEnd > 0)
             {
@@ -149,9 +147,6 @@ namespace JackStreamBox.Bot.Logic.Commands
                 timeTillVoteEnd--;
             }
 
-
-
-            Console.WriteLine("Delayed function called.");
 
             List<string> votes = VotesOfPlayers.Values.ToList();
 

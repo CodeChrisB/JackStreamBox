@@ -37,7 +37,7 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
         [ModCommand(PermissionRole.STAFF)]
         public async Task DailyQuestion4(CommandContext context,string question, string a1, string a2,string a3, string a4)
         {
-            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);    
             QuestionEmbed.Create(context, question,
                 new string[] { a1,a2,a3,a4 },
                 new string[] { "green_circle", "red_circle", "orange_circle", "blue_circle" },

@@ -16,6 +16,11 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
 
             if (answers.Length != emojis.Length) return;
 
+            if (title.Length > 255)
+            {
+                title = title.Substring(0, 250);
+                title += "...";
+            }
             var embed = new DiscordEmbedBuilder
             {
                 Title = title,
