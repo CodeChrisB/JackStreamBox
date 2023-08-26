@@ -80,7 +80,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
             await context.Channel.SendMessageAsync(GenerateVersionString());
-            BotData.IncrementValue("message");
+            
 
         }
 

@@ -86,7 +86,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             else
             {
                 await context.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
-                BotData.IncrementValue("message");
+                
             }
 
             if (VotesOfPlayers.Values.ToList().Count == 1 && PrePollMessage == null)
@@ -101,7 +101,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
                 };
                 PrePollMessage = await context.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
-                BotData.IncrementValue("message");
+                
             }
             UpdatePreMessage();
         }
@@ -160,7 +160,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             else
             {
                 await context.Channel.SendMessageAsync("Not enough votes cancel this voting.\nOnly vote after a game, you will be punished if you try to cancel a game just because you dont want to play anymore.");
-                BotData.IncrementValue("message");
+                
             }
             ResetVote();
         }
@@ -180,7 +180,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 Description = $"Setting up the Poll"
             };
             var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
-            BotData.IncrementValue("message");
+            
 
             //Add Reactions
             DiscordEmoji[] emojis = GetEmojis(context);
@@ -309,7 +309,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task vote(CommandContext context)
         {
             await context.Channel.SendMessageAsync(PackInfo.VoteCategories());
-            BotData.IncrementValue("message");
+            
         }
     }
 }

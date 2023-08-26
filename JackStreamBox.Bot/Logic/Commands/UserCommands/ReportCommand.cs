@@ -25,7 +25,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             string username = context.Member.Nickname;
             await logChannel.SendMessageAsync($"{username}\n{issue}");
-            BotData.IncrementValue("message");
+            
 
         }
     }

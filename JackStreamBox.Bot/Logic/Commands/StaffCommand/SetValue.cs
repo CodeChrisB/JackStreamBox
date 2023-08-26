@@ -30,7 +30,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 
             BotData.WriteData(key, val);
             var message = await context.Channel.SendMessageAsync("Done!");
-            BotData.IncrementValue("message");
+            
             Destroyer.Message(message, DestroyTime.FAST);
         }
 
@@ -55,7 +55,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             sb.AppendLine($"Screen Size is {16 * size}x{9 * size}");
 
             await context.Channel.SendMessageAsync(sb.ToString());
-            BotData.IncrementValue("message");
+            
 
         }
     }

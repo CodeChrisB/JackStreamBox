@@ -37,7 +37,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
                 //Just send message
                 sb.AppendLine($"Sent by : {context.Member.Nickname}");
                 await context.Channel.SendMessageAsync(message);
-                BotData.IncrementValue("message");
+                
             }
 
 
