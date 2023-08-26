@@ -33,7 +33,7 @@ public static class BotData
 
     public static int ReadData(string key, int defaultValue)
     {
-        string? value = (string?)dataDictionary[key];
+        string? value = (string?)dataDictionary.GetValueOrDefault(key);
 
         if (value != null && Int32.TryParse(value, out int parsedValue))
         {
