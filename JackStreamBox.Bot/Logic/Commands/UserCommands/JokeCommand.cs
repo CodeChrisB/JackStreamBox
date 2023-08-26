@@ -26,6 +26,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
             Destroyer.Message(message, DestroyTime.REALLYSLOW);
+            BotData.IncrementValue("message");
         }
     }
 }

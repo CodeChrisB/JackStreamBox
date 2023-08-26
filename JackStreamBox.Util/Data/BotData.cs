@@ -31,12 +31,18 @@ public static class BotData
         SaveDataToFile(FileName);
     }
 
-    public static int ReadData(string key,int defaultvalue)
+    public static int ReadData(string key, int defaultValue)
     {
-        string? value = (string?)dataDictionary.GetValueOrDefault(key);
+        string? value = (string?)dataDictionary[key];
 
-
-        return value == null ? defaultvalue :  Int32.Parse(value);
+        if (value != null && Int32.TryParse(value, out int parsedValue))
+        {
+            return parsedValue;
+        }
+        else
+        {
+            return defaultValue;
+        }
     }
 
     public static string ReadData(string key, string defaultvalue)
@@ -123,5 +129,12 @@ public static class BotData
 
     }
 
+    public static void IncrementValue(string key) => IncrementValue(key, 1);
 
+    public static void IncrementValue(string key,int value)
+    {
+        int val = ReadData(key, 0);
+        val+= value;
+        WriteData(key, val);
+    }
 }

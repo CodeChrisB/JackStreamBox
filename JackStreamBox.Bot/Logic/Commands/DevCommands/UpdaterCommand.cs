@@ -43,7 +43,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
 
             Process.Start($"{projectFolder}\\updater.bat");
             await context.Channel.SendMessageAsync("See ya in a minute when I restart");
-
+            BotData.IncrementValue("message",2);
             Environment.Exit(1);
         }
 
@@ -69,7 +69,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
 
             Process.Start($"{projectFolder}\\restarter.bat");
             await context.Channel.SendMessageAsync("See ya in a few seconds when I restart");
-
+            BotData.IncrementValue("message", 2);
             Environment.Exit(1);
         }
 
@@ -80,6 +80,8 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
             await context.Channel.SendMessageAsync(GenerateVersionString());
+            BotData.IncrementValue("message");
+
         }
 
         private static string GenerateVersionString()

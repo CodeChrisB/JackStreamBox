@@ -50,6 +50,7 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
 
             var embed = await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
             Destroyer.Message(embed, DestroyTime.REALLYSLOW);
+            BotData.IncrementValue("message");
         }
     }
 }

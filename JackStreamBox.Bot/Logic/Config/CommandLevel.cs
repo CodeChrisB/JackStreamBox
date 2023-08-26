@@ -37,6 +37,7 @@ namespace JackStreamBox.Bot.Logic.Config
             }
             string memberName = context.Member.DisplayName;
             var message = await context.Channel.SendMessageAsync($"\n{memberName} \n{text}");
+            BotData.IncrementValue("message");
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
             Destroyer.Message(message, DestroyTime.SLOW);
         }
@@ -53,6 +54,7 @@ namespace JackStreamBox.Bot.Logic.Config
             CommandLevel.IsBotPaused = !CommandLevel.IsBotPaused;
             string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
             await context.Channel.SendMessageAsync($"The bot [{name}] is {(IsBotPaused ? "paused" : "resumed")}.");
+            BotData.IncrementValue("message");
         }
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel,bool ignoreChannel = false)
         {
@@ -71,6 +73,7 @@ namespace JackStreamBox.Bot.Logic.Config
             if(!canExecute)
             {
                 context.Channel.SendMessageAsync("You can not execute this");
+                BotData.IncrementValue("message");
             }
 
             return canExecute;

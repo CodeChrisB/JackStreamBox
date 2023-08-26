@@ -26,6 +26,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             WindowNavigator.SendGameInput(Input.ESCAPE);
             int time = 60;
             var message = await context.Channel.SendMessageAsync($"Pausing the game for {time} seconds.");
+            BotData.IncrementValue("message");
             while (time > 0)
             {
                 Task.Delay(TimeSpan.FromSeconds(10)).Wait();

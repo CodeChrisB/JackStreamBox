@@ -15,11 +15,6 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
 {
     internal class DailyQuestionCommand : BaseCommandModule
     {
-
-        private const ulong DailyQuestionChannel = 1114225698056445992;
-
-            
-
         [Command("daily")]
         [Description("Show staff commands")]
         [ModCommand(PermissionRole.STAFF)]
@@ -28,7 +23,7 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
             QuestionEmbed.Create(context, "Daily Question",
                 new string[] { "Life is perfect", "Life is good", "It's okay", "I dont want to Jack about it" },
                 new string[] {"heart","thumbsup","slight_smile","speak_no_evil"},
-                DailyQuestionChannel
+                ChannelId.DailyQuestionChannel
                 );
         }
 
@@ -64,6 +59,17 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
             QuestionEmbed.Create(context, question,
                 new string[] { a1, a2 },
                 new string[] { "green_circle", "red_circle" },
+                context.Channel.Id
+                );
+        }
+
+        [Command("poll")]
+        public async Task DailyQuestion1(CommandContext context, string question, string a1)
+        {
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+            QuestionEmbed.Create(context, question,
+                new string[] { a1 },
+                new string[] { "green_circle" },
                 context.Channel.Id
                 );
         }

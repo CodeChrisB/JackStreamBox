@@ -42,6 +42,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
                 var message = await context.Channel.SendMessageAsync(stringBuilder.ToString());
                 Destroyer.Message(message, DestroyTime.REALLYSLOW);
+                BotData.IncrementValue("message");
 
             }
         }
@@ -54,6 +55,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (    CommandLevel.IsBanned(context)) return;
             await context.Channel.SendMessageAsync("https://media.discordapp.net/attachments/1066085138791932005/1070771921643372564/image.png?width=674&height=902");
+            BotData.IncrementValue("message");
         }
     }
 }

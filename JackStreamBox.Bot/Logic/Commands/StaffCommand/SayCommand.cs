@@ -21,10 +21,29 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
-            await context.Channel.SendMessageAsync(string.Join(" ", message));
-            var logChannel = await context.Client.GetChannelAsync(1114225698056445992);
-            string username = context.Member.Nickname;
-            await logChannel.SendMessageAsync($"{username}:{message}");
+
+            var LogChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
+            StringBuilder sb = new StringBuilder();
+            string replyTo = "";
+            if (context.Message.Reference != null)
+            {
+                //Reply to referenced Message
+                await context.Message.Reference.Message.RespondAsync(message);
+                sb.AppendLine($"{context.Member.Nickname} reply to {context.Message.Reference.Message.Author.Username}");
+                sb.AppendLine($"Replied to : {context.Message.Reference.Message.Content}");
+            }
+            else
+            {
+                //Just send message
+                sb.AppendLine($"Sent by : {context.Member.Nickname}");
+                await context.Channel.SendMessageAsync(message);
+                BotData.IncrementValue("message");
+            }
+
+
+            sb.AppendLine($"Message : {message}");
+            //Log messages do not count to total messages sent
+            await LogChannel.SendMessageAsync(sb.ToString());
         }
     }
 }

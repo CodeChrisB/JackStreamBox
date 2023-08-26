@@ -21,10 +21,11 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED)) return;
 
-            var logChannel = await context.Client.GetChannelAsync(1114225698056445992);
+            var logChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
 
             string username = context.Member.Nickname;
             await logChannel.SendMessageAsync($"{username}\n{issue}");
+            BotData.IncrementValue("message");
 
         }
     }

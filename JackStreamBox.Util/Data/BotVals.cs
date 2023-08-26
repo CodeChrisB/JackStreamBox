@@ -13,6 +13,7 @@ namespace JackStreamBox.Util.Data
         public static readonly string REQUIRED_VOTES = "require";
         public static readonly string BOT_NAME = "name";
         public static readonly string GAMES_HOSTED = "gamesHosted";
+        public static readonly string MESSAGES_SENT = "messages_sent";
 
         public static string[] GetKeys()
         {

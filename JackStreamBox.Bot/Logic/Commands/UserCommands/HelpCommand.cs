@@ -60,6 +60,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
             var message = await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
             Destroyer.Message(message, DestroyTime.ULTRASLOW);
+            BotData.IncrementValue("message");
         }
 
         [Command("commands")]
@@ -86,7 +87,8 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
         {
 
             CommandInfo[] ci = BotCommand.GetUserCommands();
-            CommandEmbed.Show(context, "Help Page™", ci, appendDescription);    
+            CommandEmbed.Show(context, "Help Page™", ci, appendDescription);
+            BotData.IncrementValue("message");
         }
 
         [Command("rules")]
@@ -127,6 +129,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
             var ruleMessage = await context.Channel.SendMessageAsync(embed: ruleEmbed).ConfigureAwait(false);
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
             Destroyer.Message(ruleMessage, DestroyTime.REALLYSLOW);
+            BotData.IncrementValue("message");
         }
 
     }

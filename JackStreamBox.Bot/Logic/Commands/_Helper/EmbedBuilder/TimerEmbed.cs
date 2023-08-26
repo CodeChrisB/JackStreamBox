@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
             Time--;
         }
     }
-    internal class TimerEmbed
+    public static class TimerEmbed
     {
 
         private static Dictionary<string,TimerEmbedData> EmbedData = new ();
@@ -35,8 +36,7 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
         public static async Task<DiscordMessage> Show(CommandContext context, TimerEmbedData timerData)
         {
             EmbedData.Add(timerData.Key, timerData);
-            EmbedData[timerData.Key].Builder.Title = timerData.Title;
-           
+            await BuilderHelper(timerData.Key);
 
             while(EmbedData[timerData.Key].Time > 0)
             {
@@ -66,29 +66,30 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
             content.AppendLine(EmbedData[key].Custom);
             content.AppendLine(EmbedData[key].After);
 
+            EmbedData[key].Builder.Title = EmbedData[key].Title;
+            EmbedData[key].Builder.Description = content.ToString();
 
-            if (EmbedData[key].Embed == null)
-            {
-                EmbedData[key].Builder.Description = content.ToString();
-                EmbedData[key].Builder.Title = EmbedData[key].Title;
-                EmbedData[key].Embed = await EmbedData[key].Context.Channel.SendMessageAsync(embed: EmbedData[key].Builder).ConfigureAwait(false);
-            }
-            else
-            {
-                await EmbedData[key].Embed.ModifyAsync(EmbedData[key].Builder.Build());
-            }
+            await EmbedData[key].Embed.ModifyAsync(EmbedData[key].Builder.Build());
         }
 
-        private static DiscordEmbedBuilder BuilderHelper()
+        private async static Task BuilderHelper(string key)
         {
-            return new DiscordEmbedBuilder
+            EmbedData[key].Builder = new DiscordEmbedBuilder
             {
                 Title = "",
                 Description = "",
                 Color = DiscordColor.Green,
 
             };
+
+            EmbedData[key].Embed = await EmbedData[key].Context.Channel.SendMessageAsync(embed: EmbedData[key].Builder).ConfigureAwait(false);
         }
-        public static void UpdateCustom(string key, string custom) => EmbedData. = custom;
+        public static void UpdateCustom(string key, string custom)
+        {
+            if(EmbedData.ContainsKey(key))
+            {
+                EmbedData[key].Custom = custom;
+            }
+        }
     }
 }

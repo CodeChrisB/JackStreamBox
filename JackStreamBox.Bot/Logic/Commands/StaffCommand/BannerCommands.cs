@@ -24,6 +24,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 
             CustomBanner.AddBanner(url);
             await context.Channel.SendMessageAsync("Added banner");
+            BotData.IncrementValue("message");
         }
 
         [Command("banner-")]
@@ -37,6 +38,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             bool removed = CustomBanner.RemoveBanner(index);
             string text = removed ? "Removed banner" : $"There was no index {index}";
             await context.Channel.SendMessageAsync(text);
+            BotData.IncrementValue("message");
 
 
         }
@@ -57,6 +59,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             }
 
             await context.Channel.SendMessageAsync(sb.ToString());
+            BotData.IncrementValue("message");
         }
     }
 }
