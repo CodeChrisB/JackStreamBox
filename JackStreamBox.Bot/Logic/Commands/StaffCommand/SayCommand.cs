@@ -8,13 +8,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using DSharpPlus.Entities;
 
 namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 {
     public class SayCommand : BaseCommandModule
     {
         [Command("say")]
-        [Description("Use the bot to speak.")]
+        [Description("Use the bot to speak. You can even use line breaks !")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task Tell(CommandContext context, [RemainingText] string message)
         {
@@ -22,7 +24,44 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
 
+            await context.Channel.SendMessageAsync(message);
+            SendLogMessage(context,message);
+        }
+
+        [Command("embed")]
+        [Description("Use the bot to speak. Title in \"Qutation Marks\" Message without them, can even use line breaks for message")]
+        [ModCommand(PermissionRole.STAFF)]
+        public async Task Embed(CommandContext context, string title, [RemainingText] string message)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+
+
+
+            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
+            embedBuilder.Title = title;
+            embedBuilder.Description = message;
+            embedBuilder.Color = DiscordColor.Green;
+
+            await context.Channel.SendMessageAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
+            SendLogEmbed(context,embedBuilder);
+        }
+
+        private async void SendLogEmbed(CommandContext context, DiscordEmbedBuilder embedBuilder)
+        {
             var LogChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
+
+            embedBuilder.Description = $"[{context.Member.Nickname}] {embedBuilder.Description}";
+            await LogChannel.SendMessageAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
+        }
+
+        private async void SendLogMessage(CommandContext context, string message)
+        {
+            var LogChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
+            await LogChannel.SendMessageAsync(await LogMessage(context, message));
+        }
+        private async Task<string> LogMessage(CommandContext context,string message)
+        {
             StringBuilder sb = new StringBuilder();
 
             if (context.Message.Reference != null)
@@ -36,14 +75,11 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             {
                 //Just send message
                 sb.AppendLine($"Sent by : {context.Member.Nickname}");
-                await context.Channel.SendMessageAsync(message);
-                
             }
 
 
             sb.AppendLine($"Message : {message}");
-            //Log messages do not count to total messages sent
-            await LogChannel.SendMessageAsync(sb.ToString());
+            return sb.ToString();
         }
     }
 }

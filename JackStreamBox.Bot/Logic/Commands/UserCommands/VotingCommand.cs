@@ -6,6 +6,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.EventHandling;
 using DSharpPlus.Interactivity.Extensions;
 using JackStreamBox.Bot.Logic.Attributes;
+using JackStreamBox.Bot.Logic.Commands._Helper.ChartBuilder;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Data;
 using JackStreamBox.Util;
@@ -260,6 +261,8 @@ namespace JackStreamBox.Bot.Logic.Commands
                 .ToArray();
 
             int randomIndex = maxIndices.Length == 1 ? maxIndices[0] : maxIndices[random.Next(0, maxIndices.Length)];
+
+
             pollEmbed.ImageUrl = CustomBanner.GetRandomBanner();
                 
             PackGame GameWinner = games[randomIndex];
