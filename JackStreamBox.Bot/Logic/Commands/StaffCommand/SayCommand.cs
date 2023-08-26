@@ -24,7 +24,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 
             var LogChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
             StringBuilder sb = new StringBuilder();
-            string replyTo = "";
+
             if (context.Message.Reference != null)
             {
                 //Reply to referenced Message
