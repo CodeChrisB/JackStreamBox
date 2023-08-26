@@ -44,7 +44,7 @@ After a game players can vote for the next game, after the voting the next game 
 | `!banner+`   | Add a banner (How to :  post your banner in any discord chat and then copy the link of the image use this link as the parameter for the image)  E.G !banner+ "https://media.discordapp.net/attachments/10563...."   |
 | `!banners`   | List alls banners with their respected indexes for deletion       |
 | `!input`     | Used to navigate the game helpful for channging settings. !input [button]  <br>Buttons = (l=left,r=right,u=up,d=down,esc=escape,enter=enter)  <br>Exmaple of open the settings for a game: <br>!input esc <br>!input d <br>!input d <br>!input enter  <br>To open the settings (may not work for all packs if the settings menu isnt the second option from the top in the pause menu9
-| `!say`       | Make the bot say something. Use !say "{Message}" for messages with multiple word   <br>!say Hello ✔️  <br>!say "This is a sentence" ✔️  <br>!say This is a sentence ❌  <br> Some swear words will be filterd and your message will be logged into reports, dont abuse the bot :(
+| `!say`       | Make the bot say something. Use !say "This is my message i want to sent"
 | `!set`       | Set Data use the key words seen in !setview, this changes things like how long the voting phase takes      |
 | `!setview`   | Views all keywords that can be set |
 | `!start`     | Instantly start a game  [Not working currently...] |
