@@ -29,8 +29,8 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             
             while (time > 0)
             {
-                Task.Delay(TimeSpan.FromSeconds(10)).Wait();
-                time -= 10;
+                Task.Delay(1000).Wait();
+                time -= 1;
                 await message.ModifyAsync(MessageGenerator(time));
             }
 
@@ -49,7 +49,6 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("input")]
-        [ModCommand(PermissionRole.STAFF)]
         public async Task RealInput(CommandContext context, string input, int times)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
