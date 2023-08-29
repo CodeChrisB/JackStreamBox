@@ -5,6 +5,7 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using JackStreamBox.Bot.Logic.Commands;
+using JackStreamBox.Bot.Logic.Commands._Helper;
 using JackStreamBox.Bot.Logic.Commands.DevCommands;
 using JackStreamBox.Bot.Logic.Commands.ScheduledCommands;
 using JackStreamBox.Bot.Logic.Commands.StaffCommand;
@@ -30,11 +31,23 @@ namespace JackStreamBox.Bot
 
         public async Task RunAsync()
         {
+
+            Console.WriteLine("*********************************");
+            Console.WriteLine("   __     ______     __    __    \r\n  /\\ \\   /\\  ___\\   /\\ \"-./  \\   \r\n _\\_\\ \\  \\ \\___  \\  \\ \\ \\-./\\ \\  \r\n/\\_____\\  \\/\\_____\\  \\ \\_\\ \\ \\_\\ \r\n\\/_____/   \\/_____/   \\/_/  \\/_/ \r\n                                 ");
+            Console.WriteLine("*********************************");
+
+            Console.WriteLine("Loading - Config");
             var json = String.Empty;
             using (var fs = File.OpenRead("config.json"))
             using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
                 json = await sr.ReadToEndAsync();
             var configJson = JsonConvert.DeserializeObject<Config>(json);
+
+            Console.WriteLine("Loading - Done!");
+            Console.WriteLine("Set up - Dsharp Bot");
+
+
+            DocGenerator.PASTE_BIN_KEY = configJson.PasteBinKey;
 
             var config = new DiscordConfiguration()
             {
@@ -59,6 +72,8 @@ namespace JackStreamBox.Bot
                 EnableDefaultHelp = false,
             };
 
+            Console.WriteLine("Set up - Complete");
+
 
 
             Commands = Client.UseCommandsNext(commandsConfig);
@@ -78,6 +93,8 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<BannerCommands>();
             Commands.RegisterCommands<ShowModCommand>();
             Commands.RegisterCommands<DailyQuestionCommand>();
+
+            Console.WriteLine("Dsharp - Register Commands");
             
             //Register for Help Page
             BotCommand.Register<StartGameCommand>();
@@ -93,19 +110,41 @@ namespace JackStreamBox.Bot
             BotCommand.Register<SetValue>();
             BotCommand.Register<BannerCommands>();
 
+            Console.WriteLine("Reflection - Register Commands");
+
 
             //Register for ModCommand
+            Console.WriteLine("Reflection - Register Fake Mod Commands");
             BotCommand.Register<ShowModCommand>();
-            BotCommand.Register<DailyQuestionCommand>(); 
+            BotCommand.Register<DailyQuestionCommand>();
+
+
+            //Generate Command Markdown
+            Console.WriteLine("Generator - Check for changes in Commands");
+
+            await BotCommand.GenerateMarkdown();
 
 
             //Load Settings
+            Console.WriteLine("Loading - Bot Settings");
             BotData.LoadBotSetings();
-            //Send Online Message
+            Console.WriteLine("Loading - Complete");
+
+
+
+            Console.WriteLine("*********************************");
             await Client.ConnectAsync();
             var channel = await Client.GetChannelAsync(ChannelId.JackBotVC);
             string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
             await channel.SendMessageAsync($"Hey JackStreamBox [{name}] is now online!");
+            Console.WriteLine("Sent - Log sent Message");
+
+            if (DocGenerator.PASTE_BIN_KEY.Length > 5 && false)
+            {
+                var logChannel = await Client.GetChannelAsync(ChannelId.LogChannel);
+                await logChannel.SendMessageAsync($"Updated Commands list: {DocGenerator.PASTE_BIN_URL}");
+                Console.WriteLine("Sent - Log sent Message");
+            }
 
             await Task.Delay(-1);
         }

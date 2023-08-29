@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace JackStreamBox.Bot.Logic.Config
 {
@@ -46,10 +47,15 @@ namespace JackStreamBox.Bot.Logic.Config
                         //We found a staff/dev command
                         AppendStaffCommand(attributes);
                     }
-
                 }
             }
         }
+
+        public static async Task GenerateMarkdown()
+        {
+            await DocGenerator.GenerateMarkdown(UserCommands.Concat(StaffCommands).Concat(DevCommands).ToArray());
+        }
+
         private static void AppendStaffCommand(object[] attributes)
         {
             string name = String.Empty;

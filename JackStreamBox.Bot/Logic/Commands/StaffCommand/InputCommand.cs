@@ -17,7 +17,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
     {
 
         [Command("break")]
-        [Description("Pauses the game for 1 minute.")]
+        [Description("Pauses the game for 1 minute, will resume afterwards.")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task PeeBreak(CommandContext context)
         {

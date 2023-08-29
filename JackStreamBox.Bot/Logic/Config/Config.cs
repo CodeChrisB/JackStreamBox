@@ -13,5 +13,7 @@ namespace JackStreamBox.Bot.Logic.Config
         public string Token { get; private set; }
         [JsonProperty("prefix")]
         public string Prefix { get; private set; }
+        [JsonProperty("pasteBin")]
+        public string PasteBinKey { get; private set; }
     }
 }
