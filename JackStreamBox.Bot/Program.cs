@@ -1,11 +1,25 @@
-﻿namespace JackStreamBox.Bot
+﻿using JackStreamBox.Bot.Logic.Config;
+
+namespace JackStreamBox.Bot
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            var bot = new Bot();
-            bot.RunAsync().GetAwaiter().GetResult();
+            while (true) // Infinite loop for restarting the bot
+            {
+                try
+                {
+                    var bot = new Bot();
+                    await bot.RunAsync();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Crash - Bot crashed lol");
+                    DocGenerator.WriteLog(ex.Message);
+                    Bot.CRASHED = true;
+                }
+            }
         }
     }
 }

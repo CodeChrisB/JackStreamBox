@@ -19,6 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace JackStreamBox.Bot
 {
@@ -27,6 +28,8 @@ namespace JackStreamBox.Bot
         public static DiscordClient Client {  get; private set; }
         public InteractivityExtension Interactivity { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
+
+        public static bool CRASHED { get; set; }
 
 
         public async Task RunAsync()
@@ -136,15 +139,11 @@ namespace JackStreamBox.Bot
             await Client.ConnectAsync();
             var channel = await Client.GetChannelAsync(ChannelId.JackBotVC);
             string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
-            await channel.SendMessageAsync($"Hey JackStreamBox [{name}] is now online!");
-            Console.WriteLine("Sent - Log sent Message");
 
-            if (DocGenerator.PASTE_BIN_KEY.Length > 5 && false)
-            {
-                var logChannel = await Client.GetChannelAsync(ChannelId.LogChannel);
-                await logChannel.SendMessageAsync($"Updated Commands list: {DocGenerator.PASTE_BIN_URL}");
-                Console.WriteLine("Sent - Log sent Message");
-            }
+            string message = "Hey JackStreamBox[{ name}] is now online!";
+            if(CRASHED) message = message + "\nOhh I crashed CCB will look into, I restarted for now hopefully without crashes anymore";CRASHED = false;
+            await channel.SendMessageAsync(message);
+            Console.WriteLine("Sent - Log sent Message");
 
             await Task.Delay(-1);
         }

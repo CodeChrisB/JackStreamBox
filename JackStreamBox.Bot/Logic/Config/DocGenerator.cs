@@ -12,6 +12,8 @@ namespace JackStreamBox.Bot.Logic.Config
 
         public static string PASTE_BIN_KEY ="";
         public static string PASTE_BIN_URL = "";
+
+        private static string READ_ME_FILE = "readme.md";
         public static async Task GenerateMarkdown(CommandInfo[] commands)
         {
             StringBuilder sb = new StringBuilder();
@@ -25,7 +27,7 @@ namespace JackStreamBox.Bot.Logic.Config
             {
                 //string updatedUrl = await UploadToPastebin(PASTE_BIN_KEY, sb.ToString());
                 //PASTE_BIN_URL = ConvertToRawUrl(updatedUrl);
-                WriteAll(sb); 
+                WriteAll(sb, READ_ME_FILE); 
                 Console.WriteLine($"Generator - Updates found using Reflection, new markdown for github and pastebin will be generated!");
                 Console.WriteLine("Generator - Done");
             }
@@ -77,16 +79,16 @@ namespace JackStreamBox.Bot.Logic.Config
 
         }
 
-        private static string path()
+        private static string path(string file)
         {
             string[] rootPath = AppDomain.CurrentDomain.BaseDirectory.Split("\\");  // Get the root folder of the solution
             string path = string.Join("\\", rootPath, 0, rootPath.Length - 5);
-            return Path.Combine(path, "readme.md");  // Specify the file path in the root folder
+            return Path.Combine(path, file);  // Specify the file path in the root folder
         }
 
-        private static void WriteAll(StringBuilder sb)
+        private static void WriteAll(StringBuilder sb,string file)
         {
-            string filePath = path();
+            string filePath = path(file);
             Console.WriteLine(filePath);
             try
             {
@@ -143,7 +145,7 @@ namespace JackStreamBox.Bot.Logic.Config
 
         static bool HasNewContent(string stringBuilderContent)
         {
-            string filePath = path();
+            string filePath = path(READ_ME_FILE);
             try
             {
                 string fileContent = File.ReadAllText(filePath);
@@ -154,6 +156,15 @@ namespace JackStreamBox.Bot.Logic.Config
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return false;
             }
+        }
+
+        internal static void WriteLog(string message)
+        {
+            DateTime currentDate = DateTime.Now;
+            string logFile = "logs/"+currentDate.ToString("yyyy-MM-dd_HH-mm-ss") + ".log";
+            StringBuilder sb = new StringBuilder();
+            sb.Append(message);
+            WriteAll(sb, logFile);
         }
     }
 }
