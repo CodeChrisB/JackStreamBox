@@ -140,7 +140,7 @@ namespace JackStreamBox.Bot
             var channel = await Client.GetChannelAsync(ChannelId.JackBotVC);
             string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
 
-            string message = "Hey JackStreamBox[{ name}] is now online!";
+            string message = $"Hey JackStreamBox[{ name}] is now online!";
             if(CRASHED) message = message + "\nOhh I crashed CCB will look into, I restarted for now hopefully without crashes anymore";CRASHED = false;
             await channel.SendMessageAsync(message);
             Console.WriteLine("Sent - Log sent Message");
