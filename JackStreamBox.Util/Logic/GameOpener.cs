@@ -194,6 +194,10 @@ namespace JackStreamBox.Util.logic
             WindowNavigator.SetDiscord();
             WindowNavigator.SendDiscordInput(Input.DiscordKey);
 
+            //Focus Game
+            WindowNavigator.SetWindow(windowName);
+            WindowNavigator.SendGameInput(Input.ARROW_DOWN);
+
 
             await Logger(VoteStatus.OnAllFinished);
 
