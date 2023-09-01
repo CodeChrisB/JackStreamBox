@@ -15,65 +15,53 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
 {
     internal class DailyQuestionCommand : BaseCommandModule
     {
+        string[] reactions = new string[] { "green_circle", "red_circle", "blue_circle", "yellow_circle", "orange_circle", "red_circle" };
+        string[] daily = new string[] { "heart", "thumbsup", "slight_smile", "speak_no_evil" };
+        private async Task CreateQuestion(CommandContext context, string question, string[] answers, string[] reactions,string? url) =>
+            QuestionEmbed.Create(context, question, answers,reactions.Take(answers.Length).ToArray(), context.Channel.Id,url);
+
         [Command("daily")]
         [Description("Show staff commands")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task DailyQuestion(CommandContext context)
         {
-            QuestionEmbed.Create(context, "Daily Question",
-                new string[] { "Life is perfect", "Life is good", "It's okay", "I dont want to Jack about it" },
-                new string[] {"heart","thumbsup","slight_smile","speak_no_evil"},
-                ChannelId.DailyQuestionChannel
-                );
+            await CreateQuestion(context, "Daily Question", new string[] { "Life is perfect", "Life is good", "It's okay", "I dont want to Jack about it" },daily,null);
         }
 
         [Command("poll")]
-        [Description("!poll [Question] [Answer1] [Answer2],[Answer3] [Anser4]    (Atleast 2 Answers Max 4 Questions)")]
+        [Description("!poll [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]    (At least 1 Answer Max 6 Answers)")]
         [ModCommand(PermissionRole.STAFF)]
-        public async Task DailyQuestion4(CommandContext context,string question, string a1, string a2,string a3, string a4)
+        public async Task DailyQuestion(CommandContext context, string question, string answer1 = null, string answer2 = null, string answer3 = null, string answer4 = null, string answer5 = null, string answer6 = null)
         {
-            Destroyer.Message(context.Message, DestroyTime.INSTANT);    
-            QuestionEmbed.Create(context, question,
-                new string[] { a1,a2,a3,a4 },
-                new string[] { "green_circle", "red_circle", "orange_circle", "blue_circle" },
-                context.Channel.Id
-                );
+            string[] answers = new string[] { answer1, answer2, answer3, answer4, answer5, answer6 }
+                .Where(answer => !string.IsNullOrEmpty(answer))
+                .ToArray();
+
+            if (answers.Length < 1 || answers.Length > 6)
+            {
+                // Handle invalid number of answers
+                return;
+            }
+
+            await CreateQuestion(context, question, answers,reactions,null);
         }
 
-        [Command("poll")]
-        public async Task DailyQuestion3(CommandContext context, string question, string a1, string a2, string a3)
+        [Command("poll+")]
+        [Description("!poll [ImageUrl] [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]  (At least 1 Answer Max 6 Answers)")]
+        [ModCommand(PermissionRole.STAFF)]
+        public async Task DailyQuestion(CommandContext context, string url, string question, string answer1 = null, string answer2 = null, string answer3 = null, string answer4 = null, string answer5 = null, string answer6 = null)
         {
+            string[] answers = new string[] { answer1, answer2, answer3, answer4, answer5, answer6 }
+                .Where(answer => !string.IsNullOrEmpty(answer))
+                .ToArray();
 
-            Destroyer.Message(context.Message, DestroyTime.INSTANT);
-            QuestionEmbed.Create(context, question,
-                new string[] { a1, a2, a3},
-                new string[] { "green_circle", "red_circle", "orange_circle" },
-                context.Channel.Id
-                );
+            if (answers.Length < 1 || answers.Length > 6)
+            {
+                // Handle invalid number of answers
+                return;
+            }
+
+            await CreateQuestion(context, question, answers, reactions, url);
         }
-
-        [Command("poll")]
-        public async Task DailyQuestion2(CommandContext context, string question, string a1, string a2)
-        {
-            Destroyer.Message(context.Message, DestroyTime.INSTANT);
-            QuestionEmbed.Create(context, question,
-                new string[] { a1, a2 },
-                new string[] { "green_circle", "red_circle" },
-                context.Channel.Id
-                );
-        }
-
-        [Command("poll")]
-        public async Task DailyQuestion1(CommandContext context, string question, string a1)
-        {
-            Destroyer.Message(context.Message, DestroyTime.INSTANT);
-            QuestionEmbed.Create(context, question,
-                new string[] { a1 },
-                new string[] { "green_circle" },
-                context.Channel.Id
-                );
-        }
-
-
     }
 }

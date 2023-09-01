@@ -47,11 +47,31 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             SendLogEmbed(context,embedBuilder);
         }
 
+        [Command("embed+")]
+        [Description("!embed+ \"[Image Url]\" \"[Title]\"  [Message]")]
+        [ModCommand(PermissionRole.STAFF)]
+        public async Task Embed(CommandContext context, string url, string title, [RemainingText] string message)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+
+
+
+            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
+            embedBuilder.Title = title;
+            embedBuilder.Description = message;
+            embedBuilder.Color = DiscordColor.Green;
+            embedBuilder.ImageUrl = url;
+
+            await context.Channel.SendMessageAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
+            SendLogEmbed(context, embedBuilder);
+        }
+
         private async void SendLogEmbed(CommandContext context, DiscordEmbedBuilder embedBuilder)
         {
             var LogChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
 
-            embedBuilder.Description = $"[{context.Member.Nickname}] {embedBuilder.Description}";
+            embedBuilder.Description = $"[{context.Member.Username}] {embedBuilder.Description}";
             await LogChannel.SendMessageAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
         }
 
@@ -68,13 +88,13 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             {
                 //Reply to referenced Message
                 await context.Message.Reference.Message.RespondAsync(message);
-                sb.AppendLine($"{context.Member.Nickname} reply to {context.Message.Reference.Message.Author.Username}");
+                sb.AppendLine($"{context.Member.Username} reply to {context.Message.Reference.Message.Author.Username}");
                 sb.AppendLine($"Replied to : {context.Message.Reference.Message.Content}");
             }
             else
             {
                 //Just send message
-                sb.AppendLine($"Sent by : {context.Member.Nickname}");
+                sb.AppendLine($"Sent by : {context.Member.Username}");
             }
 
 

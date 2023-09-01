@@ -35,8 +35,10 @@ After a game players can vote for the next game, after the voting the next game 
 | **!banners**| Adds a banner shown while at multiple pages|
 | **!daily**| Show staff commands|
 | **!embed**| Use the bot to speak. Title in "Qutation Marks" Message without them, can even use line breaks for the message.|
+| **!embed+**| !embed+ "[Image Url]" "[Title]"  [Message]|
 | **!input**| Let's you navigate the game yourself. Used to change settings.|
-| **!poll**| !poll [Question] [Answer1] [Answer2],[Answer3] [Anser4]    (Atleast 2 Answers Max 4 Questions)|
+| **!poll**| !poll [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]    (At least 1 Answer Max 6 Answers)|
+| **!poll+**| !poll [ImageUrl] [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]  (At least 1 Answer Max 6 Answers)|
 | **!say**| Use the bot to speak. You can even use line breaks and mentions people!!|
 | **!set**| Set values of the bot|
 | **!setview**| Set values of the bot|

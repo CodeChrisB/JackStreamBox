@@ -1,5 +1,6 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
+using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Data;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
 {
     internal class QuestionEmbed
     {
-        internal static async void Create(CommandContext context, string title, string[] answers, string[]emojis,ulong ChannelId)
+        internal static async void Create(CommandContext context, string title, string[] answers, string[]emojis,ulong ChannelId,string? url)
         {
-
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
             if (answers.Length != emojis.Length) return;
 
             if (title.Length > 255)
@@ -26,6 +27,11 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
                 Title = title,
                 Description = "If u see this message something went wrong"
             };
+
+            if(url != null)
+            {
+                embed.ImageUrl = url;
+            }
 
 
             StringBuilder sb = new StringBuilder();
