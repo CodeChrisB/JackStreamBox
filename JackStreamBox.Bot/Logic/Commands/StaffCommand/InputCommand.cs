@@ -17,7 +17,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
     {
 
         [Command("break")]
-        [Description("Pauses the game for 1 minute, will resume afterwards.")]
+        [CoammandDescription("Pauses the game for 1 minute, will resume afterwards.",":play_pause:")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task PeeBreak(CommandContext context)
         {
@@ -39,7 +39,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("input")]
-        [Description("Let's you navigate the game yourself. Used to change settings.")]
+        [CoammandDescription("Let's you navigate the game yourself. Used to change settings.",":clipboard:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task RealInput(CommandContext context, string input)
         {

@@ -60,6 +60,7 @@ namespace JackStreamBox.Bot.Logic.Config
         {
             string name = String.Empty;
             string description = String.Empty;
+            string emoji = String.Empty;
             PermissionRole role = PermissionRole.ANYONE;
             foreach (Attribute attr in attributes)
             {
@@ -68,16 +69,17 @@ namespace JackStreamBox.Bot.Logic.Config
                     //We found a method that has an required Level Information save its data
                     role = ((ModCommand)attr).RequiredLevel;
                 }
-                else if (attr.TypeId == typeof(DescriptionAttribute))
+                else if (attr.TypeId == typeof(CoammandDescription))
                 {
-                    description = ((DescriptionAttribute)attr).Description;
+                    description = ((CoammandDescription)attr).Description;
+                    emoji = ((CoammandDescription)attr).Emoji;
                 }
                 else if (attr.TypeId == typeof(CommandAttribute))
                 {
                     name = ((CommandAttribute)attr).Name;
                 }
             }
-            CommandInfo ci = new CommandInfo(name, description, role);
+            CommandInfo ci = new CommandInfo(name,emoji, description, role);
             if(role == PermissionRole.DEVELOPER) {
                 DevCommands.Add(ci);
             }
@@ -90,6 +92,7 @@ namespace JackStreamBox.Bot.Logic.Config
         {
             string name = String.Empty;
             string description = String.Empty;
+            string emoji = String.Empty;
             PermissionRole role = PermissionRole.ANYONE;
             foreach (Attribute attr in attributes)
             {
@@ -98,16 +101,17 @@ namespace JackStreamBox.Bot.Logic.Config
                     //We found a method that has an required Level Information save its data
                     role = ((Requires)attr).RequiredLevel;
                 }
-                else if(attr.TypeId == typeof(DescriptionAttribute))
+                else if(attr.TypeId == typeof(CoammandDescription))
                 {
-                    description = ((DescriptionAttribute)attr).Description;
+                    description = ((CoammandDescription)attr).Description;
+                    emoji = ((CoammandDescription)attr).Emoji;
                 }
                 else if(attr.TypeId == typeof(CommandAttribute))
                 {
                     name = ((CommandAttribute)attr).Name;
                 }
            }
-            CommandInfo ci = new CommandInfo(name, description,role);
+            CommandInfo ci = new CommandInfo(name, emoji, description,role);
             UserCommands.Add(ci);
         }
     }

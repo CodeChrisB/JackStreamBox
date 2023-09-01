@@ -76,7 +76,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
         [Command("vote")]
-        [Description($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ")]
+        [CoammandDescription($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ",":ballot_box:")]
         [Requires(PermissionRole.ANYONE)]
         public async Task Vote(CommandContext context, string voteCategory)
         {

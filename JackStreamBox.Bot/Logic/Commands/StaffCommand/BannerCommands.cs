@@ -16,7 +16,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
     {
 
         [Command("banner+")]
-        [Description("Adds a banner shown while at multiple pages")]
+        [CoammandDescription("Adds a banner shown while at multiple pages",":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task AddBanner(CommandContext context, string url)
         {
@@ -28,7 +28,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("banner-")]
-        [Description("Adds a banner shown while at multiple pages")]
+        [CoammandDescription("Adds a banner shown while at multiple pages", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
 
         public async Task RemoveBanner(CommandContext context, int index)
@@ -44,7 +44,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("banners")]
-        [Description("Adds a banner shown while at multiple pages")]
+        [CoammandDescription("Adds a banner shown while at multiple pages", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task GetAllBanners(CommandContext context)
         {

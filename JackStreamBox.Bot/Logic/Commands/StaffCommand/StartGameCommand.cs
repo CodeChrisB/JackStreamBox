@@ -22,7 +22,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
     public class StartGameCommand : BaseCommandModule
     {
         [Command("start")]
-        [Description("Starts any game you want to. Be aware this instantly closes any current game!")]
+        [CoammandDescription("Starts any game you want to. Be aware this instantly closes any current game!", ":point_right:")]
         //Dont docuemnt this command
         [ModCommand(PermissionRole.STAFF)]
         public async Task OpenGame(CommandContext context)
@@ -66,7 +66,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("join")]
-        [Description("Let the streamer join the VC.")]
+        [CoammandDescription("Let the streamer join the VC.",":robot:")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task Join(CommandContext context)
         {
@@ -78,7 +78,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("closegame")]
-        [Description("Closes the current game.")]
+        [CoammandDescription("Closes the current game.",":stop_sign:")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task CloseGame(CommandContext context)
         {
@@ -90,7 +90,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("close")]
-        [Description("Will close the bot. Use in emergency such as the bot streaming a wrong window.")]
+        [CoammandDescription("Will close the bot. Use in emergency such as the bot streaming a wrong window.",":x:")]
         //Dont docuemnt this command
         [ModCommand(PermissionRole.DEVELOPER)]
         public async Task Close(CommandContext context)

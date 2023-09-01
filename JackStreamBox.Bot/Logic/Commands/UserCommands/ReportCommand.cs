@@ -15,7 +15,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     public class ReportCommand : BaseCommandModule
     {
         [Command("report")]
-        [Description("!report **\"**Your Issue**\"")]
+        [CoammandDescription("!report **\"**Your Issue**\"",":eyes:")]
         [Requires(PermissionRole.TRUSTED)]
         public async Task ReportIssue(CommandContext context,string issue)
         {

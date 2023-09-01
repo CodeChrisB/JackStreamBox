@@ -17,7 +17,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
     public class SayCommand : BaseCommandModule
     {
         [Command("say")]
-        [Description("Use the bot to speak. You can even use line breaks and mentions people!!")]
+        [CoammandDescription("Use the bot to speak. You can even use line breaks and mentions people!!",":speech_ballon:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task Tell(CommandContext context, [RemainingText] string message)
         {
@@ -30,7 +30,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("embed")]
-        [Description("Use the bot to speak. Title in \"Qutation Marks\" Message without them, can even use line breaks for the message.")]
+        [CoammandDescription("Use the bot to speak. Title in \"Qutation Marks\" Message without them, can even use line breaks for the message.",":newspaper:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task Embed(CommandContext context, string title, [RemainingText] string message)
         {
@@ -49,7 +49,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("embed+")]
-        [Description("!embed+ \"[Image Url]\" \"[Title]\"  [Message]")]
+        [CoammandDescription("!embed+ \"[Image Url]\" \"[Title]\"  [Message]", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task Embed(CommandContext context, string url, string title, [RemainingText] string message)
         {

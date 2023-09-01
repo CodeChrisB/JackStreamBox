@@ -17,7 +17,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
     {
 
         [Command("dev")]
-        [Description("Show developer commands")]
+        [CoammandDescription("Show developer commands", "💻")]
         [Requires(PermissionRole.DEVELOPER)]
         public async Task Developer(CommandContext context)
         {
@@ -25,7 +25,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
         }
 
         [Command("staff")]
-        [Description("Show staff commands")]
+        [CoammandDescription("Show staff commands",":crown:")]
         [Requires(PermissionRole.STAFF)]
         public async Task Staff(CommandContext context)
         {

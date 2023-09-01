@@ -15,7 +15,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     internal class PackCommand : BaseCommandModule
     {
         [Command("pack")]
-        [Description("View a pack and it's games. **E.g !pack 5**")]
+        [CoammandDescription("View a pack and it's games. **E.g !pack 5**",":mag:")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context, int pack)
         {
@@ -49,7 +49,7 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         //DO NOT ADD REQUIRES ATTRIBUTE OTHERWISE IT WILL SHOWUP IN THE HELP COMMAND
         [Command("packs")]
-        [Description("Displays an image containing all games in all packs")]
+        [CoammandDescription("Displays an image containing all games in all packs",":frame_photo:")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context)
         {

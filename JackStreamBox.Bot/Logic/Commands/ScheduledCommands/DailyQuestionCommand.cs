@@ -21,7 +21,7 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
             QuestionEmbed.Create(context, question, answers,reactions.Take(answers.Length).ToArray(), context.Channel.Id,url);
 
         [Command("daily")]
-        [Description("Show staff commands")]
+        [CoammandDescription("Show staff commands",":speech_bubble:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task DailyQuestion(CommandContext context)
         {
@@ -29,7 +29,7 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
         }
 
         [Command("poll")]
-        [Description("!poll [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]    (At least 1 Answer Max 6 Answers)")]
+        [CoammandDescription("!poll [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]    (At least 1 Answer Max 6 Answers)",":newspaper:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task DailyQuestion(CommandContext context, string question, string answer1 = null, string answer2 = null, string answer3 = null, string answer4 = null, string answer5 = null, string answer6 = null)
         {
@@ -47,7 +47,7 @@ namespace JackStreamBox.Bot.Logic.Commands.ScheduledCommands
         }
 
         [Command("poll+")]
-        [Description("!poll [ImageUrl] [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]  (At least 1 Answer Max 6 Answers)")]
+        [CoammandDescription("!poll [ImageUrl] [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]  (At least 1 Answer Max 6 Answers)",":frame_photo:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task DailyQuestion(CommandContext context, string url, string question, string answer1 = null, string answer2 = null, string answer3 = null, string answer4 = null, string answer5 = null, string answer6 = null)
         {

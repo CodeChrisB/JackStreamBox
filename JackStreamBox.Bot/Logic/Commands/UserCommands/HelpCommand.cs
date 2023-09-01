@@ -17,7 +17,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
     internal class HelpCommand : BaseCommandModule
     {
         [Command("help")]
-        [Description("Explains what the bot does and how to get further help.")]
+        [CoammandDescription("Explains what the bot does and how to get further help.",":question:")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayHelp(CommandContext context)
         {
@@ -38,14 +38,16 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
                 "After a game or when there is no game players can use **!vote X**",
                 "After the first person voted there is a timelimit 60s in which all players should vote. 4 Votes are required to progress to the next phase.",
                 "**!vote 1** for pack 1 \n**!vote 2** for pack 2 (works for all packs)",
+                "You can also just use **!1** for pack 1 **!2** for pack 2 etc....",
                 "\n**The game pick phase**",
                 "We now have picked the pack we will play",
-                "The bot will create a message with 5 reactions (:one: :two: :three: :four: :five: )",
+                "The bot will create a message with 5 reactions \n:one: :two: :three: :four: :five:",
                 "In the message the bot will explain which number is which game.",
                 "Pick a game or multiple games you want to play, after the time is up the winner will be started",
                 "\n**The game phase**",
                 "The bot will show a message with the current progress of opening the game.",
                 "Then you can play the game, after the game use !vote to start another game.",
+                "\n**!commands** lets you view all commands",
                 "\n:tools: Created by CCB for your joy! :computer:",
             };
 
@@ -64,19 +66,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
         }
 
         [Command("commands")]
-        [Description("List all commands you can use.")]
+        [CoammandDescription("List all commands you can use.",":ballot_box:")]
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayCommands(CommandContext context)
-        {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
-            await DisplayPackWithDescription(context, false);
-            Destroyer.Message(context.Message, DestroyTime.NORMAL);
-        }
-
-        [Command("commands+")]
-        [Description("Get information about every command you can use.")]
-        [Requires(PermissionRole.ANYONE)]
-        public async Task DisplayCommandsWithDescription(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await DisplayPackWithDescription(context, true);
@@ -85,14 +77,12 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
 
         public async Task DisplayPackWithDescription(CommandContext context, bool appendDescription)
         {
-
             CommandInfo[] ci = BotCommand.GetUserCommands();
             CommandEmbed.Show(context, "Help Page™", ci, appendDescription);
-            
         }
 
         [Command("rules")]
-        [Description("View the rules.")]
+        [CoammandDescription("View the rules.",":scroll:")]
         [Requires(PermissionRole.ANYONE)]
         public async Task Rules(CommandContext context)
         {

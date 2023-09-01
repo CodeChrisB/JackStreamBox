@@ -23,7 +23,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
 
 
         [Command("update")]
-        [Description("Update the bot")]
+        [CoammandDescription("Update the bot",":rocket:")]
         [ModCommand(PermissionRole.DEVELOPER)]
         public async Task Update(CommandContext context)
         {
@@ -49,7 +49,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
 
 
         [Command("restart")]
-        [Description("Restart the bot")]
+        [CoammandDescription("Restart the bot",":repeat:")]
         [Requires(PermissionRole.HIGHLYTRUSTED)]
         public async Task RestartBot(CommandContext context)
         {
@@ -74,7 +74,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
         }
 
         [Command("version")]
-        [Description("Check bot version")]
+        [CoammandDescription("Check bot version",":bar_chart:")]
         [Requires(PermissionRole.TRUSTED)]
         public async Task Utest(CommandContext context)
         {

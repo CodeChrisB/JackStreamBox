@@ -21,7 +21,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
     {
 
         [Command("set")]
-        [Description("Set values of the bot")]
+        [CoammandDescription("Set values of the bot", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task Set(CommandContext context, string key, string val)
         {
@@ -36,7 +36,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 
 
         [Command("setview")]
-        [Description("Set values of the bot")]
+        [CoammandDescription("Set values of the bot", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task SetView(CommandContext context)
         {

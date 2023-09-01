@@ -7,7 +7,6 @@ After a game players can vote for the next game, after the voting the next game 
 | Command      | Description        |
 |--------------|--------------------|
 | **!commands**| List all commands you can use.|
-| **!commands+**| Get information about every command you can use.|
 | **!help**| Explains what the bot does and how to get further help.|
 | **!level**| Checks what permission level you have.|
 | **!pack**| View a pack and it's games. **E.g !pack 5**|

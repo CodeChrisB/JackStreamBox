@@ -16,7 +16,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
     {
 
         [Command("ban")]
-        [Description("Explains what the bot does and how to get further help.")]
+        [CoammandDescription("Explains what the bot does and how to get further help.",":skull:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task BanUser(CommandContext context, UserMention user)
         {

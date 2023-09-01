@@ -22,29 +22,33 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
 
 
 
+    
+
 
             StringBuilder sb = new StringBuilder();
             int level = CommandLevel.RoleToLevel(context.Member.Roles);
             int currentlevel = -1;
+            sb.Append("Here are all commands you can use");
             foreach (var ciItem in ci)
             {
                 if (level >= (int)ciItem.Role)
                 {
-
                     if (currentlevel < (int)ciItem.Role)
                     {
-                        sb.AppendLine($"**===========╣ Level {(int)ciItem.Role} - {CommandLevel.RoleName(ciItem.Role)} ╠==========**");
+                        sb.AppendLine($"\n**Level {(int)ciItem.Role} - {CommandLevel.RoleName(ciItem.Role)}**");
                         currentlevel = (int)ciItem.Role;
                     }
 
-                    sb.AppendLine($" **!{ciItem.Name}**");
                     if (appendDescription)
                     {
-                        sb.AppendLine($"{ciItem.Description}");
+                        sb.AppendLine($"- {ciItem.Emoji} **!{ciItem.Name}** {ciItem.Description}");
+                    }else
+                    {
+                        sb.AppendLine($"**!{ciItem.Name}**");
                     }
                 }
             }
-            sb.AppendLine($"**=========╣ End of commands ╠=========**");
+            //sb.AppendLine($"**=========╣ End of commands ╠=========**");
 
             helpEmbed.Description = sb.ToString();
 

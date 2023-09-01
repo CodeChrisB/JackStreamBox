@@ -14,7 +14,7 @@ namespace JackStreamBox.Bot.Logic.Commands
     public class JokeCommand : BaseCommandModule 
     {
         [Command("joke")]
-        [Description("Get a bad jackbox related pun. (Using ChatGPT)")]
+        [CoammandDescription("Get a bad jackbox related pun. (Using ChatGPT)",":tada:")]
         [Requires(PermissionRole.TRUSTED)]
         public async Task MakeRizz(CommandContext context)
         {

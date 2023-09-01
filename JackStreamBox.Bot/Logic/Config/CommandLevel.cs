@@ -17,7 +17,7 @@ namespace JackStreamBox.Bot.Logic.Config
     public class CommandLevel : BaseCommandModule
     {
         [Command("level")]
-        [Description("Checks what permission level you have.")]
+        [CoammandDescription("Checks what permission level you have.",":straight_ruler:")]
         [Requires(PermissionRole.ANYONE)]
         public async Task WhatLevelAmI(CommandContext context)
         {
@@ -45,7 +45,7 @@ namespace JackStreamBox.Bot.Logic.Config
 
         private static bool IsBotPaused = false;
         [Command("toggle")]
-        [Description("Toggle the whole bot, used for debugging without needing to access the server.")]
+        [CoammandDescription("Toggle the whole bot, used for debugging without needing to access the server.", ":flashlight:")]
         [ModCommand(PermissionRole.DEVELOPER)]
         public async Task ToggleBot(CommandContext context)
         {
