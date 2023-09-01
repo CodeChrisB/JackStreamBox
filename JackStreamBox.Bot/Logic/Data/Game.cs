@@ -12,5 +12,10 @@ namespace JackStreamBox.Bot.Logic.Data
         public string Name;
         public string Description;
         public Game Id;
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace JackStreamBox.Util.Data
 {
     public static class CustomBanner
     {
-        private const string CBFILENAME = "CustomBanner";
+        private const string CBFILENAME = "jsbIgnoreCustomBanner";
 
         public static void AddBanner(string newBanner)
         {

@@ -7,10 +7,12 @@ using DSharpPlus.Interactivity.EventHandling;
 using DSharpPlus.Interactivity.Extensions;
 using JackStreamBox.Bot.Logic.Attributes;
 using JackStreamBox.Bot.Logic.Commands._Helper.ChartBuilder;
+using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Data;
 using JackStreamBox.Util;
 using JackStreamBox.Util.Data;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -68,6 +70,10 @@ namespace JackStreamBox.Bot.Logic.Commands
             };
         }
         #endregion
+
+
+
+
 
         [Command("vote")]
         [Description($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ")]
@@ -156,127 +162,134 @@ namespace JackStreamBox.Bot.Logic.Commands
             {
                 string vote = votes[new Random().Next(votes.Count)];
                 games = PackInfo.GetVotePack(vote);
-                await voteNow(context,games);
+                await VoteNow(context,games);
             } 
             else
             {
-                await context.Channel.SendMessageAsync("Not enough votes cancel this voting.\nOnly vote after a game, you will be punished if you try to cancel a game just because you dont want to play anymore.");
-                
+
+                await PlainEmbed
+                    .CreateEmbed(context)
+                    .Title("Not Enough Votes !")
+                    .DescriptionAddLine($"Yikes... we need some more votes to start a game\n")
+                    .DescriptionAddLine($"Next time try it with atleast {BotData.ReadData(BotVals.REQUIRED_VOTES, 3)} votes")
+                    .DescriptionAddLine("Just trying to start a new vote to end the current game will revoke your bot rights.")
+                    .BuildNDestroy(DestroyTime.REALLYSLOW);
             }
             ResetVote();
         }
 
-        private async Task voteNow(CommandContext context, PackGame[] games)
+        private async Task VoteNow(CommandContext context, PackGame[] games)
         {
-            TimeSpan span = TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER,30));
-            
-            //End Game
+            // End Game
             JackStreamBoxUtility.CloseGame();
-            //Start Vote 60 sec
 
-            //----Create embed
+
+            TimeSpan voteTimer = TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER, 30));
+            TimeSpan pickTimer = TimeSpan.FromSeconds(BotData.ReadData(BotVals.PICK_TIMER, 30));
+
+            DiscordEmoji[] emojis = GetEmojis(context);
+
+
+            // Create embed
             var pollEmbed = new DiscordEmbedBuilder
             {
                 Title = "Game Vote",
-                Description = $"Setting up the Poll"
+                Description = "Setting up the Poll"
             };
             var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
-            
 
-            //Add Reactions
-            DiscordEmoji[] emojis = GetEmojis(context);
+            // Add Reactions
             foreach (var emoji in emojis)
-            {
                 await pollMessage.CreateReactionAsync(emoji);
-            }
-            //----Show votable games
 
 
-            //----Voting Phase
+            // Logger Setup Phase
             async Task Logger(VoteStatus status)
             {
                 GameStartSteps[(int)status].Completed = true;
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"Winner is {Winner}\n");
-                foreach(Step step in GameStartSteps)
+
+                var description = new StringBuilder($"Winner is {Winner}\n");
+
+                foreach (var step in GameStartSteps)
                 {
-                    sb.AppendLine($"{StatusEmoji(step.Completed)} - {step.Text}");
+                    description.AppendLine($"{StatusEmoji(step.Completed)} - {step.Text}");
                 }
 
-                pollEmbed.Description = sb.ToString();
+                pollEmbed.Description = description.ToString();
                 await pollMessage.ModifyAsync(null, pollEmbed.Build());
             }
-            string StatusEmoji(bool status)
-            {
-                if (status) return ":thumbsup:";
-                return ":x:";
-            }
 
 
-            //Get Reactions
-            var interactivity = context.Client.GetInteractivity();
-            var result = interactivity.CollectReactionsAsync(pollMessage,TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER, 30)));
 
-            //Show the user the poll
-            int timeLeft = BotData.ReadData(BotVals.PICK_TIMER, 30);
-            while (timeLeft >= 0)
+
+            // Show the user the poll countdown
+            for (int timeLeft = (int)pickTimer.TotalSeconds; timeLeft >= 0; timeLeft--)
             {
                 pollEmbed.Description = $"*What game will be played next?*\nTime Left: {timeLeft}s\n\n{GameText(games, context)}";
                 await pollMessage.ModifyAsync(null, pollEmbed.Build());
-                timeLeft--;
                 await Task.Delay(1000);
             }
 
-            //Tellin user we compute the winner
-            pollEmbed.Description = $"Computing winner... give me a second\nGames Hosted already :{BotData.ReadData(BotVals.GAMES_HOSTED, "0")}";
-            BotData.WriteData(BotVals.GAMES_HOSTED, BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1);
+            // Inform the user that the winner is being computed
+            pollEmbed.Description = $"Computing winner... give me a second\nGames Hosted already :{BotData.ReadData(BotVals.GAMES_HOSTED, 0)}";
             await pollMessage.ModifyAsync(null, pollEmbed.Build());
 
+            // Get Reactions
+            int[] maxIndices = await ComputeWinner(emojis, pollMessage);
 
 
-            //Get Reactions 
-            IReadOnlyList<DiscordUser>[] reactions = new IReadOnlyList<DiscordUser>[] {
-                await pollMessage.GetReactionsAsync(GetEmojis(context)[0]),
-                await pollMessage.GetReactionsAsync(GetEmojis(context)[1]),
-                await pollMessage.GetReactionsAsync(GetEmojis(context)[2]),
-                await pollMessage.GetReactionsAsync(GetEmojis(context)[3]),
-                await pollMessage.GetReactionsAsync(GetEmojis(context)[4])
-            };
+            OpenVoteWinner(maxIndices,pollEmbed, pollMessage, Logger);
 
-            int[] reactionCount = new int[]
-            {
-                reactions[0].Count,
-                reactions[1].Count,
-                reactions[2].Count,
-                reactions[3].Count,
-                reactions[4].Count,
-            };
+        }
+
+        private async Task<int[]> ComputeWinner(DiscordEmoji[] emojis,DiscordMessage pollMessage)
+        {
+            var reactionTasks = emojis.Select(emoji => pollMessage.GetReactionsAsync(emoji)).ToArray();
+            await Task.WhenAll(reactionTasks);
+
+            int[] reactionCount = reactionTasks.Select(reactions => reactions.Result.Count).ToArray();
 
             int max = reactionCount.Max();
             Random random = new Random();
-            int[] maxIndices = reactionCount
-                .Select((n, i) => (Number: n, Index: i))
-                .Where(pair => pair.Number == max)
-                .Select(pair => pair.Index)
+            int[] maxIndices = Enumerable.Range(0, reactionCount.Length)
+                .Where(i => reactionCount[i] == max)
                 .ToArray();
 
-            int randomIndex = maxIndices.Length == 1 ? maxIndices[0] : maxIndices[random.Next(0, maxIndices.Length)];
+            return maxIndices;
+        }
 
-
+        private async void OpenVoteWinner(int[] maxIndices,DiscordEmbedBuilder pollEmbed, DiscordMessage pollMessage, Func<VoteStatus, Task> logger)
+        {
+            //Set Message Data
             pollEmbed.ImageUrl = CustomBanner.GetRandomBanner();
-                
+            pollEmbed.Title = "**Preparing your next game**";
+
+            Random random = new Random();
+            int randomIndex = maxIndices.Length == 1 ? maxIndices[0] : maxIndices[random.Next(0, maxIndices.Length)];
             PackGame GameWinner = games[randomIndex];
-            
+
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
             Winner = GameWinner.Name;
-            
-            pollEmbed.Title = "**Preparing your next game**";
-            await Logger(VoteStatus.OnStartingGamePack);
-            await JackStreamBoxUtility.OpenGame(GameWinner.Id, Logger);
+
+            await logger(VoteStatus.OnStartingGamePack);
+            await JackStreamBoxUtility.OpenGame(GameWinner.Id, logger);
+            BotData.WriteData(BotVals.GAMES_HOSTED, BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1);
 
             ResetVote();
-            Destroyer.Message(pollMessage, DestroyTime.SLOW);
         }
+
+
+
+
+
+
+
+
+        private string StatusEmoji(bool status)
+        {
+            return status ? ":thumbsup:" : ":x:";
+        }
+
 
         private DiscordEmoji[] GetEmojis(CommandContext context)
         {
@@ -305,6 +318,20 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             return sb.ToString();
         }
+
+
+
+        // Commands for using only numbers to vote
+        [Command("1")] public async Task Vote1(CommandContext context) => await Vote(context, "1");
+        [Command("2")] public async Task Vote2(CommandContext context) => await Vote(context, "2");
+        [Command("3")] public async Task Vote3(CommandContext context) => await Vote(context, "3");
+        [Command("4")] public async Task Vote4(CommandContext context) => await Vote(context, "4");
+        [Command("5")] public async Task Vote5(CommandContext context) => await Vote(context, "5");
+        [Command("6")] public async Task Vote6(CommandContext context) => await Vote(context, "6");
+        [Command("7")] public async Task Vote7(CommandContext context) => await Vote(context, "7");
+        [Command("8")] public async Task Vote8(CommandContext context) => await Vote(context, "8");
+        [Command("9")] public async Task Vote9(CommandContext context) => await Vote(context, "9");
+        [Command("10")] public async Task Vote10(CommandContext context) => await Vote(context, "10");
 
 
         //Basic explaination what vote calls a user can use

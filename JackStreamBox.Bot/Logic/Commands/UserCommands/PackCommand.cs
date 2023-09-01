@@ -19,7 +19,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context, int pack)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE,true)) return;
             if (pack > 0 && pack < 10)
             {
                 string[] emoji = new string[5] {
@@ -53,7 +53,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         [Requires(PermissionRole.ANYONE)]
         public async Task DisplayPack(CommandContext context)
         {
-            if (    CommandLevel.IsBanned(context)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE, true)) return;
             await context.Channel.SendMessageAsync("https://media.discordapp.net/attachments/1066085138791932005/1070771921643372564/image.png?width=674&height=902");
             
         }

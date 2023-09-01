@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DSharpPlus.Entities;
+using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 
 namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 {
@@ -55,16 +56,16 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
+            DiscordEmbedBuilder embed = PlainEmbed
+                .CreateEmbed(context)
+                .ImageUrl(url)
+                .Title(title)
+                .Description(message)
+                .GetBuilder();
 
 
-            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
-            embedBuilder.Title = title;
-            embedBuilder.Description = message;
-            embedBuilder.Color = DiscordColor.Green;
-            embedBuilder.ImageUrl = url;
-
-            await context.Channel.SendMessageAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
-            SendLogEmbed(context, embedBuilder);
+            SendLogEmbed(context, embed);
+            PlainEmbed.BuildNDestroy(context,embed,DestroyTime.SLOW);
         }
 
         private async void SendLogEmbed(CommandContext context, DiscordEmbedBuilder embedBuilder)
