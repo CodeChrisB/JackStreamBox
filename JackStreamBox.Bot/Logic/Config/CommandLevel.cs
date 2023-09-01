@@ -138,11 +138,11 @@ namespace JackStreamBox.Bot.Logic.Config
         {
             switch (role)
             {
-                case PermissionRole.ANYONE: return "Open";
-                case PermissionRole.TRUSTED: return "Trust";
-                case PermissionRole.HIGHLYTRUSTED: return "High";
-                case PermissionRole.STAFF: return "Staff";
-                case PermissionRole.DEVELOPER: return "Devs";
+                case PermissionRole.ANYONE: return "Anyone";
+                case PermissionRole.TRUSTED: return "Trused Users";
+                case PermissionRole.HIGHLYTRUSTED: return "Top Hosts";
+                case PermissionRole.STAFF: return "Staff Members";
+                case PermissionRole.DEVELOPER: return "Developers";
                 default: return "Banned";
             }
         }
