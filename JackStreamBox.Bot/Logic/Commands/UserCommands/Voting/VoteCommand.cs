@@ -5,7 +5,9 @@ using DSharpPlus.CommandsNext.Converters;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.EventHandling;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands;
 using JackStreamBox.Bot.Logic.Attributes;
+using JackStreamBox.Bot.Logic.Commands._Helper;
 using JackStreamBox.Bot.Logic.Commands._Helper.ChartBuilder;
 using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 using JackStreamBox.Bot.Logic.Config;
@@ -22,24 +24,25 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace JackStreamBox.Bot.Logic.Commands
+namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 {
-    internal class VotingCommand : BaseCommandModule
+    internal class VoteCommand : BaseCommandModule
     {
         #region Vote Declaration
 
         //Vote Props
-        private List<string> voteCategories = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", /*"draw", "trivia", "talk", "fun"*/ };
-        Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
-        private PackGame[]? games = null;
-        private int timeTillVoteEnd =0;
+        private static List<string> voteCategories = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", /*"draw", "trivia", "talk", "fun"*/ };
+        private static Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
+        private static PackGame[]? games = null;
+        private static int timeTillVoteEnd = 0;
 
         //Discord Props
-        private DiscordMessage PackVoteMessage;
-        private DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
+        private static DiscordMessage PackVoteMessage;
+        private static DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
 
-   
-        public void ResetVote()
+
+
+        public static void ResetVote()
         {
             VotesOfPlayers = new Dictionary<string, string>();
             games = null;
@@ -49,15 +52,16 @@ namespace JackStreamBox.Bot.Logic.Commands
         #endregion
 
         #region Step
-        public struct Step {
+        public struct Step
+        {
             public string Text;
             public bool Completed;
         }
 
-        Step[] GameStartSteps = new Step[1];
-        private string Winner = "";
+        private static Step[] GameStartSteps = new Step[1];
+        private static string Winner = "";
 
-        private void ResetGameStartSteps()
+        private static void ResetGameStartSteps()
         {
             GameStartSteps = new Step[]
             {
@@ -76,30 +80,42 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
         [Command("vote")]
-        [CoammandDescription($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ",":ballot_box:")]
+        [CoammandDescription($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ", ":ballot_box:")]
         [Requires(PermissionRole.ANYONE)]
-        public async Task Vote(CommandContext context, string voteCategory)
+        public static async Task CallVote(CommandContext context, string voteCategory)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
-            await context.Message.DeleteAsync();
+            CustomContext ccontext = new CustomContext(context);
+            
+        }
+
+        public static async void Vote(CustomContext ccontext, string voteCategory)
+        {
+            if(ccontext.Message != null)
+            {
+                await ccontext.Message.DeleteAsync();
+            }
 
 
             voteCategory = voteCategory.ToLower();
 
             if (voteCategories.IndexOf(voteCategory) > -1)
             {
-                VotesOfPlayers[context.Member.Id.ToString()] = voteCategory;
+                VotesOfPlayers[ccontext.Member.Id.ToString()] = voteCategory;
             }
             else
             {
-                await context.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
-                
+                if(ccontext.Message != null)
+                {
+                    await ccontext.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
+
+                }
             }
 
             if (VotesOfPlayers.Values.ToList().Count == 1 && PackVoteMessage == null)
             {
                 ResetGameStartSteps();
-                Task.Run(() => OnPackVoteEnd(context));
+                Task.Run(() => OnPackVoteEnd(ccontext));
                 PrePollMessageData = new DiscordEmbedBuilder
                 {
                     Title = "Game Vote",
@@ -107,13 +123,26 @@ namespace JackStreamBox.Bot.Logic.Commands
                     Color = DiscordColor.Green,
 
                 };
-                PackVoteMessage = await context.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
-                
+                PackVoteMessage = await ccontext.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
+
             }
             ModifyPackVoteMessage();
-        } 
+        }
+        [Command("vote")]
+        [CoammandDescription($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ", ":ballot_box:")]
+        [Requires(PermissionRole.ANYONE)]
+        //public Command for Slashcommand
+        public static async Task VoteViaSlash(InteractionContext context, string voteCategory)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
 
-        private void ModifyPackVoteMessage()
+            Vote(new CustomContext(context), voteCategory);
+
+            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Done!"));
+        }
+        
+
+        private static void ModifyPackVoteMessage()
         {
             if (PackVoteMessage == null) return;
 
@@ -129,7 +158,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                 sb.AppendLine($"Required Votes: :white_check_mark:");
 
 
-            foreach ( var key in voteCategories )
+            foreach (var key in voteCategories)
                 sb.AppendLine($"**!{key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
 
             if (timeTillVoteEnd > 0)
@@ -145,9 +174,9 @@ namespace JackStreamBox.Bot.Logic.Commands
 
         }
 
-        public async Task OnPackVoteEnd(CommandContext context)
+        private static async Task OnPackVoteEnd(CustomContext context)
         {
-            
+
             timeTillVoteEnd = BotData.ReadData(BotVals.VOTE_TIMER, 30);
 
             while (timeTillVoteEnd >= 0)
@@ -159,13 +188,13 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
             List<string> votes = VotesOfPlayers.Values.ToList();
-             
-            if(votes.Count >= BotData.ReadData(BotVals.REQUIRED_VOTES, 3))
+
+            if (votes.Count >= BotData.ReadData(BotVals.REQUIRED_VOTES, 3))
             {
                 string vote = votes[new Random().Next(votes.Count)];
                 games = PackInfo.GetVotePack(vote);
-                await VoteNow(context,games);
-            } 
+                await VoteNow(context, games);
+            }
             else
             {
 
@@ -180,7 +209,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             ResetVote();
         }
 
-        private async Task VoteNow(CommandContext context, PackGame[] games)
+        private static async Task VoteNow(CustomContext context, PackGame[] games)
         {
             // End Game
             JackStreamBoxUtility.CloseGame();
@@ -240,11 +269,11 @@ namespace JackStreamBox.Bot.Logic.Commands
             int[] maxIndices = await ComputeWinner(emojis, pollMessage);
 
 
-            OpenVoteWinner(maxIndices,pollEmbed, pollMessage, Logger);
+            OpenVoteWinner(maxIndices, pollEmbed, pollMessage, Logger);
 
         }
 
-        private async Task<int[]> ComputeWinner(DiscordEmoji[] emojis,DiscordMessage pollMessage)
+        private static async Task<int[]> ComputeWinner(DiscordEmoji[] emojis, DiscordMessage pollMessage)
         {
             var reactionTasks = emojis.Select(emoji => pollMessage.GetReactionsAsync(emoji)).ToArray();
             await Task.WhenAll(reactionTasks);
@@ -260,7 +289,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             return maxIndices;
         }
 
-        private async void OpenVoteWinner(int[] maxIndices,DiscordEmbedBuilder pollEmbed, DiscordMessage pollMessage, Func<VoteStatus, Task> logger)
+        private static async void OpenVoteWinner(int[] maxIndices, DiscordEmbedBuilder pollEmbed, DiscordMessage pollMessage, Func<VoteStatus, Task> logger)
         {
             //Set Message Data
             pollEmbed.ImageUrl = CustomBanner.GetRandomBanner();
@@ -280,22 +309,15 @@ namespace JackStreamBox.Bot.Logic.Commands
             ResetVote();
         }
 
-
-
-
-
-
-
-
-        private string StatusEmoji(bool status)
+        private static string StatusEmoji(bool status)
         {
             return status ? ":thumbsup:" : ":x:";
         }
 
 
-        private DiscordEmoji[] GetEmojis(CommandContext context)
+        private static DiscordEmoji[] GetEmojis(CustomContext context)
         {
-            
+
             DiscordEmoji[] emojis =
             {
                 DiscordEmoji.FromName(context.Client, ":one:"),
@@ -308,12 +330,12 @@ namespace JackStreamBox.Bot.Logic.Commands
             return emojis;
         }
 
-        private string GameText(PackGame[] games, CommandContext context)
+        private static string GameText(PackGame[] games, CustomContext context)
         {
             DiscordEmoji[] emojis = GetEmojis(context);
             StringBuilder sb = new StringBuilder();
 
-            for(int i = 0; i < emojis.Length; i++)
+            for (int i = 0; i < emojis.Length; i++)
             {
                 sb.AppendLine($"{emojis[i]} {games[i].Name}\n");
             }
@@ -324,16 +346,19 @@ namespace JackStreamBox.Bot.Logic.Commands
 
 
         // Commands for using only numbers to vote
-        [Command("1")] public async Task Vote1(CommandContext context) => await Vote(context, "1");
-        [Command("2")] public async Task Vote2(CommandContext context) => await Vote(context, "2");
-        [Command("3")] public async Task Vote3(CommandContext context) => await Vote(context, "3");
-        [Command("4")] public async Task Vote4(CommandContext context) => await Vote(context, "4");
-        [Command("5")] public async Task Vote5(CommandContext context) => await Vote(context, "5");
-        [Command("6")] public async Task Vote6(CommandContext context) => await Vote(context, "6");
-        [Command("7")] public async Task Vote7(CommandContext context) => await Vote(context, "7");
-        [Command("8")] public async Task Vote8(CommandContext context) => await Vote(context, "8");
-        [Command("9")] public async Task Vote9(CommandContext context) => await Vote(context, "9");
-        [Command("10")] public async Task Vote10(CommandContext context) => await Vote(context, "10");
+
+        [Command("1")] public async Task Vote1(CommandContext context) => await CallVote(context, "1");
+        [Command("2")] public async Task Vote2(CommandContext context) => await CallVote(context, "2");
+        [Command("3")] public async Task Vote3(CommandContext context) => await CallVote(context, "3");
+        [Command("4")] public async Task Vote4(CommandContext context) => await CallVote(context, "4");
+        [Command("5")] public async Task Vote5(CommandContext context) => await CallVote(context, "5");
+        [Command("6")] public async Task Vote6(CommandContext context) => await CallVote(context, "6");
+        [Command("7")] public async Task Vote7(CommandContext context) => await CallVote(context, "7");
+        [Command("8")] public async Task Vote8(CommandContext context) => await CallVote(context, "8");
+        [Command("9")] public async Task Vote9(CommandContext context) => await CallVote(context, "9");
+        [Command("10")] public async Task Vote10(CommandContext context) => await CallVote(context, "10");
+
+
 
 
         //Basic explaination what vote calls a user can use
@@ -341,7 +366,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         public async Task vote(CommandContext context)
         {
             await context.Channel.SendMessageAsync(PackInfo.VoteCategories());
-            
+
         }
     }
 }

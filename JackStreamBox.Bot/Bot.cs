@@ -11,16 +11,15 @@ using JackStreamBox.Bot.Logic.Commands.ScheduledCommands;
 using JackStreamBox.Bot.Logic.Commands.StaffCommand;
 using JackStreamBox.Bot.Logic.Commands.UserCommands;
 using JackStreamBox.Bot.Logic.Config;
-using JackStreamBox.Bot.Logic.Data;
+using JackStreamBox.Bot.Logic.Logger;
 using JackStreamBox.Util.Data;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Serilog;
+using DSharpPlus.SlashCommands;
+
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.Voting;
 
 namespace JackStreamBox.Bot
 {
@@ -29,6 +28,7 @@ namespace JackStreamBox.Bot
         public static DiscordClient Client {  get; private set; }
         public InteractivityExtension Interactivity { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
+
 
         public static bool CRASHED { get; set; }
 
@@ -53,12 +53,22 @@ namespace JackStreamBox.Bot
 
             DocGenerator.PASTE_BIN_KEY = configJson.PasteBinKey;
 
+
+            //Create Logger
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.Sink(new CustomLogSink(JackBotLogger.OnLog))
+            .CreateLogger();
+
+
+            var logFactory = new LoggerFactory().AddSerilog();
+
             var config = new DiscordConfiguration()
             {
                 Intents = DiscordIntents.All,
                 Token = configJson.Token,
                 TokenType = TokenType.Bot,
-                AutoReconnect = true
+                AutoReconnect = true,
+                //LoggerFactory = logFactory
 
             };
 
@@ -81,11 +91,15 @@ namespace JackStreamBox.Bot
 
 
             Commands = Client.UseCommandsNext(commandsConfig);
+            var Slash = Client.UseSlashCommands();
+
+            //Slash Commands
+            Slash.RegisterCommands<VoteSlash>();
 
             //text commands
             Commands.RegisterCommands<StartGameCommand>();
             Commands.RegisterCommands<PackCommand>();
-            Commands.RegisterCommands<VotingCommand>();
+            Commands.RegisterCommands<VoteCommand>();
             Commands.RegisterCommands<HelpCommand>();
             Commands.RegisterCommands<CommandLevel>();
             Commands.RegisterCommands<JokeCommand>();
@@ -103,7 +117,7 @@ namespace JackStreamBox.Bot
             //Register for Help Page
             BotCommand.Register<StartGameCommand>();
             BotCommand.Register<PackCommand>();
-            BotCommand.Register<VotingCommand>();
+            BotCommand.Register<VoteCommand>();
             BotCommand.Register<HelpCommand>();
             BotCommand.Register<JokeCommand>();
             BotCommand.Register<InputCommand>();

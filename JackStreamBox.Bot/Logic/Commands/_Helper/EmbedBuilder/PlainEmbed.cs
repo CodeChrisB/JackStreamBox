@@ -1,5 +1,6 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
+using JackStreamBox.Bot.Logic.Commands._Helper;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Data;
 using System;
@@ -15,6 +16,10 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
         public static FluentBuilder CreateEmbed(CommandContext context)
         {
             return  new FluentBuilder(context);
+        }
+        public static FluentBuilder CreateEmbed(CustomContext context)
+        {
+            return new FluentBuilder(context);
         }
         public static FluentBuilder CreateEmbed()
         {
@@ -37,9 +42,14 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
 public class FluentBuilder
 {
     DiscordEmbedBuilder builder;
-    CommandContext _context;    
+    CustomContext _context;    
     
     public FluentBuilder(CommandContext context)
+    {
+        _context = new CustomContext(context);
+        builder = new DiscordEmbedBuilder();
+    }
+    public FluentBuilder(CustomContext context)
     {
         _context = context;
         builder = new DiscordEmbedBuilder();

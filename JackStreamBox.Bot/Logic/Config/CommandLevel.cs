@@ -2,6 +2,7 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using DSharpPlus.SlashCommands;
 using JackStreamBox.Bot.Logic.Attributes;
 using JackStreamBox.Bot.Logic.Commands;
 using JackStreamBox.Bot.Logic.Data;
@@ -70,29 +71,32 @@ namespace JackStreamBox.Bot.Logic.Config
             await ToggleBot(context);
         }
 
- 
 
+        
+        public static bool CanExecuteCommand(InteractionContext context, PermissionRole permissionLevel, bool ignoreChannel = false)
+        {
+            if (CommandLevel.IsBotPaused) return false;
+            int grantedLevel = RoleToLevel(context.Member.Roles);
+            return InternalCanExecute(grantedLevel,permissionLevel,context.Channel.Id,ignoreChannel);
+        }
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel,bool ignoreChannel = false)
         {
             if (CommandLevel.IsBotPaused) return false;
-
             int grantedLevel = RoleToLevel(context.Member.Roles);
+            return InternalCanExecute(grantedLevel, permissionLevel, context.Channel.Id, ignoreChannel);
+        }
+
+        private static bool InternalCanExecute(int grantedLevel, PermissionRole permissionLevel, ulong  channelId,bool ignoreChannel)
+        {
             int requiredLevel = (int)permissionLevel;
 
             //Check if inside the Jackbot VC or if staff used the command
-            if (!ignoreChannel && context.Channel.Id != ChannelId.JackBotVC && grantedLevel < (int)PermissionRole.STAFF) return false;
+            if (!ignoreChannel && channelId != ChannelId.JackBotVC && grantedLevel < (int)PermissionRole.STAFF) return false;
 
             //Check if inside dev channel only dev bot can execute stuff here
-            if (context.Channel.Id == ChannelId.DevChannel && IsDevBot == false) return false;
+            if (channelId == ChannelId.DevChannel && IsDevBot == false) return false;
 
             bool canExecute = grantedLevel >= requiredLevel;
-
-
-            if(!canExecute)
-            {
-                context.Channel.SendMessageAsync("You can not execute this");
-                
-            }
 
             return canExecute;
         }

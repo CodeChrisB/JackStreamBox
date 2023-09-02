@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DSharpPlus.Entities;
 using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
+using DSharpPlus.SlashCommands;
 
 namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 {
@@ -45,10 +46,13 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 
 
 
-            DiscordEmbedBuilder embedBuilder = new DiscordEmbedBuilder();
-            embedBuilder.Title = title;
-            embedBuilder.Description = message;
-            embedBuilder.Color = DiscordColor.Green;
+            DiscordEmbedBuilder embedBuilder = PlainEmbed
+                .CreateEmbed()
+                .Title(title)
+                .Description(message)
+                .Color(DiscordColor.Green)
+                .GetBuilder();
+
 
             await context.Channel.SendMessageAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
             SendLogEmbed(context,embedBuilder);
@@ -69,7 +73,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
                 .Description(message)
                 .GetBuilder();
 
-
+                
             SendLogEmbed(context, embed);
             PlainEmbed.BuildNDestroy(context,embed,DestroyTime.SLOW);
         }
@@ -78,7 +82,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         {
             var LogChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
 
-            embedBuilder.Description = $"[{context.Member.Username}] {embedBuilder.Description}";
+            embedBuilder.Description = $"[{context.Member.Username}]\n {embedBuilder.Description}";
             await LogChannel.SendMessageAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
         }
 

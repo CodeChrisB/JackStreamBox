@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JackStreamBox.ConApp", "Jac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{264D562D-6176-439A-AAC8-0C66CC6B87F2}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		ReadMe.md = ReadMe.md
 		restarter.bat = restarter.bat
 		updater.bat = updater.bat
@@ -22,9 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DiscordPlugin", "DiscordPlu
 		toggleYourStuff.plugin.js = toggleYourStuff.plugin.js
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JacktStreamBox.Database", "JacktStreamBox.Database\JacktStreamBox.Database.csproj", "{B25F8683-ABAC-47F4-A872-E69D1097B9F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JacktStreamBox.Database", "JacktStreamBox.Database\JacktStreamBox.Database.csproj", "{B25F8683-ABAC-47F4-A872-E69D1097B9F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JackStreamBox.DBConapp", "JackStreamBox.DBConapp\JackStreamBox.DBConapp.csproj", "{8BF9208A-1A0F-4058-AA06-0E09DAE46AF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JackStreamBox.DBConapp", "JackStreamBox.DBConapp\JackStreamBox.DBConapp.csproj", "{8BF9208A-1A0F-4058-AA06-0E09DAE46AF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

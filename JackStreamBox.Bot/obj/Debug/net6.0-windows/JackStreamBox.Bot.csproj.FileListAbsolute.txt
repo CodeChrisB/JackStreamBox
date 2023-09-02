@@ -37,3 +37,9 @@ D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.Co
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.dll
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.pdb
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Logic\Data\Jokes.txt
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Microsoft.Extensions.Logging.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Microsoft.Extensions.Options.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Microsoft.Extensions.Primitives.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Serilog.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Serilog.Extensions.Logging.dll
+D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\DSharpPlus.SlashCommands.dll

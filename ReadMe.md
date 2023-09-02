@@ -13,6 +13,7 @@ After a game players can vote for the next game, after the voting the next game 
 | **!packs**| Displays an image containing all games in all packs|
 | **!rules**| View the rules.|
 | **!vote**| Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. |
+| **!vote**| Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. |
 ## Level 2  Trused Users 
 | Command      | Description        |
 |--------------|--------------------|

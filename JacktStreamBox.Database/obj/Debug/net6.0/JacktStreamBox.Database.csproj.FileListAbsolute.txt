@@ -1,0 +1,12 @@
+D:\Git\JackBoxStream\JacktStreamBox.Database\bin\Debug\net6.0\JacktStreamBox.Database.deps.json
+D:\Git\JackBoxStream\JacktStreamBox.Database\bin\Debug\net6.0\JacktStreamBox.Database.dll
+D:\Git\JackBoxStream\JacktStreamBox.Database\bin\Debug\net6.0\JacktStreamBox.Database.pdb
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\JacktStreamBox.Database.csproj.AssemblyReference.cache
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\JacktStreamBox.Database.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\JacktStreamBox.Database.AssemblyInfoInputs.cache
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\JacktStreamBox.Database.AssemblyInfo.cs
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\JacktStreamBox.Database.csproj.CoreCompileInputs.cache
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\JacktStreamBox.Database.dll
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\refint\JacktStreamBox.Database.dll
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\JacktStreamBox.Database.pdb
+D:\Git\JackBoxStream\JacktStreamBox.Database\obj\Debug\net6.0\ref\JacktStreamBox.Database.dll
