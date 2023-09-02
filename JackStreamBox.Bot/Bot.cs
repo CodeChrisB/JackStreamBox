@@ -11,6 +11,7 @@ using JackStreamBox.Bot.Logic.Commands.ScheduledCommands;
 using JackStreamBox.Bot.Logic.Commands.StaffCommand;
 using JackStreamBox.Bot.Logic.Commands.UserCommands;
 using JackStreamBox.Bot.Logic.Config;
+using JackStreamBox.Bot.Logic.Data;
 using JackStreamBox.Util.Data;
 using Newtonsoft.Json;
 using System;
@@ -142,7 +143,9 @@ namespace JackStreamBox.Bot
 
             string message = $"Hey JackStreamBox[{ name}] is now online!";
             if(CRASHED) message = message + "\nOhh I crashed CCB will look into, I restarted for now hopefully without crashes anymore";CRASHED = false;
-            await channel.SendMessageAsync(message);
+            
+            var welcomeMessage = await channel.SendMessageAsync(AsciiArt.WelcomeMessage(name));
+            Destroyer.Message(welcomeMessage,DestroyTime.SLOW);
             Console.WriteLine("Sent - Log sent Message");
 
             await Task.Delay(-1);

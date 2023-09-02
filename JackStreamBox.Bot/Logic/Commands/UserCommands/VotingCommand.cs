@@ -35,7 +35,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         private int timeTillVoteEnd =0;
 
         //Discord Props
-        private DiscordMessage PrePollMessage;
+        private DiscordMessage PackVoteMessage;
         private DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
 
    
@@ -43,7 +43,7 @@ namespace JackStreamBox.Bot.Logic.Commands
         {
             VotesOfPlayers = new Dictionary<string, string>();
             games = null;
-            PrePollMessage = null;
+            PackVoteMessage = null;
             ResetGameStartSteps();
         }
         #endregion
@@ -96,10 +96,10 @@ namespace JackStreamBox.Bot.Logic.Commands
                 
             }
 
-            if (VotesOfPlayers.Values.ToList().Count == 1 && PrePollMessage == null)
+            if (VotesOfPlayers.Values.ToList().Count == 1 && PackVoteMessage == null)
             {
                 ResetGameStartSteps();
-                Task.Run(() => VoteOrCancel(context));
+                Task.Run(() => OnPackVoteEnd(context));
                 PrePollMessageData = new DiscordEmbedBuilder
                 {
                     Title = "Game Vote",
@@ -107,15 +107,15 @@ namespace JackStreamBox.Bot.Logic.Commands
                     Color = DiscordColor.Green,
 
                 };
-                PrePollMessage = await context.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
+                PackVoteMessage = await context.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
                 
             }
-            UpdatePreMessage();
-        }
+            ModifyPackVoteMessage();
+        } 
 
-        private void UpdatePreMessage()
+        private void ModifyPackVoteMessage()
         {
-            if (PrePollMessage == null) return;
+            if (PackVoteMessage == null) return;
 
             StringBuilder sb = new StringBuilder();
 
@@ -123,27 +123,29 @@ namespace JackStreamBox.Bot.Logic.Commands
 
             int requiredVotes = BotData.ReadData(BotVals.REQUIRED_VOTES, 4);
 
-            if(VotesOfPlayers.Values.Count<requiredVotes)
-                sb.AppendLine($"Required Votes: {VotesOfPlayers.Values.Count}/{requiredVotes}");
+            if (VotesOfPlayers.Values.Count < requiredVotes)
+                sb.AppendLine($"Required Votes: {VotesOfPlayers.Values.Count}/{requiredVotes} :x:");
+            else
+                sb.AppendLine($"Required Votes: :white_check_mark:");
 
 
             foreach ( var key in voteCategories )
-                sb.AppendLine($"**!vote {key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
+                sb.AppendLine($"**!{key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
 
             if (timeTillVoteEnd > 0)
             {
                 PrePollMessageData.Description = sb.ToString();
-                PrePollMessage.ModifyAsync(PrePollMessageData.Build());
+                PackVoteMessage.ModifyAsync(PrePollMessageData.Build());
             }
             else
             {
-                if (PrePollMessage == null) return;
-                PrePollMessage.DeleteAsync();
+                if (PackVoteMessage == null) return;
+                PackVoteMessage.DeleteAsync();
             }
 
         }
 
-        public async Task VoteOrCancel(CommandContext context)
+        public async Task OnPackVoteEnd(CommandContext context)
         {
             
             timeTillVoteEnd = BotData.ReadData(BotVals.VOTE_TIMER, 30);
@@ -151,7 +153,7 @@ namespace JackStreamBox.Bot.Logic.Commands
             while (timeTillVoteEnd >= 0)
             {
                 await Task.Delay(1000);
-                UpdatePreMessage();
+                ModifyPackVoteMessage();
                 timeTillVoteEnd--;
             }
 
@@ -173,7 +175,7 @@ namespace JackStreamBox.Bot.Logic.Commands
                     .DescriptionAddLine($"Yikes... we need some more votes to start a game\n")
                     .DescriptionAddLine($"Next time try it with atleast {BotData.ReadData(BotVals.REQUIRED_VOTES, 3)} votes")
                     .DescriptionAddLine("Just trying to start a new vote to end the current game will revoke your bot rights.")
-                    .BuildNDestroy(DestroyTime.REALLYSLOW);
+                    .BuildNDestroy(DestroyTime.SLOW);
             }
             ResetVote();
         }

@@ -25,7 +25,13 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
 
-            await context.Channel.SendMessageAsync(message);
+            if (context.Message.Reference != null)
+            {
+                await context.Message.Reference.Message.RespondAsync(message);
+            }else
+            {
+                await context.Channel.SendMessageAsync(message);
+            }
             SendLogMessage(context,message);
         }
 
@@ -88,7 +94,6 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             if (context.Message.Reference != null)
             {
                 //Reply to referenced Message
-                await context.Message.Reference.Message.RespondAsync(message);
                 sb.AppendLine($"{context.Member.Username} reply to {context.Message.Reference.Message.Author.Username}");
                 sb.AppendLine($"Replied to : {context.Message.Reference.Message.Content}");
             }
