@@ -148,6 +148,9 @@ namespace JackStreamBox.Bot
             Destroyer.Message(welcomeMessage,DestroyTime.SLOW);
             Console.WriteLine("Sent - Log sent Message");
 
+            //Set Bot Mode
+            CommandLevel.IsDevBot = name.ToLower().Contains("dev");
+
             await Task.Delay(-1);
         }
 

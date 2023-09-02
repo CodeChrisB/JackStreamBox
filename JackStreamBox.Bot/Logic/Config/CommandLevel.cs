@@ -56,6 +56,9 @@ namespace JackStreamBox.Bot.Logic.Config
             await context.Channel.SendMessageAsync($"The bot [{name}] is {(IsBotPaused ? "paused" : "resumed")}.");
             
         }
+
+        public static bool IsDevBot = false; 
+
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel,bool ignoreChannel = false)
         {
             if (CommandLevel.IsBotPaused) return false;
@@ -63,9 +66,11 @@ namespace JackStreamBox.Bot.Logic.Config
             int grantedLevel = RoleToLevel(context.Member.Roles);
             int requiredLevel = (int)permissionLevel;
 
-            //Check if inside the Jackbot VC or if developer used the command
- 
-            if (!ignoreChannel && context.Channel.Id.ToString() != "1105184748701229066" && grantedLevel < (int)PermissionRole.STAFF) return false;
+            //Check if inside the Jackbot VC or if staff used the command
+            if (!ignoreChannel && context.Channel.Id != ChannelId.JackBotVC && grantedLevel < (int)PermissionRole.STAFF) return false;
+
+            //Check if inside dev channel only dev bot can execute stuff here
+            if (context.Channel.Id == ChannelId.DevChannel && IsDevBot == false) return false;
 
             bool canExecute = grantedLevel >= requiredLevel;
 
