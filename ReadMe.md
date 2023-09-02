@@ -3,7 +3,7 @@
 ## How does it work  
 The bot automatically opens the games so that players can join.
 After a game players can vote for the next game, after the voting the next game gets opend.
-## Level 1  Open 
+## Level 1  Anyone 
 | Command      | Description        |
 |--------------|--------------------|
 | **!commands**| List all commands you can use.|
@@ -13,20 +13,20 @@ After a game players can vote for the next game, after the voting the next game 
 | **!packs**| Displays an image containing all games in all packs|
 | **!rules**| View the rules.|
 | **!vote**| Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. |
-## Level 2  Trust 
+## Level 2  Trused Users 
 | Command      | Description        |
 |--------------|--------------------|
 | **!joke**| Get a bad jackbox related pun. (Using ChatGPT)|
 | **!report**| !report **"**Your Issue**"|
 | **!version**| Check bot version|
-## Level 3  High 
+## Level 3  Top Hosts 
 | Command      | Description        |
 |--------------|--------------------|
 | **!break**| Pauses the game for 1 minute, will resume afterwards.|
 | **!closegame**| Closes the current game.|
 | **!join**| Let the streamer join the VC.|
 | **!restart**| Restart the bot|
-## Level 4  Staff 
+## Level 4  Staff Members 
 | Command      | Description        |
 |--------------|--------------------|
 | **!banner-**| Adds a banner shown while at multiple pages|
@@ -43,7 +43,7 @@ After a game players can vote for the next game, after the voting the next game 
 | **!setview**| Set values of the bot|
 | **!staff**| Show staff commands|
 | **!start**| Starts any game you want to. Be aware this instantly closes any current game!|
-## Level 5  Devs 
+## Level 5  Developers 
 | Command      | Description        |
 |--------------|--------------------|
 | **!close**| Will close the bot. Use in emergency such as the bot streaming a wrong window.|
