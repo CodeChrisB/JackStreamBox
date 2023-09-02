@@ -16,6 +16,10 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
         {
             return  new FluentBuilder(context);
         }
+        public static FluentBuilder CreateEmbed()
+        {
+            return new FluentBuilder();
+        }
 
         public static  async Task<DiscordMessage> Build(CommandContext context, DiscordEmbedBuilder embed)
         {
@@ -41,6 +45,10 @@ public class FluentBuilder
         builder = new DiscordEmbedBuilder();
     }
 
+    public FluentBuilder()
+    {
+        builder = new DiscordEmbedBuilder();
+    }
 
     //Chainable Commands
     public FluentBuilder Title(string title)
@@ -51,6 +59,11 @@ public class FluentBuilder
     public FluentBuilder Description(string description)
     {
         builder.Description = description;
+        return this;
+    }
+    public FluentBuilder Color(DiscordColor color)
+    {
+        builder.Color = color;
         return this;
     }
     public FluentBuilder DescriptionAddLine(string description)

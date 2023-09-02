@@ -137,15 +137,15 @@ namespace JackStreamBox.Bot
 
 
             Console.WriteLine("*********************************");
-            await Client.ConnectAsync();
-            var channel = await Client.GetChannelAsync(ChannelId.JackBotVC);
-
             //Set Bot Mode
             string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
             CommandLevel.IsDevBot = name.ToLower().Contains("dev");
 
+            //Connect to Discord
+            await Client.ConnectAsync();
+
             //Send Welcome Message
-            Destroyer.Message(await channel.SendMessageAsync(AsciiArt.WelcomeMessage(name)),DestroyTime.SLOW);
+            AsciiArt.WelcomeMessage(Client);
             Console.WriteLine("Sent - Log sent Message");
 
 
