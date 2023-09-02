@@ -71,7 +71,7 @@ namespace JackStreamBox.Bot.Logic.Config
         private static void Header(StringBuilder sb)
         {
 
-            sb.AppendLine("![image](https://user-images.githubusercontent.com/55576076/235742815-f471e12a-7e11-45ee-aad4-25b1b0aa38ab.png");
+            sb.AppendLine("![image](https://user-images.githubusercontent.com/55576076/235742815-f471e12a-7e11-45ee-aad4-25b1b0aa38ab.png)");
             sb.AppendLine("### A 24/7 Jackbox Party Pack Bot.  ");
             sb.AppendLine("## How does it work  ");
             sb.AppendLine("The bot automatically opens the games so that players can join.");
