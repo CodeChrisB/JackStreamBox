@@ -16,6 +16,11 @@ namespace JackStreamBox.Bot.Logic.Config
 {
     public class CommandLevel : BaseCommandModule
     {
+        private static bool IsBotPaused = false;
+        public static bool IsDevBot = false;
+        public static string BotName = "xxxx";
+
+
         [Command("level")]
         [CoammandDescription("Checks what permission level you have.",":straight_ruler:")]
         [Requires(PermissionRole.ANYONE)]
@@ -43,7 +48,7 @@ namespace JackStreamBox.Bot.Logic.Config
         }
 
 
-        private static bool IsBotPaused = false;
+
         [Command("toggle")]
         [CoammandDescription("Toggle the whole bot, used for debugging without needing to access the server.", ":flashlight:")]
         [ModCommand(PermissionRole.DEVELOPER)]
@@ -53,11 +58,19 @@ namespace JackStreamBox.Bot.Logic.Config
             if (level < (int)PermissionRole.DEVELOPER) return;
             CommandLevel.IsBotPaused = !CommandLevel.IsBotPaused;
             string name = BotData.ReadData(BotVals.BOT_NAME, "TB1");
-            await context.Channel.SendMessageAsync($"The bot [{name}] is {(IsBotPaused ? "paused" : "resumed")}.");
-            
+            await context.Channel.SendMessageAsync($"The bot [{name}] is {(IsBotPaused ? "paused" : "resumed")}."); 
         }
 
-        public static bool IsDevBot = false; 
+        [Command("toggle")]
+        public async Task ToggleBotByName(CommandContext context, string botName)
+        {
+            //Only toggle if its the correct bot
+            if(BotData.ReadData(BotVals.BOT_NAME, "TB1").ToLower() != botName.ToLower()) return;
+
+            await ToggleBot(context);
+        }
+
+ 
 
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel,bool ignoreChannel = false)
         {
