@@ -12,17 +12,13 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
 {
     internal class CommandEmbed
     {
-        internal static async void Show(CommandContext context, string title, CommandInfo[] ci, bool appendDescription)
+        internal static async void Show(CustomContext context, string title, CommandInfo[] ci, bool appendDescription)
         {
             var helpEmbed = new DiscordEmbedBuilder
             {
                 Title = title,
                 Description = "If u see this message something went wrong"
             };
-
-
-
-    
 
 
             StringBuilder sb = new StringBuilder();

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DSharpPlus.Entities;
+using JackStreamBox.Bot.Logic.Commands._Helper;
+using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 using JackStreamBox.Util;
 using JackStreamBox.Util.Data;
 
 namespace JackStreamBox.Bot.Logic.Data
 {
-    public struct Pack
+    public struct JackboxPack
     {
         public string Name;
         public PackGame[] games;
@@ -16,19 +19,19 @@ namespace JackStreamBox.Bot.Logic.Data
     
     public class PackInfo
     {
-        public static Pack GetPackInfo(int pack)
+        public static JackboxPack GetPackInfo(int pack)
         {
             return AllPacks()[pack-1];
 
 
         }
 
-        public static Pack[] GetAllPacks() { return AllPacks(); }
+        public static JackboxPack[] GetAllPacks() { return AllPacks(); }
 
         public static PackGame[] GetAllGames()
         {
             List<PackGame> games = new List<PackGame>();
-            foreach (Pack pack in PackInfo.GetAllPacks())
+            foreach (JackboxPack pack in PackInfo.GetAllPacks())
             {
                 games.AddRange(pack.games);
             }
@@ -52,13 +55,13 @@ namespace JackStreamBox.Bot.Logic.Data
 
         }
 
-        private static Pack[] AllPacks()
+        private static JackboxPack[] AllPacks()
         {
-            return new Pack[]
+            return new JackboxPack[]
                 {
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 1",
+                        Name = "Jackbox Party JackboxPack 1",
                         games = new PackGame[]
                         {
                             new PackGame {Id= Game.Ydkj2015, Name = "You Don't Know Jack", Description = "A trivia game where players answer questions to score points." },
@@ -68,9 +71,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.Lieswatter,  Name = "Lie Swatter", Description = "A trivia game where players have to determine which statements are true and which are lies." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 2",
+                        Name = "Jackbox Party JackboxPack 2",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.Quipplashxl,  Name = "Quiplash XL", Description = "A game where players answer prompts with witty responses to try and win votes." },
@@ -80,9 +83,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.Bombcorp,  Name = "Bomb Corp.", Description = "A cooperative game where players work together to defuse bombs." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 3",
+                        Name = "Jackbox Party JackboxPack 3",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.Quipplash2, Name = "Quiplash 2", Description = "A sequel to Quiplash with new prompts and features." },
@@ -92,9 +95,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.Fakeinit, Name = "Fakin' It", Description = "A bluffing game where players try to hide the fact that they don't know the answer." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 4",
+                        Name = "Jackbox Party JackboxPack 4",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.Fibbage3, Name = "Fibbage 3", Description = "A sequel to Fibbage with new questions and features." },
@@ -104,9 +107,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.Civic, Name = "Civic Doodle", Description = "A drawing game where players draw and improve on each other's town murals." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 5",
+                        Name = "Jackbox Party JackboxPack 5",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.Ydkj2018, Name = "You Don't Know Jack: Full Stream", Description = "A trivia game where players answer questions to score points." },
@@ -116,9 +119,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.Zeepledoome,  Name = "Zeeple Dome", Description = "A game where players fight aliens in an arena by launching themselves at them." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 6",
+                        Name = "Jackbox Party JackboxPack 6",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.Triviamurderparty2, Name = "Trivia Murder Party 2", Description = "A sequel to Trivia Murder Party with new questions and features." },
@@ -128,9 +131,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.Rolemodels,  Name = "Role Models", Description = "A game where players try to match each other up with the most fitting personas." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 7",
+                        Name = "Jackbox Party JackboxPack 7",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.Quipplash3, Name = "Quiplash 3", Description = "A sequel to Quiplash with new prompts and features." },
@@ -140,9 +143,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.Blatherround, Name = "Blather 'Round", Description = "A game where players try to get others to guess a secret phrase without using any of the forbidden words." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 8",
+                        Name = "Jackbox Party JackboxPack 8",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.DrawfulAnimate, Name = "Drawful Animate", Description = "Drawful but now with Animation !" },
@@ -152,9 +155,9 @@ namespace JackStreamBox.Bot.Logic.Data
                             new PackGame {Id = Game.WeaponsDrawn,  Name = "Weapons Drawn", Description = "Hide a letter in a murder weapon you design, the others will try to catch you." }
                         }
                     },
-                    new Pack
+                    new JackboxPack
                     {
-                        Name = "Jackbox Party Pack 9",
+                        Name = "Jackbox Party JackboxPack 9",
                         games = new PackGame[]
                         {
                             new PackGame {Id = Game.Fibbage4, Name = "Fibbage 4", Description = "A sequel of the sequel to Fibbage with new questions and features." },
@@ -189,25 +192,22 @@ namespace JackStreamBox.Bot.Logic.Data
                 case "talk":
                     return GenSelection(Game.Talkingpoints, Game.Patentlystupid, Game.Pushthebutton, Game.Blatherround, Game.Junktopia);
             }
-            //Pack 7 is the best
+            //JackboxPack 7 is the best
             return AllPacks()[7].games;
         }
 
-        public static string VoteCategories()
+        public static async void VoteCategories(CustomContext ccontext)
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("╔════════════════════");
-            sb.AppendLine("║You can vote for any pack itself using **!pack X**");
-            sb.AppendLine("║e.g **!vote 5** or **!vote 8**");
-            sb.AppendLine("╠═ Categories ══");
-            sb.AppendLine("║**!vote draw** Will only pick drawing games");
-            sb.AppendLine("║**!vote trivia** Will only pick triva games");
-            sb.AppendLine("║**!vote fun** Will only pick 'fun' games");
-            sb.AppendLine("║**!vote mic** Will pick games were a mic is required.");
-            sb.AppendLine("╚════════════════════");
 
-
-            return sb.ToString();
+            await PlainEmbed.CreateEmbed(ccontext)
+                .Title("How 2 Vote")
+                .DescriptionAddLine("- There are 3 way you can use to vote")
+                .DescriptionAddLine("2 using ! commands and 1 using slash commands :")
+                .DescriptionAddLine("**!vote 1**  <- Votes for JackboxPack 1")
+                .DescriptionAddLine("**!5** <- Votes for JackboxPack 5")
+                .DescriptionAddLine("**/8** <- Votes for JackboxPack 8")
+                .Color(DiscordColor.IndianRed)
+                .BuildNDestroy(DestroyTime.NORMAL);
         }
 
         private static PackGame[] GenSelection(Game g1, Game g2, Game g3, Game g4, Game g5)

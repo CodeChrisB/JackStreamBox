@@ -29,4 +29,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Logic\Commands\_Helper\NewFolder\" />
+  </ItemGroup>
+
 </Project>

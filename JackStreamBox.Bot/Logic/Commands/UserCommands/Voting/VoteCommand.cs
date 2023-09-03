@@ -11,6 +11,7 @@ using JackStreamBox.Bot.Logic.Commands._Helper;
 using JackStreamBox.Bot.Logic.Commands._Helper.ChartBuilder;
 using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 using JackStreamBox.Bot.Logic.Config;
+using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
 using JackStreamBox.Bot.Logic.Data;
 using JackStreamBox.Util;
 using JackStreamBox.Util.Data;
@@ -28,345 +29,41 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 {
     internal class VoteCommand : BaseCommandModule
     {
-        #region Vote Declaration
-
-        //Vote Props
-        private static List<string> voteCategories = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", /*"draw", "trivia", "talk", "fun"*/ };
-        private static Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
-        private static PackGame[]? games = null;
-        private static int timeTillVoteEnd = 0;
-
-        //Discord Props
-        private static DiscordMessage PackVoteMessage;
-        private static DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
-
-
-
-        public static void ResetVote()
-        {
-            VotesOfPlayers = new Dictionary<string, string>();
-            games = null;
-            PackVoteMessage = null;
-            ResetGameStartSteps();
-        }
-        #endregion
-
-        #region Step
-        public struct Step
-        {
-            public string Text;
-            public bool Completed;
-        }
-
-        private static Step[] GameStartSteps = new Step[1];
-        private static string Winner = "";
-
-        private static void ResetGameStartSteps()
-        {
-            GameStartSteps = new Step[]
-            {
-                new Step { Text = BotMessage.StartingGamePack, Completed = false },
-                new Step { Text = BotMessage.OpenedGamePack, Completed = false },
-                new Step { Text = BotMessage.StartingGame, Completed = false },
-                new Step { Text = BotMessage.GameOpend, Completed = false },
-                new Step { Text = BotMessage.StartingStream, Completed = false },
-                new Step { Text = BotMessage.AllFinished, Completed = false },
-            };
-        }
-        #endregion
-
-
 
 
 
         [Command("vote")]
         [CoammandDescription($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ", ":ballot_box:")]
         [Requires(PermissionRole.ANYONE)]
-        public static async Task CallVote(CommandContext context, string voteCategory)
+        public static async Task VoteX(CommandContext context, string voteCategory)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
-            CustomContext ccontext = new CustomContext(context);
-            
-        }
-
-        public static async void Vote(CustomContext ccontext, string voteCategory)
-        {
-            if(ccontext.Message != null)
-            {
-                await ccontext.Message.DeleteAsync();
-            }
-
-
-            voteCategory = voteCategory.ToLower();
-
-            if (voteCategories.IndexOf(voteCategory) > -1)
-            {
-                VotesOfPlayers[ccontext.Member.Id.ToString()] = voteCategory;
-            }
-            else
-            {
-                if(ccontext.Message != null)
-                {
-                    await ccontext.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
-
-                }
-            }
-
-            if (VotesOfPlayers.Values.ToList().Count == 1 && PackVoteMessage == null)
-            {
-                ResetGameStartSteps();
-                Task.Run(() => OnPackVoteEnd(ccontext));
-                PrePollMessageData = new DiscordEmbedBuilder
-                {
-                    Title = "Game Vote",
-                    Description = $"Setting up the Poll",
-                    Color = DiscordColor.Green,
-
-                };
-                PackVoteMessage = await ccontext.Channel.SendMessageAsync(embed: PrePollMessageData).ConfigureAwait(false);
-
-            }
-            ModifyPackVoteMessage();
-        }
-        [Command("vote")]
-        [CoammandDescription($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ", ":ballot_box:")]
-        [Requires(PermissionRole.ANYONE)]
-        //public Command for Slashcommand
-        public static async Task VoteViaSlash(InteractionContext context, string voteCategory)
-        {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
-
-            Vote(new CustomContext(context), voteCategory);
-
-            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Done!"));
-        }
-        
-
-        private static void ModifyPackVoteMessage()
-        {
-            if (PackVoteMessage == null) return;
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
-
-            int requiredVotes = BotData.ReadData(BotVals.REQUIRED_VOTES, 4);
-
-            if (VotesOfPlayers.Values.Count < requiredVotes)
-                sb.AppendLine($"Required Votes: {VotesOfPlayers.Values.Count}/{requiredVotes} :x:");
-            else
-                sb.AppendLine($"Required Votes: :white_check_mark:");
-
-
-            foreach (var key in voteCategories)
-                sb.AppendLine($"**!{key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
-
-            if (timeTillVoteEnd > 0)
-            {
-                PrePollMessageData.Description = sb.ToString();
-                PackVoteMessage.ModifyAsync(PrePollMessageData.Build());
-            }
-            else
-            {
-                if (PackVoteMessage == null) return;
-                PackVoteMessage.DeleteAsync();
-            }
-
-        }
-
-        private static async Task OnPackVoteEnd(CustomContext context)
-        {
-
-            timeTillVoteEnd = BotData.ReadData(BotVals.VOTE_TIMER, 30);
-
-            while (timeTillVoteEnd >= 0)
-            {
-                await Task.Delay(1000);
-                ModifyPackVoteMessage();
-                timeTillVoteEnd--;
-            }
-
-
-            List<string> votes = VotesOfPlayers.Values.ToList();
-
-            if (votes.Count >= BotData.ReadData(BotVals.REQUIRED_VOTES, 3))
-            {
-                string vote = votes[new Random().Next(votes.Count)];
-                games = PackInfo.GetVotePack(vote);
-                await VoteNow(context, games);
-            }
-            else
-            {
-
-                await PlainEmbed
-                    .CreateEmbed(context)
-                    .Title("Not Enough Votes !")
-                    .DescriptionAddLine($"Yikes... we need some more votes to start a game\n")
-                    .DescriptionAddLine($"Next time try it with atleast {BotData.ReadData(BotVals.REQUIRED_VOTES, 3)} votes")
-                    .DescriptionAddLine("Just trying to start a new vote to end the current game will revoke your bot rights.")
-                    .BuildNDestroy(DestroyTime.SLOW);
-            }
-            ResetVote();
-        }
-
-        private static async Task VoteNow(CustomContext context, PackGame[] games)
-        {
-            // End Game
-            JackStreamBoxUtility.CloseGame();
-
-
-            TimeSpan voteTimer = TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER, 30));
-            TimeSpan pickTimer = TimeSpan.FromSeconds(BotData.ReadData(BotVals.PICK_TIMER, 30));
-
-            DiscordEmoji[] emojis = GetEmojis(context);
-
-
-            // Create embed
-            var pollEmbed = new DiscordEmbedBuilder
-            {
-                Title = "Game Vote",
-                Description = "Setting up the Poll"
-            };
-            var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
-
-            // Add Reactions
-            foreach (var emoji in emojis)
-                await pollMessage.CreateReactionAsync(emoji);
-
-
-            // Logger Setup Phase
-            async Task Logger(VoteStatus status)
-            {
-                GameStartSteps[(int)status].Completed = true;
-
-                var description = new StringBuilder($"Winner is {Winner}\n");
-
-                foreach (var step in GameStartSteps)
-                {
-                    description.AppendLine($"{StatusEmoji(step.Completed)} - {step.Text}");
-                }
-
-                pollEmbed.Description = description.ToString();
-                await pollMessage.ModifyAsync(null, pollEmbed.Build());
-            }
-
-
-
-
-            // Show the user the poll countdown
-            for (int timeLeft = (int)pickTimer.TotalSeconds; timeLeft >= 0; timeLeft--)
-            {
-                pollEmbed.Description = $"*What game will be played next?*\nTime Left: {timeLeft}s\n\n{GameText(games, context)}";
-                await pollMessage.ModifyAsync(null, pollEmbed.Build());
-                await Task.Delay(1000);
-            }
-
-            // Inform the user that the winner is being computed
-            pollEmbed.Description = $"Computing winner... give me a second\nGames Hosted already :{BotData.ReadData(BotVals.GAMES_HOSTED, 0)}";
-            await pollMessage.ModifyAsync(null, pollEmbed.Build());
-
-            // Get Reactions
-            int[] maxIndices = await ComputeWinner(emojis, pollMessage);
-
-
-            OpenVoteWinner(maxIndices, pollEmbed, pollMessage, Logger);
-
-        }
-
-        private static async Task<int[]> ComputeWinner(DiscordEmoji[] emojis, DiscordMessage pollMessage)
-        {
-            var reactionTasks = emojis.Select(emoji => pollMessage.GetReactionsAsync(emoji)).ToArray();
-            await Task.WhenAll(reactionTasks);
-
-            int[] reactionCount = reactionTasks.Select(reactions => reactions.Result.Count).ToArray();
-
-            int max = reactionCount.Max();
-            Random random = new Random();
-            int[] maxIndices = Enumerable.Range(0, reactionCount.Length)
-                .Where(i => reactionCount[i] == max)
-                .ToArray();
-
-            return maxIndices;
-        }
-
-        private static async void OpenVoteWinner(int[] maxIndices, DiscordEmbedBuilder pollEmbed, DiscordMessage pollMessage, Func<VoteStatus, Task> logger)
-        {
-            //Set Message Data
-            pollEmbed.ImageUrl = CustomBanner.GetRandomBanner();
-            pollEmbed.Title = "**Preparing your next game**";
-
-            Random random = new Random();
-            int randomIndex = maxIndices.Length == 1 ? maxIndices[0] : maxIndices[random.Next(0, maxIndices.Length)];
-            PackGame GameWinner = games[randomIndex];
-
-            await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
-            Winner = GameWinner.Name;
-
-            await logger(VoteStatus.OnStartingGamePack);
-            await JackStreamBoxUtility.OpenGame(GameWinner.Id, logger);
-            BotData.WriteData(BotVals.GAMES_HOSTED, BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1);
-
-            ResetVote();
-        }
-
-        private static string StatusEmoji(bool status)
-        {
-            return status ? ":thumbsup:" : ":x:";
-        }
-
-
-        private static DiscordEmoji[] GetEmojis(CustomContext context)
-        {
-
-            DiscordEmoji[] emojis =
-            {
-                DiscordEmoji.FromName(context.Client, ":one:"),
-                DiscordEmoji.FromName(context.Client, ":two:"),
-                DiscordEmoji.FromName(context.Client, ":three:"),
-                DiscordEmoji.FromName(context.Client, ":four:"),
-                DiscordEmoji.FromName(context.Client, ":five:")
-            };
-
-            return emojis;
-        }
-
-        private static string GameText(PackGame[] games, CustomContext context)
-        {
-            DiscordEmoji[] emojis = GetEmojis(context);
-            StringBuilder sb = new StringBuilder();
-
-            for (int i = 0; i < emojis.Length; i++)
-            {
-                sb.AppendLine($"{emojis[i]} {games[i].Name}\n");
-            }
-
-            return sb.ToString();
+            VoteLogic.Vote(context.ToCustomContext(), voteCategory);
         }
 
 
 
         // Commands for using only numbers to vote
 
-        [Command("1")] public async Task Vote1(CommandContext context) => await CallVote(context, "1");
-        [Command("2")] public async Task Vote2(CommandContext context) => await CallVote(context, "2");
-        [Command("3")] public async Task Vote3(CommandContext context) => await CallVote(context, "3");
-        [Command("4")] public async Task Vote4(CommandContext context) => await CallVote(context, "4");
-        [Command("5")] public async Task Vote5(CommandContext context) => await CallVote(context, "5");
-        [Command("6")] public async Task Vote6(CommandContext context) => await CallVote(context, "6");
-        [Command("7")] public async Task Vote7(CommandContext context) => await CallVote(context, "7");
-        [Command("8")] public async Task Vote8(CommandContext context) => await CallVote(context, "8");
-        [Command("9")] public async Task Vote9(CommandContext context) => await CallVote(context, "9");
-        [Command("10")] public async Task Vote10(CommandContext context) => await CallVote(context, "10");
+        [Command("1")] public async Task Vote1(CommandContext context) => await VoteX(context, "1");
+        [Command("2")] public async Task Vote2(CommandContext context) => await VoteX(context, "2");
+        [Command("3")] public async Task Vote3(CommandContext context) => await VoteX(context, "3");
+        [Command("4")] public async Task Vote4(CommandContext context) => await VoteX(context, "4");
+        [Command("5")] public async Task Vote5(CommandContext context) => await VoteX(context, "5");
+        [Command("6")] public async Task Vote6(CommandContext context) => await VoteX(context, "6");
+        [Command("7")] public async Task Vote7(CommandContext context) => await VoteX(context, "7");
+        [Command("8")] public async Task Vote8(CommandContext context) => await VoteX(context, "8");
+        [Command("9")] public async Task Vote9(CommandContext context) => await VoteX(context, "9");
+        [Command("10")] public async Task Vote10(CommandContext context) => await VoteX(context, "10");
 
 
 
 
-        //Basic explaination what vote calls a user can use
+        //Give help when players to stupid to vote
         [Command("vote")]
         public async Task vote(CommandContext context)
         {
-            await context.Channel.SendMessageAsync(PackInfo.VoteCategories());
-
+            PackInfo.VoteCategories(context.ToCustomContext());
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using JackStreamBox.Bot.Logic.Attributes;
+using JackStreamBox.Bot.Logic.Commands._Helper;
 using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Data;
@@ -10,16 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
-namespace JackStreamBox.Bot.Logic.Commands.UserCommands
+namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Help
 {
-    internal class HelpCommand : BaseCommandModule
+    internal class HelpLogic
     {
-        [Command("help")]
-        [CoammandDescription("Explains what the bot does and how to get further help.",":question:")]
-        [Requires(PermissionRole.ANYONE)]
-        public async Task DisplayHelp(CommandContext context)
+        internal static async void DisplayHelp(CustomContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             var helpEmbed = new DiscordEmbedBuilder
@@ -46,7 +42,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
                 "The bot will create a message with 5 reactions \n:one: :two: :three: :four: :five:",
                 "In the message the bot will explain which number is which game.",
                 "Pick a game or multiple games you want to play, after the time is up the winner will be started.",
-                "\n**3. Game Phase**", 
+                "\n**3. Game Phase**",
                 "The bot will show a message with the current progress of opening the game.",
                 "Then you can play the game, after the game use !vote to start another game.",
                 "\n**!commands** lets you view all commands",
@@ -64,65 +60,36 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
             var message = await context.Channel.SendMessageAsync(embed: helpEmbed).ConfigureAwait(false);
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
             Destroyer.Message(message, DestroyTime.ULTRASLOW);
-            
         }
 
-        [Command("commands")]
-        [CoammandDescription("List all commands you can use.",":ballot_box:")]
-        [Requires(PermissionRole.ANYONE)]
-        public async Task DisplayCommands(CommandContext context)
+        internal static async void DisplayCommands(CustomContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await DisplayPackWithDescription(context, true);
             Destroyer.Message(context.Message, DestroyTime.NORMAL);
         }
 
-        public async Task DisplayPackWithDescription(CommandContext context, bool appendDescription)
+        private static async Task DisplayPackWithDescription(CustomContext context, bool appendDescription)
         {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             CommandInfo[] ci = BotCommand.GetUserCommands();
             CommandEmbed.Show(context, "Help Page™", ci, appendDescription);
         }
 
-        [Command("rules")]
-        [CoammandDescription("View the rules.",":scroll:")]
-        [Requires(PermissionRole.ANYONE)]
-        public async Task Rules(CommandContext context)
+        public static async Task SetRules(CustomContext context,string text)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
-            var ruleEmbed = new DiscordEmbedBuilder
-            {
-                Title = "Help Page",
-                Description = ""
-            };
-            string[] rules = new string[]
-            {
-                "No Racism or Discrimination of Any Kind",
-                "Follow the discord TOS",
-                "Respect for All Participants",
-                "No Mid-game quitting",
-                "No doxxing",
-                "No spamming in game or chat",
-                "Staff members may introduce other rules which will apply next to the listed rules above",
-            };
-
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendLine("**JackStreamBox Rules**");
-            int i = 1;
-            foreach (var rule in rules)
-            {
-                sb.AppendLine($"[{i}] - {rule}");
-                i++;
-            }
-
-            sb.AppendLine("\nIf you **break rules** you risk getting the @NoBot Role, which will prohibt you interacting with the bot ever again.");
-            ruleEmbed.Description = sb.ToString();
-            var ruleMessage = await context.Channel.SendMessageAsync(embed: ruleEmbed).ConfigureAwait(false);
-            Destroyer.Message(context.Message, DestroyTime.INSTANT);
-            Destroyer.Message(ruleMessage, DestroyTime.REALLYSLOW);
-            
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            BotData.WriteCustomData<string>(BotData.RULE_FILE, text);
         }
 
+        internal static async void ShowRules(CustomContext context)
+        {
+            string rules = BotData.ReadCustomData<string>(BotData.RULE_FILE);
+            await  PlainEmbed.CreateEmbed(context)
+                .Title("Rules")
+                .Description(rules)
+                .BuildNDestroy(DestroyTime.SLOW);
+            Destroyer.Message(context.Message, DestroyTime.INSTANT);
+        }
     }
 }

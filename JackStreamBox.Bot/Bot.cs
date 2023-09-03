@@ -9,7 +9,6 @@ using JackStreamBox.Bot.Logic.Commands._Helper;
 using JackStreamBox.Bot.Logic.Commands.DevCommands;
 using JackStreamBox.Bot.Logic.Commands.ScheduledCommands;
 using JackStreamBox.Bot.Logic.Commands.StaffCommand;
-using JackStreamBox.Bot.Logic.Commands.UserCommands;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Logger;
 using JackStreamBox.Util.Data;
@@ -20,6 +19,10 @@ using DSharpPlus.SlashCommands;
 
 using System.Text;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Voting;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.Help;
+using JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.Pack;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.Report;
 
 namespace JackStreamBox.Bot
 {
@@ -93,10 +96,10 @@ namespace JackStreamBox.Bot
             Commands = Client.UseCommandsNext(commandsConfig);
             var Slash = Client.UseSlashCommands();
 
-            //Slash Commands
-            Slash.RegisterCommands<VoteSlash>();
+
 
             //text commands
+            Console.WriteLine("Dsharp - Register Commands");
             Commands.RegisterCommands<StartGameCommand>();
             Commands.RegisterCommands<PackCommand>();
             Commands.RegisterCommands<VoteCommand>();
@@ -112,8 +115,13 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<ShowModCommand>();
             Commands.RegisterCommands<DailyQuestionCommand>();
 
-            Console.WriteLine("Dsharp - Register Commands");
-            
+            //Slash Commands
+            Slash.RegisterCommands<HelpSlash>();
+            Slash.RegisterCommands<PackSlash>();
+            Slash.RegisterCommands<ReportSlash>();
+            Slash.RegisterCommands<VoteSlash>();
+
+
             //Register for Help Page
             BotCommand.Register<StartGameCommand>();
             BotCommand.Register<PackCommand>();
@@ -159,7 +167,7 @@ namespace JackStreamBox.Bot
             await Client.ConnectAsync();
 
             //Send Welcome Message
-            AsciiArt.WelcomeMessage(Client);
+            //AsciiArt.WelcomeMessage(Client);
             Console.WriteLine("Sent - Log sent Message");
 
 

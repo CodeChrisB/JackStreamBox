@@ -10,11 +10,10 @@ namespace JackStreamBox.Bot
         {
 
             // Set up the global exception handler
-            AppDomain.CurrentDomain.UnhandledException += OnCrash;
+            //AppDomain.CurrentDomain.UnhandledException += OnCrash;
 
 
-            while (true) // Infinite loop for restarting the bot
-            {
+ 
                 try
                 {
                     var bot = new Bot();
@@ -25,7 +24,7 @@ namespace JackStreamBox.Bot
                     Console.WriteLine($"Crash - Bot crashed lol");
                     //DocGenerator.WriteLog(ex.Message);
                 }
-            }
+
         }
 
         static void OnCrash(object sender, UnhandledExceptionEventArgs e)

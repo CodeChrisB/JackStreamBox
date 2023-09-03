@@ -34,6 +34,5 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper
             Member = context.Member;
             Client = context.Client;
         }
-
     }
 }

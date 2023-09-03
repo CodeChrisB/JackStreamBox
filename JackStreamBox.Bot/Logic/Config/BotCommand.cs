@@ -8,6 +8,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using DSharpPlus;
+using DSharpPlus.SlashCommands;
+using DSharpPlus.CommandsNext;
 
 namespace JackStreamBox.Bot.Logic.Config
 {
@@ -24,8 +27,6 @@ namespace JackStreamBox.Bot.Logic.Config
         public static void Register<T>()
         {
             var type = typeof(T);
-
-
             var methods = type.GetMethods();
 
 

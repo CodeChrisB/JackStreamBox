@@ -4,6 +4,7 @@ using DSharpPlus.Entities;
 using JackStreamBox.Bot.Logic.Attributes;
 using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 using JackStreamBox.Bot.Logic.Config;
+using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
 using JackStreamBox.Bot.Logic.Data;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
         [Requires(PermissionRole.DEVELOPER)]
         public async Task Developer(CommandContext context)
         {
-            CommandEmbed.Show(context, "Dev Commands", BotCommand.GetDeveloperCommands(), true);
+            CommandEmbed.Show(context.ToCustomContext(), "Dev Commands", BotCommand.GetDeveloperCommands(), true);
         }
 
         [Command("staff")]
@@ -29,7 +30,7 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
         [Requires(PermissionRole.STAFF)]
         public async Task Staff(CommandContext context)
         {
-            CommandEmbed.Show(context, "Staff Commands", BotCommand.GetStaffCommands(), true);
+            CommandEmbed.Show(context.ToCustomContext(), "Staff Commands", BotCommand.GetStaffCommands(), true);
         }
     }
 }

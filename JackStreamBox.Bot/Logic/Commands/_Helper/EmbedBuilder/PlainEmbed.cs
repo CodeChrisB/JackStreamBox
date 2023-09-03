@@ -26,6 +26,8 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder
             return new FluentBuilder();
         }
 
+
+
         public static  async Task<DiscordMessage> Build(CommandContext context, DiscordEmbedBuilder embed)
         {
             return await context.Channel.SendMessageAsync(embed: embed.Build());

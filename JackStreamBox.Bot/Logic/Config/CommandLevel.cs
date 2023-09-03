@@ -5,6 +5,9 @@ using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JackStreamBox.Bot.Logic.Attributes;
 using JackStreamBox.Bot.Logic.Commands;
+using JackStreamBox.Bot.Logic.Commands._Helper;
+using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
+using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
 using JackStreamBox.Bot.Logic.Data;
 using JackStreamBox.Util.Data;
 using System;
@@ -29,23 +32,60 @@ namespace JackStreamBox.Bot.Logic.Config
         {
 
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
-            int grantedLevel = RoleToLevel(context.Member.Roles);
-            string text= "";
-            switch (grantedLevel)
-            {
-                case 0: text = "You can not use this bot. All acesss besides this command is removed from your permissions.:skull:"; break;
-                case 1: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: Besides of voting you don't have alot of permissions"; break;
-                case 2: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: Besides of voting you don't have alot of permissions"; break;
-                case 3: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: You can use !startvote to try to start a game vote"; break;
-                case 4: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: Start games; make pee breaks; let the bot rejoin and more"; break;
-                case 5: text = $"**Level {grantedLevel} ({RoleName((PermissionRole)grantedLevel)})**: You can do anything :crown:"; break;
-                default: text = "Level N/A: could not find your level"; break;
-            }
-            string memberName = context.Member.DisplayName;
-            var message = await context.Channel.SendMessageAsync($"\n{memberName} \n{text}");
-            
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
-            Destroyer.Message(message, DestroyTime.SLOW);
+            int grantedLevel = RoleToLevel(context.Member.Roles);
+   
+            FluentBuilder builder = PlainEmbed.CreateEmbed(context).Title($"Level of {context.Member.DisplayName}");
+
+            if(grantedLevel == (int)PermissionRole.NOBOT)
+            {
+                builder
+                    .DescriptionAddLine("You can not use this bot. All acesss besides this command is removed from your permissions.:skull:")
+                    .Color(DiscordColor.DarkRed);
+            }
+            else
+            {
+                if (grantedLevel >= (int)PermissionRole.ANYONE)
+                {
+                    builder
+                        .DescriptionAddLine("- Voting rights")
+                        .Color(DiscordColor.Yellow);
+
+                }
+                if (grantedLevel >= (int)PermissionRole.TRUSTED)
+                {
+                    builder
+                        .DescriptionAddLine("- Report rights")
+                        .Color(DiscordColor.Green);
+                }
+                if (grantedLevel >= (int)PermissionRole.HIGHLYTRUSTED)
+                {
+                    builder
+                         .DescriptionAddLine("- Report rights")
+                         .DescriptionAddLine("- Pause games for toilet breaks")
+                         .DescriptionAddLine("- Restart the bot")
+                         .Color(DiscordColor.Blue);
+                }
+                if(grantedLevel >= (int)PermissionRole.STAFF)
+                {
+                    builder
+                        .DescriptionAddLine("- Moderation via Bot")
+                        .DescriptionAddLine("- Embed creator")
+                        .DescriptionAddLine("- Poll creator")
+                        .Color(DiscordColor.Gold);
+                        
+                }
+                if(grantedLevel >= (int)PermissionRole.DEVELOPER)
+                {
+                    builder
+                        .DescriptionAddLine("- Get logs")
+                        .DescriptionAddLine("- Update the bot")
+                        .Color(DiscordColor.Purple);
+                }  
+            }
+
+            await builder.BuildNDestroy(DestroyTime.SLOW);
+        
         }
 
 
@@ -75,16 +115,19 @@ namespace JackStreamBox.Bot.Logic.Config
         
         public static bool CanExecuteCommand(InteractionContext context, PermissionRole permissionLevel, bool ignoreChannel = false)
         {
-            if (CommandLevel.IsBotPaused) return false;
-            int grantedLevel = RoleToLevel(context.Member.Roles);
-            return InternalCanExecute(grantedLevel,permissionLevel,context.Channel.Id,ignoreChannel);
+            return CanExecuteCommand(context.ToCustomContext(), permissionLevel, ignoreChannel);
         }
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel,bool ignoreChannel = false)
+        {
+            return CanExecuteCommand(context.ToCustomContext(), permissionLevel, ignoreChannel);
+        }
+        public static bool CanExecuteCommand(CustomContext context, PermissionRole permissionLevel, bool ignoreChannel = false)
         {
             if (CommandLevel.IsBotPaused) return false;
             int grantedLevel = RoleToLevel(context.Member.Roles);
             return InternalCanExecute(grantedLevel, permissionLevel, context.Channel.Id, ignoreChannel);
         }
+
 
         private static bool InternalCanExecute(int grantedLevel, PermissionRole permissionLevel, ulong  channelId,bool ignoreChannel)
         {

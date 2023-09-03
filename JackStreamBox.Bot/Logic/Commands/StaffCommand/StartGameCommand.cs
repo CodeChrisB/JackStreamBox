@@ -102,7 +102,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 
         private DiscordMessageBuilder OpenPack(string id)
         {
-            Pack chosenPack = PackInfo.GetPackInfo(int.Parse(id));
+            JackboxPack chosenPack = PackInfo.GetPackInfo(int.Parse(id));
 
             var content = new DiscordComponent[5];
 
@@ -124,7 +124,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
 
             for (int i = 0; i < content.Length; i++)
             {
-                content[i] = new DiscordButtonComponent(ButtonStyle.Primary, $"pack-{pack[i].ToString()}", $"Pack {pack[i].ToString()}");
+                content[i] = new DiscordButtonComponent(ButtonStyle.Primary, $"pack-{pack[i].ToString()}", $"JackboxPack {pack[i].ToString()}");
             }
 
             var builder = new DiscordMessageBuilder()

@@ -1,5 +1,5 @@
 ![image](https://user-images.githubusercontent.com/55576076/235742815-f471e12a-7e11-45ee-aad4-25b1b0aa38ab.png)
-### A 24/7 Jackbox Party Pack Bot.  
+### A 24/7 Jackbox Party JackboxPack Bot.  
 ## How does it work  
 The bot automatically opens the games so that players can join.
 After a game players can vote for the next game, after the voting the next game gets opend.
@@ -11,14 +11,12 @@ After a game players can vote for the next game, after the voting the next game 
 | **!level**| Checks what permission level you have.|
 | **!pack**| View a pack and it's games. **E.g !pack 5**|
 | **!packs**| Displays an image containing all games in all packs|
-| **!rules**| View the rules.|
-| **!vote**| Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. |
 | **!vote**| Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. |
 ## Level 2  Trused Users 
 | Command      | Description        |
 |--------------|--------------------|
 | **!joke**| Get a bad jackbox related pun. (Using ChatGPT)|
-| **!report**| !report **"**Your Issue**"|
+| **!report**| !report **Your Issue**|
 | **!version**| Check bot version|
 ## Level 3  Top Hosts 
 | Command      | Description        |

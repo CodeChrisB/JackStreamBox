@@ -10,7 +10,8 @@ using System.Xml.Serialization;
 public static class BotData
 {
     private const string FileName = "config.txt";
-    private const string gitIgnorePart = "customConfigData";
+    private const string gitIgnorePart = "jsbIgnore";
+    public static string RULE_FILE = "rules.txt";
     private static Dictionary<string, object> dataDictionary;
 
     public static void LoadBotSetings()
