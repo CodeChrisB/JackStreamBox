@@ -112,6 +112,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<ReportCommand>();
             Commands.RegisterCommands<SetValue>();
             Commands.RegisterCommands<BannerCommands>();
+            Commands.RegisterCommands<RuleCommands>();
             Commands.RegisterCommands<ShowModCommand>();
             Commands.RegisterCommands<DailyQuestionCommand>();
 
