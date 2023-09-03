@@ -18,7 +18,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             [Choice("Pack 8", 8)]
             [Choice("Pack 9", 9)]
             [Choice("Pack 10", 10)]
-            [Option("pack", "Number of days of message history to delete")] long pack  = -1)
+            [Option("pack", "The pack you want to vote for.")] long pack  = -1)
         {
             // Call your VoteLogic.VoteViaSlash function with the selected pack
             await VoteLogic.VoteViaSlash(ctx, pack.ToString());

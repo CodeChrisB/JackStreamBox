@@ -1,6 +1,5 @@
 git stash
-git stash
-git pull 
+git pull --force
 cd ..\..\..\
 dotnet build
 
