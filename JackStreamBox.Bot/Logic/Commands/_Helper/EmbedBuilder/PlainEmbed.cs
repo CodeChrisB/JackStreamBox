@@ -90,6 +90,7 @@ public class FluentBuilder
     }
 
 
+
     //End Commands
     public DiscordEmbedBuilder GetBuilder() => builder;
 

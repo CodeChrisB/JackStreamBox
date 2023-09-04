@@ -41,6 +41,13 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             VoteLogic.Vote(context.ToCustomContext(), voteCategory);
         }
 
+        //Give help when players to stupid to vote
+        [Command("vote")]
+        public async Task vote(CommandContext context)
+        {
+            PackInfo.VoteCategories(context.ToCustomContext());
+        }
+
 
 
         // Commands for using only numbers to vote
@@ -59,11 +66,6 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
 
 
-        //Give help when players to stupid to vote
-        [Command("vote")]
-        public async Task vote(CommandContext context)
-        {
-            PackInfo.VoteCategories(context.ToCustomContext());
-        }
+
     }
 }

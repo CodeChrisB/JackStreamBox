@@ -26,5 +26,14 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Help
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             HelpLogic.DisplayCommands(context.ToCustomContext());
         }
+
+        [Command("rules")]
+        [CoammandDescription("Show all rules", ":ballot_box:")]
+        [Requires(PermissionRole.ANYONE)]
+        public async Task Rules(CommandContext context)
+        {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            HelpLogic.ShowRules(context.ToCustomContext());
+        }
     }
 }

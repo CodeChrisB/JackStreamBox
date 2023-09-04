@@ -1,6 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,15 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper
             User = context.User;
             Member = context.Member;
             Client = context.Client;
+        }
+
+        public CustomContext(ComponentInteractionCreateEventArgs context)
+        {
+            Channel = context.Interaction.Channel;
+            Message = null;
+            User = context.Interaction.User;
+            Member = context.Guild.CurrentMember;
+            Client = Bot.Client;   
         }
     }
 }

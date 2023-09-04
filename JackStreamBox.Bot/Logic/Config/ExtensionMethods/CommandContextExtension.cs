@@ -1,4 +1,5 @@
 ﻿using DSharpPlus.CommandsNext;
+using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 using JackStreamBox.Bot.Logic.Commands._Helper;
 using System;
@@ -18,6 +19,11 @@ namespace JackStreamBox.Bot.Logic.Config.ExtensionMethods
 
 
         public static CustomContext ToCustomContext(this InteractionContext context)
+        {
+            return new CustomContext(context);
+        }
+
+        public static CustomContext ToCustomContext(this ComponentInteractionCreateEventArgs context)
         {
             return new CustomContext(context);
         }

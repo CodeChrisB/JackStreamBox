@@ -41,9 +41,16 @@ namespace JackStreamBox.Util.Data
         private static string[] GetEntry(string file)
         {
             string[] banners = BotData.ReadCustomData<string[]>(file);
-            if(banners == null || banners.Length == 0) return new string[] { "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png" };
+            if (banners == null || banners.Length == 0) return DefaultArray(file);
              
             return banners;
+        }
+
+        private static string[] DefaultArray(string file)
+        {
+            if(file == BANNER) return new string[] { "https://media.discordapp.net/attachments/1066085138791932005/1135296119610552350/7u88ip.png" };
+            if (file == RULE) return new string[] { "Do not spam any commands!" };
+            return new string[] { "There was an error pls report it" };
         }
 
         private static void WriteEntry(string file ,string[] banners)

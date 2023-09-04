@@ -26,7 +26,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
         }
 
         [Command("banner-")]
-        [CoammandDescription("Adds a banner shown while at multiple pages", ":point_right:")]
+        [CoammandDescription("Removes a banner shown while at multiple pages", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
 
         public async Task Remove(CommandContext context, int index)
@@ -36,7 +36,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
         }
 
         [Command("banners")]
-        [CoammandDescription("Adds a banner shown while at multiple pages", ":point_right:")]
+        [CoammandDescription("Shows all banners", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task GetAll(CommandContext context)
         {

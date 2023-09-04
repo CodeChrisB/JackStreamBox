@@ -26,6 +26,12 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         private static Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
         private static PackGame[]? games = null;
         private static int timeTillVoteEnd = 0;
+        private static bool currentlyVoting = false;
+
+        private static DateTime lockOutTill = new DateTime();
+        public static bool IsLocked() { return DateTime.Now<lockOutTill; }
+
+
 
         //Discord Props
         private static DiscordMessage PackVoteMessage;
@@ -37,7 +43,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         {
             VotesOfPlayers = new Dictionary<string, string>();
             games = null;
+            currentlyVoting = false;
             PackVoteMessage = null;
+            PrePollMessageData = null;
             ResetGameStartSteps();
         }
         #endregion
@@ -68,24 +76,30 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
 
         //Methods for Player Voting
-        public static async void Vote(CustomContext ccontext, string voteCategory)
+        public static async void Vote(CustomContext ccontext, string voteCategory,ulong id = 0)
         {
-            if (ccontext.Message != null)
+            if (DateTime.Now < lockOutTill)
             {
-                await ccontext.Message.DeleteAsync();
+                ResetVote();
+                SendLockOutMessage(ccontext);
+                return;
             }
 
-            if (IsValidCategory(voteCategory))
-            {
-                VotesOfPlayers[ccontext.Member.Id.ToString()] = voteCategory;
-            }
-            else if(ccontext.Message != null)
+
+            //Not Valid? Send Message and Stop
+            if (!IsValidCategory(voteCategory))
             {
                 await ccontext.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
+                return;
             }
 
 
-            if (VotesOfPlayers.Values.ToList().Count == 1 && PackVoteMessage == null)
+            //Valid Set Vote
+
+            VotesOfPlayers[id>0 ? id.ToString() : ccontext.Member.Id.ToString()] = voteCategory;
+
+            
+            if (VotesOfPlayers.Count == 1 && PackVoteMessage == null)
             {
                 ResetGameStartSteps();
                 Task.Run(() => OnPackVoteEnd(ccontext));
@@ -111,7 +125,26 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 .CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                 .WithContent("Done!"));
         }
+        public static async void VoteViaMenu(CustomContext customContext, string id)
+        {
+            string packId = "";
+            switch (id)
+            {
+                case ButtonId.PACK1: packId = "1"; break;
+                case ButtonId.PACK2: packId = "2"; break;
+                case ButtonId.PACK3: packId = "3"; break;
+                case ButtonId.PACK4: packId = "4"; break;
+                case ButtonId.PACK5: packId = "5"; break;
+                case ButtonId.PACK6: packId = "6"; break;
+                case ButtonId.PACK7: packId = "7"; break;
+                case ButtonId.PACK8: packId = "8"; break;
+                case ButtonId.PACK9: packId = "9"; break;
+                case ButtonId.PACK10: packId = "9"; break;
+            }
 
+
+            Vote(customContext, packId,customContext.User.Id);
+        }
         //Helpers for the Voting
         private static void ModifyPackVoteMessage()
         {
@@ -162,11 +195,12 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             {
                 string vote = votes[new Random().Next(votes.Count)];
                 games = PackInfo.GetVotePack(vote);
+                SetTimeout();
                 await VoteNow(context, games);
             }
             else
             {
-
+                ResetTimeout();
                 await PlainEmbed
                     .CreateEmbed(context)
                     .Title("Not Enough Votes !")
@@ -276,7 +310,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             await logger(VoteStatus.OnStartingGamePack);
             await JackStreamBoxUtility.OpenGame(GameWinner.Id, logger);
-            BotData.WriteData(BotVals.GAMES_HOSTED, BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1);
+            BotData.WriteData(BotVals.GAMES_HOSTED, (BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1).ToString());
 
             ResetVote();
         }
@@ -325,5 +359,27 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             return sb.ToString();
         }
 
+
+        public static void SetTimeout()
+        {
+            // Get the current datetime
+            DateTime currentDateTime = DateTime.Now;
+
+            // Add the TimeSpan to the current datetime
+            DateTime resultDateTime = currentDateTime.Add(TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMEOUT, 300)));
+
+            lockOutTill = resultDateTime;
+        }
+
+        public static void ResetTimeout()
+        {
+            lockOutTill = DateTime.Now;    
+        }
+
+        public static async void SendLockOutMessage(CustomContext context)
+        {
+            TimeSpan timeUntilTarget = lockOutTill - DateTime.Now;
+            await context.Channel.SendMessageAsync($"We just voted! Next vote can be started in {(int)timeUntilTarget.TotalMinutes} Minutes and {(int)(timeUntilTarget.TotalSeconds % 60)} seconds.");
+        }
     }
 }

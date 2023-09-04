@@ -11,6 +11,7 @@ After a game players can vote for the next game, after the voting the next game 
 | **!level**| Checks what permission level you have.|
 | **!pack**| View a pack and it's games. **E.g !pack 5**|
 | **!packs**| Displays an image containing all games in all packs|
+| **!rules**| Show all rules|
 | **!vote**| Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. |
 ## Level 2  Trused Users 
 | Command      | Description        |
@@ -28,15 +29,19 @@ After a game players can vote for the next game, after the voting the next game 
 ## Level 4  Staff Members 
 | Command      | Description        |
 |--------------|--------------------|
-| **!banner-**| Adds a banner shown while at multiple pages|
+| **!banner-**| Removes a banner shown while at multiple pages|
 | **!banner+**| Adds a banner shown while at multiple pages|
-| **!banners**| Adds a banner shown while at multiple pages|
+| **!banners**| Shows all banners|
 | **!daily**| Show staff commands|
 | **!embed**| Use the bot to speak. Title in "Qutation Marks" Message without them, can even use line breaks for the message.|
 | **!embed+**| !embed+ "[Image Url]" "[Title]"  [Message]|
 | **!input**| Let's you navigate the game yourself. Used to change settings.|
+| **!menu**| Opens a menu that let's you vote and do other stuff|
 | **!poll**| !poll [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]    (At least 1 Answer Max 6 Answers)|
 | **!poll+**| !poll [ImageUrl] [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]  (At least 1 Answer Max 6 Answers)|
+| **!rule**| Show all rules with their indexes needed to remove them|
+| **!rule-**| Removes a rule with the indicated index|
+| **!rule+**| Adds a rule|
 | **!say**| Use the bot to speak. You can even use line breaks and mentions people!!|
 | **!set**| Set values of the bot|
 | **!setview**| Set values of the bot|

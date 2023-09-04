@@ -14,12 +14,19 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
 {
     internal class ListLogic
     {
+        private static string T(string file)
+        {
+            if (file == ListSerializer.BANNER) return "Banner";
+            if (file == ListSerializer.RULE) return "Rule";
+            return "";
+        }
+
         public static async Task Add(CommandContext context,string file, string url)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
 
             ListSerializer.AddEntry(file, url);
-            await context.Channel.SendMessageAsync("Added banner");
+            await context.Channel.SendMessageAsync($"Added {T(file)}");
         }
 
         public static async Task Remove(CommandContext context,string file, int index)
@@ -27,7 +34,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
 
             bool removed = ListSerializer.RemoveEntry(file, index);
-            string text = removed ? "Removed banner" : $"There was no index {index}";
+            string text = removed ? $"Removed {T(file)}" : $"There was no index {index}";
             await context.Channel.SendMessageAsync(text);
         }
 

@@ -23,6 +23,8 @@ using JackStreamBox.Bot.Logic.Commands.UserCommands.Help;
 using JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Pack;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Report;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.Menu;
+using JackStreamBox.Bot.Logic.Commands.UserCommands;
 
 namespace JackStreamBox.Bot
 {
@@ -82,6 +84,9 @@ namespace JackStreamBox.Bot
                 Timeout = TimeSpan.FromMinutes(1)
             });
 
+            Client.ComponentInteractionCreated += async (s, e) => await ButtonHandler.OnInteraction(s, e);
+
+
             var commandsConfig = new CommandsNextConfiguration()
             {
                 StringPrefixes = new string[] { configJson.Prefix },
@@ -115,6 +120,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<RuleCommands>();
             Commands.RegisterCommands<ShowModCommand>();
             Commands.RegisterCommands<DailyQuestionCommand>();
+            Commands.RegisterCommands<MenuCommand>();
 
             //Slash Commands
             Slash.RegisterCommands<HelpSlash>();
@@ -133,9 +139,11 @@ namespace JackStreamBox.Bot
             BotCommand.Register<CommandLevel>();
             BotCommand.Register<SayCommand>();
             BotCommand.Register<UpdaterCommand>();
+            BotCommand.Register<MenuCommand>();
             BotCommand.Register<ReportCommand>();
             BotCommand.Register<SetValue>();
             BotCommand.Register<BannerCommands>();
+            BotCommand.Register<RuleCommands>();
 
             Console.WriteLine("Reflection - Register Commands");
 
