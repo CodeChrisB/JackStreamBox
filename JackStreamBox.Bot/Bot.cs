@@ -127,6 +127,7 @@ namespace JackStreamBox.Bot
             Slash.RegisterCommands<PackSlash>();
             Slash.RegisterCommands<ReportSlash>();
             Slash.RegisterCommands<VoteSlash>();
+            Slash.RegisterCommands<MenuSlash>();
 
 
             //Register for Help Page

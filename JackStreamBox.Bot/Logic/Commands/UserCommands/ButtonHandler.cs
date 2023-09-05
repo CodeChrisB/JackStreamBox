@@ -5,6 +5,7 @@ using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
 using JackStreamBox.Bot.Logic.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,8 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
         {
             await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
             string id = e.Id;
-            
+
+            DateTime dt = e.Message.CreationTimestamp.DateTime;
             switch(id)
             {
                 case ButtonId.PACK1:
@@ -30,7 +32,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
                 case ButtonId.PACK8:
                 case ButtonId.PACK9:
                 case ButtonId.PACK10:
-                    VoteLogic.VoteViaMenu(e.ToCustomContext(),id);
+                    VoteLogic.VoteViaMenu(e.ToCustomContext(),id,dt);
                     break;
 
 

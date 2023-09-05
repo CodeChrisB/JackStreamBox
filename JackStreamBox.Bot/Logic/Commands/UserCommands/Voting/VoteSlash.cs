@@ -21,11 +21,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             [Option("pack", "The pack you want to vote for.")] long pack  = -1)
         {
             // Call your VoteLogic.VoteViaSlash function with the selected pack
+            await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent($"You voted for {pack.ToString()}"));
             await VoteLogic.VoteViaSlash(ctx, pack.ToString());
 
-            if(pack >0) {
-                await ctx.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent($"You voted for {pack.ToString()}"));
-            }
             // Respond to the interaction
 
         }

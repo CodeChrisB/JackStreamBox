@@ -99,7 +99,7 @@ public class FluentBuilder
         return await _context.Channel.SendMessageAsync(embed: builder.Build());
     }
 
-    public async Task BuildNDestroy(TimeSpan destroyTime)
+    public async void BuildNDestroy(TimeSpan destroyTime)
     {
         Destroyer.Message(await Build(),destroyTime);
     }

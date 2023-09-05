@@ -82,10 +82,10 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Help
             BotData.WriteCustomData<string>(BotData.RULE_FILE, text);
         }
 
-        internal static async void ShowRules(CustomContext context)
+        internal static void ShowRules(CustomContext context)
         {
             string rules = BotData.ReadCustomData<string>(BotData.RULE_FILE);
-            await  PlainEmbed.CreateEmbed(context)
+            PlainEmbed.CreateEmbed(context)
                 .Title("Rules")
                 .Description(rules)
                 .BuildNDestroy(DestroyTime.SLOW);

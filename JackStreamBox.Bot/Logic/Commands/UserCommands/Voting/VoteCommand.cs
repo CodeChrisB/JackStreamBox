@@ -35,7 +35,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         [Command("vote")]
         [CoammandDescription($"Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. ", ":ballot_box:")]
         [Requires(PermissionRole.ANYONE)]
-        public static async Task VoteX(CommandContext context, string voteCategory)
+        public async Task VoteX(CommandContext context, string voteCategory)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             VoteLogic.Vote(context.ToCustomContext(), voteCategory);

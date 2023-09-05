@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JackStreamBox.Bot.Logic.Commands._Helper
+namespace JackStreamBox.Bot.Logic.Commands._Helper.Ascii
 {
     public class AsciiArt
     {
@@ -37,7 +37,7 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper
 
         }
 
-        private static string StringPadding(string input,int length)
+        private static string StringPadding(string input, int length)
         {
             return input.PadRight(length);
         }

@@ -33,9 +33,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Pack
             [Option("pack", "Number of days of message history to delete")] long pack  = -1)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE, true)) return;
+            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent($"Used **/pack [{pack}]**"));
             PackLogic.DisplayPack(context.ToCustomContext(), (int)pack);
 
-            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder());
         }
 
         //DO NOT ADD REQUIRES ATTRIBUTE OTHERWISE IT WILL SHOWUP IN THE HELP COMMAND
@@ -43,7 +43,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Pack
         public async Task DisplayPack(InteractionContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE, true)) return;
+            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Used **/packs**"));
             PackLogic.SendPackScreenshot(context.ToCustomContext());
+
         }
     }
 }

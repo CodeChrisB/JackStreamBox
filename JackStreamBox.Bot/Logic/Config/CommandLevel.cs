@@ -84,7 +84,7 @@ namespace JackStreamBox.Bot.Logic.Config
                 }  
             }
 
-            await builder.BuildNDestroy(DestroyTime.SLOW);
+            builder.BuildNDestroy(DestroyTime.SLOW);
         
         }
 

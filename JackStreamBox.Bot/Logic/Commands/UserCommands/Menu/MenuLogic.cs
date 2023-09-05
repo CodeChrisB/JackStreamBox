@@ -9,6 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using JackStreamBox.Bot.Logic.Data;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Voting;
+using JackStreamBox.Bot.Logic.Config;
+using JackStreamBox.Util.Data;
+using static System.Net.Mime.MediaTypeNames;
+using System.Diagnostics.Metrics;
 
 namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Menu
 {
@@ -44,7 +48,17 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Menu
             });
 
 
-            await context.Channel.SendMessageAsync(builder);
+            PlainEmbed
+            .CreateEmbed(context)
+            .Title("Voting Menu")
+            .DescriptionAddLine(":ballot_box: Yo everyone!")
+            .DescriptionAddLine(":one: Vote for the pack you want to play next!")
+            .DescriptionAddLine(":two: After the vote we gonna pick the game")
+            .DescriptionAddLine(":three: Then we finally play the game")
+            .DescriptionAddLine(":four: !menu to open this menu")
+            .BuildNDestroy(DestroyTime.REALLYSLOW);
+            var message =  await context.Channel.SendMessageAsync(builder);
+            Destroyer.Message(message,DestroyTime.REALLYSLOW);
         }
 
 

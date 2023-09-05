@@ -75,6 +75,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         #endregion
 
 
+
         //Methods for Player Voting
         public static async void Vote(CustomContext ccontext, string voteCategory,ulong id = 0)
         {
@@ -125,8 +126,14 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 .CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder()
                 .WithContent("Done!"));
         }
-        public static async void VoteViaMenu(CustomContext customContext, string id)
+        public static async void VoteViaMenu(CustomContext customContext, string id,DateTime menuCreationTime)
         {
+            if (IsOlderThanNSeconds(menuCreationTime, 60))
+            {
+                await customContext.Channel.SendMessageAsync("Hey sorry this menu is to old I do not allow to use it anymore. Create a new one using **!menu**");
+                return;
+            }
+
             string packId = "";
             switch (id)
             {
@@ -139,7 +146,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 case ButtonId.PACK7: packId = "7"; break;
                 case ButtonId.PACK8: packId = "8"; break;
                 case ButtonId.PACK9: packId = "9"; break;
-                case ButtonId.PACK10: packId = "9"; break;
+                case ButtonId.PACK10: packId = "10"; break;
             }
 
 
@@ -201,7 +208,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             else
             {
                 ResetTimeout();
-                await PlainEmbed
+                PlainEmbed
                     .CreateEmbed(context)
                     .Title("Not Enough Votes !")
                     .DescriptionAddLine($"Yikes... we need some more votes to start a game\n")
@@ -380,6 +387,18 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         {
             TimeSpan timeUntilTarget = lockOutTill - DateTime.Now;
             await context.Channel.SendMessageAsync($"We just voted! Next vote can be started in {(int)timeUntilTarget.TotalMinutes} Minutes and {(int)(timeUntilTarget.TotalSeconds % 60)} seconds.");
+        }
+
+        private static bool IsOlderThanNSeconds(DateTime dateTimeToCheck, int seconds)
+        {
+            // Get the current DateTime
+            DateTime currentDateTime = DateTime.Now;
+
+            // Calculate the TimeSpan between the current DateTime and the dateTimeToCheck
+            TimeSpan timeDifference = currentDateTime - dateTimeToCheck;
+
+            // Check if the timeDifference is greater than or equal to "n" seconds
+            return timeDifference.TotalSeconds >= seconds;
         }
     }
 }

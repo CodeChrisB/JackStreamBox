@@ -196,10 +196,10 @@ namespace JackStreamBox.Bot.Logic.Data
             return AllPacks()[7].games;
         }
 
-        public static async void VoteCategories(CustomContext ccontext)
+        public static void VoteCategories(CustomContext ccontext)
         {
 
-            await PlainEmbed.CreateEmbed(ccontext)
+            PlainEmbed.CreateEmbed(ccontext)
                 .Title("How 2 Vote")
                 .DescriptionAddLine("- There are 3 way you can use to vote")
                 .DescriptionAddLine("2 using ! commands and 1 using slash commands :")

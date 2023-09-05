@@ -5,6 +5,8 @@ using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
 using JackStreamBox.Bot.Logic.Data;
 using DSharpPlus.SlashCommands;
+using DSharpPlus.Entities;
+using DSharpPlus;
 
 namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Help
 {
@@ -14,6 +16,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Help
         public async Task DisplayHelp(InteractionContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Used **/help**"));
             HelpLogic.DisplayHelp(context.ToCustomContext());
         }
 
@@ -21,6 +24,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Help
         public async Task DisplayCommands(InteractionContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Used **/commands**"));
             HelpLogic.DisplayCommands(context.ToCustomContext());
         }
 
@@ -28,6 +32,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Help
         public async Task Rules(InteractionContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Used **/rules*+"));
             HelpLogic.ShowRules(context.ToCustomContext());
         }
     }
