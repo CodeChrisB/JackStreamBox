@@ -90,7 +90,15 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             //Not Valid? Send Message and Stop
             if (!IsValidCategory(voteCategory))
             {
-                await ccontext.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
+                if(voteCategory == "10")
+                {
+                    await ccontext.Channel.SendMessageAsync("I have pack 10 installed but I can't stream it til release");
+
+                }
+                else
+                {
+                    await ccontext.Channel.SendMessageAsync("use **!vote** for information what you can vote for.");
+                }
                 return;
             }
 
