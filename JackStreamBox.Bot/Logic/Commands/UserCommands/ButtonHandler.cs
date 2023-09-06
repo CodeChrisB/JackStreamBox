@@ -1,6 +1,9 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using JackStreamBox.Bot.Logic.Commands._Helper;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Voting;
+using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
 using JackStreamBox.Bot.Logic.Data;
 using System;
@@ -16,6 +19,11 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
     {
         internal static async Task OnInteraction(DiscordClient s, ComponentInteractionCreateEventArgs e)
         {
+
+            CustomContext context = e.ToCustomContext();
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+
+            await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
             string id = e.Id;
 
             DateTime dt = e.Interaction.CreationTimestamp.DateTime;
@@ -32,7 +40,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
                 case ButtonId.PACK8:
                 case ButtonId.PACK9:
                 case ButtonId.PACK10:
-                    VoteLogic.VoteViaMenu(e.ToCustomContext(),id,dt);
+                    VoteLogic.VoteViaMenu(context, id,dt);
                     break;
 
 
