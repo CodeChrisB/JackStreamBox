@@ -86,6 +86,12 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 return;
             }
 
+            //Not in JackBot VC? Must be showcase 
+            if (ccontext.Channel.Id != ChannelId.JackBotVC && ccontext.Channel.Id != ChannelId.DevChannel)
+            {
+                await ccontext.Channel.SendMessageAsync($"This is a showcase of the Vote Menu, I would have voted for Pack {voteCategory}");
+                return;
+            }
 
             //Not Valid? Send Message and Stop
             if (!IsValidCategory(voteCategory))
@@ -101,6 +107,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 }
                 return;
             }
+
 
 
             //Valid Set Vote
