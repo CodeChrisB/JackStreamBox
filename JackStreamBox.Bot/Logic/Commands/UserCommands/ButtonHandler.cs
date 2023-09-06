@@ -16,10 +16,10 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
     {
         internal static async Task OnInteraction(DiscordClient s, ComponentInteractionCreateEventArgs e)
         {
-            await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
             string id = e.Id;
 
-            DateTime dt = e.Message.CreationTimestamp.DateTime;
+            DateTime dt = e.Interaction.CreationTimestamp.DateTime;
+
             switch(id)
             {
                 case ButtonId.PACK1:

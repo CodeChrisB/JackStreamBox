@@ -128,12 +128,6 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         }
         public static async void VoteViaMenu(CustomContext customContext, string id,DateTime menuCreationTime)
         {
-            if (IsOlderThanNSeconds(menuCreationTime, 60))
-            {
-                await customContext.Channel.SendMessageAsync("Hey sorry this menu is to old I do not allow to use it anymore. Create a new one using **!menu**");
-                return;
-            }
-
             string packId = "";
             switch (id)
             {
