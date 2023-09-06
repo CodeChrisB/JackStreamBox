@@ -25,6 +25,7 @@ using JackStreamBox.Bot.Logic.Commands.UserCommands.Pack;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Report;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Menu;
 using JackStreamBox.Bot.Logic.Commands.UserCommands;
+using JackStreamBox.Bot.Logic.Commands._Helper.Ascii;
 
 namespace JackStreamBox.Bot
 {
@@ -177,7 +178,7 @@ namespace JackStreamBox.Bot
             await Client.ConnectAsync();
 
             //Send Welcome Message
-            //AsciiArt.WelcomeMessage(Client);
+            AsciiArt.WelcomeMessage(Client);
             Console.WriteLine("Sent - Log sent Message");
 
 
