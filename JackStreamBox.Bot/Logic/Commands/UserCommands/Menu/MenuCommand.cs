@@ -21,7 +21,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Menu
         [ModCommand(PermissionRole.STAFF)]
         public async Task GetAll(CommandContext context)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             MenuLogic.OpenMenu(context.ToCustomContext());
         }
     }
