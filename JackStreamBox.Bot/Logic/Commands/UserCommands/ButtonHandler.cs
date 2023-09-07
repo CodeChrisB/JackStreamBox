@@ -21,7 +21,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
         {
 
             CustomContext context = e.ToCustomContext();
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            if (CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
 
             await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
             string id = e.Id;
@@ -41,6 +41,13 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
                 case ButtonId.PACK9:
                 case ButtonId.PACK10:
                     VoteLogic.VoteViaMenu(context, id,dt);
+                    break;
+                case ButtonId.VOTE1:
+                case ButtonId.VOTE2:
+                case ButtonId.VOTE3:
+                case ButtonId.VOTE4:
+                case ButtonId.VOTE5:
+                    VoteLogic.OnGameVote(context, id);
                     break;
 
 

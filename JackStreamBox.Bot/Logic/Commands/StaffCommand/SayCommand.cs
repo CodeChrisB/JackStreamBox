@@ -36,6 +36,34 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             SendLogMessage(context,message);
         }
 
+        [Command("troll")]
+        [CoammandDescription("Use the bot to speak. You can even use line breaks and mentions people!!", ":nerd:")]
+        [ModCommand(PermissionRole.STAFF)]
+        public async Task Troll(CommandContext context, [RemainingText] string message)
+        {
+                char[] result = new char[message.Length];
+                int state = 0;
+                for (int i = 0; i < message.Length; i++)
+                {
+                    if (message[i] == ' ')
+                    {
+                        result[i] = message[i];
+                    }
+                    else if (state % 2 == 0)
+                    {
+                        result[i] = Char.ToUpper(message[i]);
+                        state++;
+                    }
+                    else
+                    {
+                        result[i] = Char.ToLower(message[i]);
+                        state++;
+                    }
+                }
+
+            await Tell(context,new string(result));
+        }
+
         [Command("embed")]
         [CoammandDescription("Use the bot to speak. Title in \"Qutation Marks\" Message without them, can even use line breaks for the message.",":newspaper:")]
         [ModCommand(PermissionRole.STAFF)]

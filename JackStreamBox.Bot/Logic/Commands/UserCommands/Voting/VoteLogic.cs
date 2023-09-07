@@ -23,9 +23,14 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
         //Vote Props
         private static List<string> voteCategories = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", /*"draw", "trivia", "talk", "fun"*/ };
-        private static Dictionary<string, string> VotesOfPlayers = new Dictionary<string, string>();
+
+
+        private static Dictionary<string, string> PackVotes = new Dictionary<string, string>();
+        private static Dictionary<ulong, int> GameVotes = new Dictionary<ulong, int>();
         private static PackGame[]? games = null;
-        private static int timeTillVoteEnd = 0;
+        private static int 
+            
+            timeTillVoteEnd = 0;
         private static bool currentlyVoting = false;
 
         private static DateTime lockOutTill = new DateTime();
@@ -41,7 +46,8 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
         public static void ResetVote()
         {
-            VotesOfPlayers = new Dictionary<string, string>();
+            PackVotes = new Dictionary<string, string>();
+            GameVotes = new Dictionary<ulong, int>();
             games = null;
             currentlyVoting = false;
             PackVoteMessage = null;
@@ -86,12 +92,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 return;
             }
 
-            //Not in JackBot VC? Must be showcase 
-            if (ccontext.Channel.Id != ChannelId.JackBotVC && ccontext.Channel.Id != ChannelId.DevChannel)
-            {
-                await ccontext.Channel.SendMessageAsync($"This is a showcase of the Vote Menu, I would have voted for Pack {voteCategory}");
-                return;
-            }
+
 
             //Not Valid? Send Message and Stop
             if (!IsValidCategory(voteCategory))
@@ -112,13 +113,13 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             //Valid Set Vote
 
-            VotesOfPlayers[id>0 ? id.ToString() : ccontext.Member.Id.ToString()] = voteCategory;
+            PackVotes[id>0 ? id.ToString() : ccontext.Member.Id.ToString()] = voteCategory;
 
             
-            if (VotesOfPlayers.Count == 1 && PackVoteMessage == null)
+            if (PackVotes.Count == 1 && PackVoteMessage == null)
             {
                 ResetGameStartSteps();
-                Task.Run(() => OnPackVoteEnd(ccontext));
+                OnPackVoteEnd(ccontext);
                 
 
                 PrePollMessageData = PlainEmbed
@@ -161,6 +162,21 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             Vote(customContext, packId,customContext.User.Id);
         }
+
+        public static void OnGameVote(CustomContext context, string id )
+        {
+            int gameId = 0;
+            switch (id)
+            {
+                case ButtonId.VOTE1: gameId = 0; break;
+                case ButtonId.VOTE2: gameId = 1; break;
+                case ButtonId.VOTE3: gameId = 2; break;
+                case ButtonId.VOTE4: gameId = 3; break;
+                case ButtonId.VOTE5: gameId = 4; break;
+
+            }
+            GameVotes[context.User.Id] = gameId;
+        }
         //Helpers for the Voting
         private static void ModifyPackVoteMessage()
         {
@@ -172,14 +188,14 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             int requiredVotes = BotData.ReadData(BotVals.REQUIRED_VOTES, 4);
 
-            if (VotesOfPlayers.Values.Count < requiredVotes)
-                sb.AppendLine($"Required Votes: {VotesOfPlayers.Values.Count}/{requiredVotes} :x:");
+            if (PackVotes.Values.Count < requiredVotes)
+                sb.AppendLine($"Required Votes: {PackVotes.Values.Count}/{requiredVotes} :x:");
             else
                 sb.AppendLine($"Required Votes: :white_check_mark:");
 
 
             foreach (var key in voteCategories)
-                sb.AppendLine($"**!{key}** : {VotesOfPlayers.Count(x => x.Value == key)}");
+                sb.AppendLine($"**!{key}** : {PackVotes.Count(x => x.Value == key)}");
 
             if (timeTillVoteEnd > 0)
             {
@@ -193,7 +209,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             }
 
         }
-        private static async Task OnPackVoteEnd(CustomContext context)
+        private static async void OnPackVoteEnd(CustomContext context)
         {
             timeTillVoteEnd = BotData.ReadData(BotVals.VOTE_TIMER, 30);
 
@@ -205,7 +221,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             }
 
 
-            List<string> votes = VotesOfPlayers.Values.ToList();
+            List<string> votes = PackVotes.Values.ToList();
 
             if (votes.Count >= BotData.ReadData(BotVals.REQUIRED_VOTES, 3))
             {
@@ -248,27 +264,8 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 Description = "Setting up the Poll"
             };
             var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
+            var gameVoteMessage = await GameVoteMenu(context);
 
-            // Add Reactions
-            foreach (var emoji in emojis)
-                await pollMessage.CreateReactionAsync(emoji);
-
-
-            // Logger Setup Phase
-            async Task Logger(VoteStatus status)
-            {
-                GameStartSteps[(int)status].Completed = true;
-
-                var description = new StringBuilder($"Winner is {Winner}\n");
-
-                foreach (var step in GameStartSteps)
-                {
-                    description.AppendLine($"{StatusEmoji(step.Completed)} - {step.Text}");
-                }
-
-                pollEmbed.Description = description.ToString();
-                await pollMessage.ModifyAsync(null, pollEmbed.Build());
-            }
 
 
 
@@ -281,15 +278,58 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 await Task.Delay(1000);
             }
 
+
+
+
             // Inform the user that the winner is being computed
             pollEmbed.Description = $"Computing winner... give me a second\nGames Hosted already :{BotData.ReadData(BotVals.GAMES_HOSTED, 0)}";
             await pollMessage.ModifyAsync(null, pollEmbed.Build());
 
-            // Get Reactions
-            int[] maxIndices = await ComputeWinner(emojis, pollMessage);
+   
 
+            Destroyer.Message(gameVoteMessage, DestroyTime.INSTANT);
+            OpenVoteWinner( pollEmbed, pollMessage);
 
-            OpenVoteWinner(maxIndices, pollEmbed, pollMessage, Logger);
+        }
+        
+        private static int[] CurrentGameVotes
+        {
+            get
+            {
+                int[] games = new int[5];
+
+                foreach(int game in GameVotes.Values.ToArray())
+                {
+                    games[game]++;
+                }
+
+                int max = games.Max();
+                int[] maxIndices = Enumerable.Range(0, games.Length)
+                .Where(i => games[i] == max)
+                .ToArray();
+
+                return maxIndices;
+            }
+        }
+
+        private static async Task<DiscordMessage> GameVoteMenu(CustomContext context)
+        {
+            DiscordButtonComponent Btn(string id, string emoji)
+            {
+                return new DiscordButtonComponent(ButtonStyle.Secondary, id, "", false, new DiscordComponentEmoji(emoji));
+            }
+            var builder = new DiscordMessageBuilder()
+                .WithContent("-----")
+                .AddComponents(new DiscordComponent[]
+                {
+                    Btn(ButtonId.VOTE1,"1️⃣"),
+                    Btn(ButtonId.VOTE2,"2️⃣"),
+                    Btn(ButtonId.VOTE3,"3️⃣"),
+                    Btn(ButtonId.VOTE4,"4️⃣"),
+                    Btn(ButtonId.VOTE5,"5️⃣")
+                });
+
+            return await context.Channel.SendMessageAsync(builder);
 
         }
 
@@ -311,21 +351,40 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             return maxIndices;
         }
 
-        private static async void OpenVoteWinner(int[] maxIndices, DiscordEmbedBuilder pollEmbed, DiscordMessage pollMessage, Func<VoteStatus, Task> logger)
+        private static async void OpenVoteWinner(DiscordEmbedBuilder pollEmbed, DiscordMessage pollMessage)
         {
             //Set Message Data
             pollEmbed.ImageUrl = ListSerializer.GetRandomEntry(ListSerializer.BANNER);
             pollEmbed.Title = "**Preparing your next game**";
 
             Random random = new Random();
-            int randomIndex = maxIndices.Length == 1 ? maxIndices[0] : maxIndices[random.Next(0, maxIndices.Length)];
+            int randomIndex = CurrentGameVotes.Length == 1 ? 
+                CurrentGameVotes[0] : 
+                CurrentGameVotes[random.Next(0, CurrentGameVotes.Length)];
+
             PackGame GameWinner = games[randomIndex];
 
             await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
             Winner = GameWinner.Name;
 
-            await logger(VoteStatus.OnStartingGamePack);
-            await JackStreamBoxUtility.OpenGame(GameWinner.Id, logger);
+            // Logger Setup Phase
+            async Task Logger(VoteStatus status)
+            {
+                GameStartSteps[(int)status].Completed = true;
+
+                var description = new StringBuilder($"Winner is {Winner}\n");
+
+                foreach (var step in GameStartSteps)
+                {
+                    description.AppendLine($"{StatusEmoji(step.Completed)} - {step.Text}");
+                }
+
+                pollEmbed.Description = description.ToString();
+                await pollMessage.ModifyAsync(null, pollEmbed.Build());
+            }
+
+            await Logger(VoteStatus.OnStartingGamePack);
+            await JackStreamBoxUtility.OpenGame(GameWinner.Id, Logger);
             BotData.WriteData(BotVals.GAMES_HOSTED, (BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1).ToString());
 
             ResetVote();

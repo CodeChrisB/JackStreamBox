@@ -8,6 +8,7 @@ namespace JackStreamBox.Bot.Logic.Data
 {
     public class ButtonId
     {
+        //Pack Vote
         public const string PACK1 = "pack_1";
         public const string PACK2 = "pack_2";
         public const string PACK3 = "pack_3";
@@ -18,5 +19,12 @@ namespace JackStreamBox.Bot.Logic.Data
         public const string PACK8 = "pack_8";
         public const string PACK9 = "pack_9";
         public const string PACK10 = "pack_10";
+        //Game Vote
+        public const string VOTE1 = "1";
+        public const string VOTE2 = "2";
+        public const string VOTE3 = "3";
+        public const string VOTE4 = "4";
+        public const string VOTE5 = "5";
+
     }
 }
