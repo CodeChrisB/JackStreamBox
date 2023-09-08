@@ -14,6 +14,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 {
@@ -40,7 +41,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
         //Discord Props
         private static DiscordMessage PackVoteMessage;
+        private static DiscordMessage GameVoteMessage;
         private static DiscordEmbedBuilder PrePollMessageData = new DiscordEmbedBuilder { };
+        private static DiscordEmbedBuilder GameVoteData = new DiscordEmbedBuilder { };
 
 
 
@@ -51,6 +54,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             games = null;
             currentlyVoting = false;
             PackVoteMessage = null;
+            GameVoteMessage = null;
             PrePollMessageData = null;
             ResetGameStartSteps();
         }
@@ -209,6 +213,40 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             }
 
         }
+
+        private static void ModifyGameVoteMessage(int timeLeft,CustomContext context)
+        {
+            if (GameVoteMessage == null) return;
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("*What game will be played next?*");
+            sb.AppendLine($"Time Left: {timeLeft}s");
+            sb.AppendLine(GameText(games,context));
+
+            char winner = '█';
+            char loser = '▒';
+            int maxVotes = CurrentGameVotes.Max();
+            for (int i = 0; i < games.Length; i++)
+            {
+                char filling = maxVotes == CurrentGameVotes[i] ? winner : loser;
+                sb.AppendLine($"({i + 1}) | {new string(filling, CurrentGameVotes[i]*2+1)}");
+            }
+            /*
+            5 |███████████████████         (17)
+            4 |██████████████████████████   (19)
+            3 |████████████████████████████ (20)
+            2 |█████████████████████         (15)
+            1 |███████████████               (11)
+                0   5   10  15  20
+             
+             
+             */
+
+            GameVoteData.Description = sb.ToString() ;
+            GameVoteMessage.ModifyAsync(GameVoteData.Build());
+        }
+
         private static async void OnPackVoteEnd(CustomContext context)
         {
             timeTillVoteEnd = BotData.ReadData(BotVals.VOTE_TIMER, 30);
@@ -258,12 +296,12 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
 
             // Create embed
-            var pollEmbed = new DiscordEmbedBuilder
+            GameVoteData = new DiscordEmbedBuilder
             {
                 Title = "Game Vote",
                 Description = "Setting up the Poll"
             };
-            var pollMessage = await context.Channel.SendMessageAsync(embed: pollEmbed).ConfigureAwait(false);
+            GameVoteMessage = await context.Channel.SendMessageAsync(embed: GameVoteData).ConfigureAwait(false);
             var gameVoteMessage = await GameVoteMenu(context);
 
 
@@ -273,39 +311,42 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             // Show the user the poll countdown
             for (int timeLeft = (int)pickTimer.TotalSeconds; timeLeft >= 0; timeLeft--)
             {
-                pollEmbed.Description = $"*What game will be played next?*\nTime Left: {timeLeft}s\n\n{GameText(games, context)}";
-                await pollMessage.ModifyAsync(null, pollEmbed.Build());
+                ModifyGameVoteMessage(timeLeft,context);
                 await Task.Delay(1000);
             }
 
 
 
 
-            // Inform the user that the winner is being computed
-            pollEmbed.Description = $"Computing winner... give me a second\nGames Hosted already :{BotData.ReadData(BotVals.GAMES_HOSTED, 0)}";
-            await pollMessage.ModifyAsync(null, pollEmbed.Build());
+
 
    
 
             Destroyer.Message(gameVoteMessage, DestroyTime.INSTANT);
-            OpenVoteWinner( pollEmbed, pollMessage);
+            OpenVoteWinner();
 
         }
-        
+
         private static int[] CurrentGameVotes
         {
             get
             {
                 int[] games = new int[5];
-
-                foreach(int game in GameVotes.Values.ToArray())
+                foreach (int game in GameVotes.Values.ToArray())
                 {
                     games[game]++;
                 }
-
-                int max = games.Max();
-                int[] maxIndices = Enumerable.Range(0, games.Length)
-                .Where(i => games[i] == max)
+                return games;
+            }
+        }
+        
+        private static int[] WinnerIndices
+        {
+            get
+            {
+                int max = CurrentGameVotes.Max();
+                int[] maxIndices = Enumerable.Range(0, CurrentGameVotes.Length)
+                .Where(i => CurrentGameVotes[i] == max)
                 .ToArray();
 
                 return maxIndices;
@@ -335,36 +376,18 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
         //Helpers for getting Winner & Start Game
 
-        private static async Task<int[]> ComputeWinner(DiscordEmoji[] emojis, DiscordMessage pollMessage)
-        {
-            var reactionTasks = emojis.Select(emoji => pollMessage.GetReactionsAsync(emoji)).ToArray();
-            await Task.WhenAll(reactionTasks);
-
-            int[] reactionCount = reactionTasks.Select(reactions => reactions.Result.Count).ToArray();
-
-            int max = reactionCount.Max();
-            Random random = new Random();
-            int[] maxIndices = Enumerable.Range(0, reactionCount.Length)
-                .Where(i => reactionCount[i] == max)
-                .ToArray();
-
-            return maxIndices;
-        }
-
-        private static async void OpenVoteWinner(DiscordEmbedBuilder pollEmbed, DiscordMessage pollMessage)
+        private static async void OpenVoteWinner()
         {
             //Set Message Data
-            pollEmbed.ImageUrl = ListSerializer.GetRandomEntry(ListSerializer.BANNER);
-            pollEmbed.Title = "**Preparing your next game**";
+            GameVoteData.ImageUrl = ListSerializer.GetRandomEntry(ListSerializer.BANNER);
+            GameVoteData.Title = "**Preparing your next game**";
 
             Random random = new Random();
-            int randomIndex = CurrentGameVotes.Length == 1 ? 
-                CurrentGameVotes[0] : 
-                CurrentGameVotes[random.Next(0, CurrentGameVotes.Length)];
+            int randomIndex = WinnerIndices.Length == 1 ? 
+                WinnerIndices[0] : 
+                WinnerIndices[random.Next(0, WinnerIndices.Length)];
 
             PackGame GameWinner = games[randomIndex];
-
-            await pollMessage.DeleteAllReactionsAsync().ConfigureAwait(false);
             Winner = GameWinner.Name;
 
             // Logger Setup Phase
@@ -379,13 +402,15 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                     description.AppendLine($"{StatusEmoji(step.Completed)} - {step.Text}");
                 }
 
-                pollEmbed.Description = description.ToString();
-                await pollMessage.ModifyAsync(null, pollEmbed.Build());
+
+                GameVoteData.Description = description.ToString();
+                await GameVoteMessage.ModifyAsync(null, GameVoteData.Build());
             }
 
             await Logger(VoteStatus.OnStartingGamePack);
             await JackStreamBoxUtility.OpenGame(GameWinner.Id, Logger);
             BotData.WriteData(BotVals.GAMES_HOSTED, (BotData.ReadData(BotVals.GAMES_HOSTED, 0) + 1).ToString());
+
 
             ResetVote();
         }
@@ -433,7 +458,6 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             return sb.ToString();
         }
-
 
         public static void SetTimeout()
         {
