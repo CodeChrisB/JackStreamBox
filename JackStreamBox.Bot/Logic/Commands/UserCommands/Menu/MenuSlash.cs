@@ -20,7 +20,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Menu
         [SlashCommand("menu", "Opens a menu that lets you vote for all packs")]
         public async Task GetAll(InteractionContext context)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             await context.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource, new DiscordInteractionResponseBuilder().WithContent("Used **/menu**"));
 
             MenuLogic.OpenMenu(context.ToCustomContext());
