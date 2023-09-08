@@ -21,7 +21,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
         {
 
             CustomContext context = e.ToCustomContext();
-            if (CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
 
             await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
             string id = e.Id;

@@ -404,7 +404,10 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
 
                 GameVoteData.Description = description.ToString();
-                await GameVoteMessage.ModifyAsync(null, GameVoteData.Build());
+                if (GameVoteMessage != null)
+                {
+                    await GameVoteMessage.ModifyAsync(null, GameVoteData.Build());
+                }
             }
 
             await Logger(VoteStatus.OnStartingGamePack);
