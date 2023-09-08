@@ -22,7 +22,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         [ModCommand(PermissionRole.STAFF)]
         public async Task Tell(CommandContext context, [RemainingText] string message)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
 

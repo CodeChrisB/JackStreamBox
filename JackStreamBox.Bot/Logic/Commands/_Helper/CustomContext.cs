@@ -41,7 +41,7 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper
             Channel = context.Interaction.Channel;
             Message = null;
             User = context.Interaction.User;
-            Member = context.Guild.CurrentMember;
+            Member = (DiscordMember)context.User;
             Client = Bot.Client;   
         }
     }

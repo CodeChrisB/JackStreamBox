@@ -115,6 +115,7 @@ namespace JackStreamBox.Bot.Logic.Config
         
         public static bool CanExecuteCommand(InteractionContext context, PermissionRole permissionLevel, bool ignoreChannel = false)
         {
+               
             return CanExecuteCommand(context.ToCustomContext(), permissionLevel, ignoreChannel);
         }
         public static bool CanExecuteCommand(CommandContext context,PermissionRole permissionLevel,bool ignoreChannel = false)
@@ -158,6 +159,7 @@ namespace JackStreamBox.Bot.Logic.Config
 
             foreach (DiscordRole role in roles)
             {
+                Console.WriteLine(role.Name);
                 switch (role.Name) {
                     //Trusted
                     case "Level 2":

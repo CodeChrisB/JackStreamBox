@@ -29,9 +29,8 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         private static Dictionary<string, string> PackVotes = new Dictionary<string, string>();
         private static Dictionary<ulong, int> GameVotes = new Dictionary<ulong, int>();
         private static PackGame[]? games = null;
-        private static int 
-            
-            timeTillVoteEnd = 0;
+        private static int  timeTillVoteEnd = 0;
+        private static int  gamePickTimer =0;
         private static bool currentlyVoting = false;
 
         private static DateTime lockOutTill = new DateTime();
@@ -179,6 +178,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             }
             GameVotes[context.User.Id] = gameId;
+            ModifyGameVoteMessage(context);
         }
         //Helpers for the Voting
         private static void ModifyPackVoteMessage()
@@ -213,23 +213,24 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
         }
 
-        private static void ModifyGameVoteMessage(int timeLeft,CustomContext context)
+        private static void ModifyGameVoteMessage(CustomContext context)
         {
             if (GameVoteMessage == null) return;
 
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine("*What game will be played next?*");
-            sb.AppendLine($"Time Left: {timeLeft}s");
+            sb.AppendLine($"Time Left: {gamePickTimer}s");
             sb.AppendLine(GameText(games,context));
 
             char winner = '█';
             char loser = '▒';
             int maxVotes = CurrentGameVotes.Max();
+            sb.AppendLine("Current Votes:");
             for (int i = 0; i < games.Length; i++)
             {
                 char filling = maxVotes == CurrentGameVotes[i] ? winner : loser;
-                sb.AppendLine($"({i + 1}) | {new string(filling, CurrentGameVotes[i]*2+1)}");
+                sb.AppendLine($"({i + 1})| {new string(filling, CurrentGameVotes[i]*2+1)}");
             }
             /*
             5 |███████████████████         (17)
@@ -286,10 +287,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         {
             // End Game
             JackStreamBoxUtility.CloseGame();
-
-
-            TimeSpan voteTimer = TimeSpan.FromSeconds(BotData.ReadData(BotVals.VOTE_TIMER, 30));
-            TimeSpan pickTimer = TimeSpan.FromSeconds(BotData.ReadData(BotVals.PICK_TIMER, 30));
+            gamePickTimer = BotData.ReadData(BotVals.PICK_TIMER, 30);
 
             DiscordEmoji[] emojis = GetEmojis(context);
 
@@ -308,9 +306,10 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
 
             // Show the user the poll countdown
-            for (int timeLeft = (int)pickTimer.TotalSeconds; timeLeft >= 0; timeLeft--)
+            while (gamePickTimer >= 0)
             {
-                ModifyGameVoteMessage(timeLeft,context);
+                ModifyGameVoteMessage(context);
+                gamePickTimer--;
                 await Task.Delay(1000);
             }
 
