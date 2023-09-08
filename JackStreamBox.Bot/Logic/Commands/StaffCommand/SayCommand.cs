@@ -22,7 +22,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         [ModCommand(PermissionRole.STAFF)]
         public async Task Tell(CommandContext context, [RemainingText] string message)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
 
 
@@ -37,10 +37,17 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("troll")]
-        [CoammandDescription("TrOlOl", ":nerd:")]
+        [CoammandDescription("Use the bot to speak. You can even use line breaks and mentions people!!", ":nerd:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task Troll(CommandContext context, [RemainingText] string message)
         {
+
+                message = GetTrollMessage(context, message);
+
+                if(message == "")
+                {
+                    Destroyer.Message(context.Message,DestroyTime.INSTANT);
+                }
                 char[] result = new char[message.Length];
                 int state = 0;
                 for (int i = 0; i < message.Length; i++)
@@ -64,6 +71,16 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             await Tell(context,new string(result));
         }
 
+        public string GetTrollMessage(CommandContext context,string message)
+        {
+            if (message != null && message.Length > 0) return message;
+
+            if (context.Message.Reference != null)
+            {
+                return context.Message.Reference.Message.Content;
+            }
+            return "";
+        }
         [Command("embed")]
         [CoammandDescription("Use the bot to speak. Title in \"Qutation Marks\" Message without them, can even use line breaks for the message.",":newspaper:")]
         [ModCommand(PermissionRole.STAFF)]

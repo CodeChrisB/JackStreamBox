@@ -54,7 +54,6 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
             games = null;
             currentlyVoting = false;
             PackVoteMessage = null;
-            GameVoteMessage = null;
             PrePollMessageData = null;
             ResetGameStartSteps();
         }
@@ -375,6 +374,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         }
 
         //Helpers for getting Winner & Start Game
+
 
         private static async void OpenVoteWinner()
         {
