@@ -47,7 +47,7 @@ After a game players can vote for the next game, after the voting the next game 
 | **!setview**| Set values of the bot|
 | **!staff**| Show staff commands|
 | **!start**| Starts any game you want to. Be aware this instantly closes any current game!|
-| **!troll**| Use the bot to speak. You can even use line breaks and mentions people!!|
+| **!troll**| TrOlOl|
 ## Level 5  Developers 
 | Command      | Description        |
 |--------------|--------------------|

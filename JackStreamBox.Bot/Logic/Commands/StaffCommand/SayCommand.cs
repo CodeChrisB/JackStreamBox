@@ -37,7 +37,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         }
 
         [Command("troll")]
-        [CoammandDescription("Use the bot to speak. You can even use line breaks and mentions people!!", ":nerd:")]
+        [CoammandDescription("TrOlOl", ":nerd:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task Troll(CommandContext context, [RemainingText] string message)
         {
