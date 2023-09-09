@@ -5,8 +5,6 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JackStreamBox.Util", "JackStreamBox.Util\JackStreamBox.Util.csproj", "{5C0C6925-EFF1-4329-8006-4E6F56D4A907}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JackStreamBox.ConApp", "JackStreamBox.ConApp\JackStreamBox.ConApp.csproj", "{7238CD4F-0BA0-416E-BEB6-FCE08FCA3424}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{264D562D-6176-439A-AAC8-0C66CC6B87F2}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -35,10 +33,6 @@ Global
 		{5C0C6925-EFF1-4329-8006-4E6F56D4A907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C0C6925-EFF1-4329-8006-4E6F56D4A907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C0C6925-EFF1-4329-8006-4E6F56D4A907}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7238CD4F-0BA0-416E-BEB6-FCE08FCA3424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7238CD4F-0BA0-416E-BEB6-FCE08FCA3424}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7238CD4F-0BA0-416E-BEB6-FCE08FCA3424}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7238CD4F-0BA0-416E-BEB6-FCE08FCA3424}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4DD21AC0-2F15-4C11-A8E0-EEEF2C0CB57F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4DD21AC0-2F15-4C11-A8E0-EEEF2C0CB57F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DD21AC0-2F15-4C11-A8E0-EEEF2C0CB57F}.Release|Any CPU.ActiveCfg = Release|Any CPU
