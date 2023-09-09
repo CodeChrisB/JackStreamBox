@@ -11,9 +11,14 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
     internal class XPStore
     {
         /* Public API */
-        public static ulong AddXp(ulong id)
+
+        public static void LoadData()
         {
             LoadDataFromFile();
+        }
+        public static ulong AddXp(ulong id)
+        {
+            
             Random random = new Random(DateTime.Now.Millisecond); 
             ulong xpToAdd = (ulong)BotData.ReadData(BotVals.XP_AMOUNT,10);
             xpToAdd += (ulong)random.Next(0, BotData.ReadData(BotVals.XP_RANDOM, 0));
@@ -32,7 +37,6 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 
         public static ulong GetById(ulong id)
         {
-            LoadDataFromFile();
             return XPStoreData[id];
         }
 
@@ -48,14 +52,21 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         private static Dictionary<ulong, ulong> XPStoreData = new Dictionary<ulong, ulong>();
         private static void SaveDataToFile()
         {
-            using (StreamWriter writer = new StreamWriter(FileName))
+            try
             {
-                foreach (var data in XPStoreData)
+                using (StreamWriter writer = new StreamWriter(FileName))
                 {
-                    writer.WriteLine($"{data.Key},{data.Value}");
+                    foreach (var data in XPStoreData)
+                    {
+                        writer.WriteLine($"{data.Key},{data.Value}");
+                    }
+                    writer.Flush();
                 }
-                writer.Close();
+            }catch (Exception e)
+            {
+                SaveDataToFile();
             }
+
         }
 
         private static void LoadDataFromFile()
@@ -78,6 +89,9 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             }
         }
 
-
+        internal static string GetAsString()
+        {
+            return File.ReadAllText(FileName);
+        }
     }
 }

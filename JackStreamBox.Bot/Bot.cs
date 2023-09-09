@@ -87,6 +87,7 @@ namespace JackStreamBox.Bot
             });
 
             Client.ComponentInteractionCreated += async (s, e) => await ButtonHandler.OnInteraction(s, e);
+            Client.VoiceStateUpdated += OverwatchVC.VoiceStateUpdatedAsync;
 
 
             var commandsConfig = new CommandsNextConfiguration()
@@ -184,6 +185,7 @@ namespace JackStreamBox.Bot
 
 
             Console.WriteLine("Setting up - Scheduler");
+            XPStore.LoadData();
             OverwatchVC.guildId = 697504479834275898;
             Scheduler.RegisterScheduler("XPDistribution", async () =>
             {
