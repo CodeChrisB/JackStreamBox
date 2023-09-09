@@ -17,10 +17,11 @@ namespace JackStreamBox.Util.Data
         public static readonly string VOTE_TIMEOUT = "vote_timeout";
         public static readonly string XP_TIME = "xpTime";
         public static readonly string XP_AMOUNT = "xpAmount";
+        public static readonly string XP_RANDOM = "xpRandom";
 
         public static string[] GetKeys()
         {
-            return new string[] { VOTE_TIMER, PICK_TIMER, REQUIRED_VOTES, BOT_NAME,"m1","m2","m3","m4","m5","m6","screen", GAMES_HOSTED, VOTE_TIMEOUT };
+            return new string[] { VOTE_TIMER, PICK_TIMER, REQUIRED_VOTES, BOT_NAME,"m1","m2","m3","m4","m5","m6","screen", GAMES_HOSTED, VOTE_TIMEOUT, XP_TIME,XP_AMOUNT };
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JackStreamBox.Util.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,9 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         public static ulong AddXp(ulong id)
         {
             LoadDataFromFile();
-            ulong xpToAdd = 10;
+            Random random = new Random(DateTime.Now.Millisecond); 
+            ulong xpToAdd = (ulong)BotData.ReadData(BotVals.XP_AMOUNT,10);
+            xpToAdd += (ulong)random.Next(0, BotData.ReadData(BotVals.XP_RANDOM, 0));
             if(XPStoreData.ContainsKey(id))
             {
                 XPStoreData[id] += xpToAdd;

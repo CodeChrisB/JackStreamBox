@@ -188,7 +188,7 @@ namespace JackStreamBox.Bot
             Scheduler.RegisterScheduler("XPDistribution", async () =>
             {
                 await OverwatchVC.DistributeXP();
-            }, TimeSpan.FromMinutes(10));
+            }, TimeSpan.FromMinutes(BotData.ReadData(BotVals.XP_TIME,15)));
 
             await Task.Delay(-1);
         }
