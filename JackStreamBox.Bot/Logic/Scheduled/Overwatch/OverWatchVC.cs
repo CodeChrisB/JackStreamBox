@@ -9,6 +9,7 @@ using System.Threading.Channels;
 using Microsoft.VisualBasic.ApplicationServices;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Report;
 using JackStreamBox.Bot.Logic.Config;
+using JackStreamBox.Util.Data;
 
 namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 {
@@ -55,7 +56,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             {
                 var guild = await Bot.Client.GetGuildAsync(guildId);
                 DiscordChannel channel = guild.GetChannel(ChannelId.LogChannel);
-                await channel.SendMessageAsync($"Added XP to {discordMember.Username} : {xpAdded} --> XP Now : {XPStore.GetById(discordMember.Id)}");
+                await channel.SendMessageAsync($"[{BotData.ReadData(BotVals.BOT_NAME,"TB1")}] Added XP to {discordMember.Username} : {xpAdded} --> XP Now : {XPStore.GetById(discordMember.Id)}");
             }
         }
     }
