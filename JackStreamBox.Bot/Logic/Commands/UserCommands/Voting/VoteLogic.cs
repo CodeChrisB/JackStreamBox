@@ -358,7 +358,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                 return new DiscordButtonComponent(ButtonStyle.Secondary, id, "", false, new DiscordComponentEmoji(emoji));
             }
             var builder = new DiscordMessageBuilder()
-                .WithContent("-----")
+                .WithContent("**Click button to vote**")
                 .AddComponents(new DiscordComponent[]
                 {
                     Btn(ButtonId.VOTE1,"1️⃣"),

@@ -16,7 +16,7 @@ namespace JackStreamBox.Util
         /// A bool value indicating the sucess of the
         public static async Task<bool> OpenGame(Game game, Func<VoteStatus, Task> Logger)
         {
-            var task = GameOpener.Open(game,Logger);
+            var task = GameOpener.Open(game, Logger);
             await task;
             return task.Result;
         }
