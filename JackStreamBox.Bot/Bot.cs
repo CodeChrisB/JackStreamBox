@@ -26,6 +26,7 @@ using JackStreamBox.Bot.Logic.Commands.UserCommands.Report;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Menu;
 using JackStreamBox.Bot.Logic.Commands.UserCommands;
 using JackStreamBox.Bot.Logic.Commands._Helper.Ascii;
+using JackStreamBox.Bot.Logic.Scheduled.Overwatch;
 
 namespace JackStreamBox.Bot
 {
@@ -182,6 +183,12 @@ namespace JackStreamBox.Bot
             Console.WriteLine("Sent - Log sent Message");
 
 
+            Console.WriteLine("Setting up - Scheduler");
+            OverwatchVC.guildId = 697504479834275898;
+            Scheduler.RegisterScheduler("XPDistribution", async () =>
+            {
+                await OverwatchVC.DistributeXP();
+            }, TimeSpan.FromMinutes(10));
 
             await Task.Delay(-1);
         }

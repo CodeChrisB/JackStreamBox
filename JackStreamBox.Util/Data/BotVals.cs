@@ -15,6 +15,8 @@ namespace JackStreamBox.Util.Data
         public static readonly string GAMES_HOSTED = "gamesHosted";
         public static readonly string MESSAGES_SENT = "messages_sent";
         public static readonly string VOTE_TIMEOUT = "vote_timeout";
+        public static readonly string XP_TIME = "xpTime";
+        public static readonly string XP_AMOUNT = "xpAmount";
 
         public static string[] GetKeys()
         {

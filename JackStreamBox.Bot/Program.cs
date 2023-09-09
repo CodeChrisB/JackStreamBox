@@ -21,6 +21,7 @@ namespace JackStreamBox.Bot
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex);
                     Console.WriteLine($"Crash - Bot crashed lol");
                     //DocGenerator.WriteLog(ex.Message);
                 }

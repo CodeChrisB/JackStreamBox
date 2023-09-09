@@ -31,11 +31,6 @@ D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PcapDotNet.Core.
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PcapDotNet.Core.dll
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\PcapDotNet.Packets.dll
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\SharpPcap.dll
-D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.deps.json
-D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.runtimeconfig.json
-D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.exe
-D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.dll
-D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\JackStreamBox.ConApp.pdb
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Logic\Data\Jokes.txt
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Microsoft.Extensions.Logging.dll
 D:\Git\JackBoxStream\JackStreamBox.Bot\bin\Debug\net6.0-windows\Microsoft.Extensions.Options.dll

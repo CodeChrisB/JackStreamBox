@@ -88,7 +88,7 @@ public static class BotData
     }
 
 
-    private static string FileNameToCustomFile(string filename)
+    public static string FileNameToCustomFile(string filename)
     {
        return  $"{gitIgnorePart}{filename}.txt";
     }
