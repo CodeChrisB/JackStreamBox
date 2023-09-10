@@ -18,8 +18,10 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper
         public DiscordUser User { get; set; }
         public DiscordMember Member { get; set; }
         public DiscordClient Client { get; set; }
-        
+        public DiscordGuild Guild { get; set; }
+
         public CustomContext(CommandContext context) { 
+            Guild = context.Guild;
             Channel = context.Channel;
             Message = context.Message;
             User = context.User;
@@ -29,6 +31,7 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper
 
         public CustomContext(InteractionContext context)
         {
+            Guild = context.Guild;
             Channel = context.Channel;
             Message = null;
             User = context.User;
@@ -38,6 +41,7 @@ namespace JackStreamBox.Bot.Logic.Commands._Helper
 
         public CustomContext(ComponentInteractionCreateEventArgs context)
         {
+            Guild = context.Guild;
             Channel = context.Interaction.Channel;
             Message = null;
             User = context.Interaction.User;

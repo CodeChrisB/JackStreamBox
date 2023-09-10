@@ -100,7 +100,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         {
             if (discordMember == null) return;
             var guild = await Bot.Client.GetGuildAsync(guildId);
-            ulong xpAdded = XPStore.AddXp(discordMember.Id);
+            int xpAdded = XPStore.AddXp(discordMember.Id);
 
             if (guildId > 0)
             {

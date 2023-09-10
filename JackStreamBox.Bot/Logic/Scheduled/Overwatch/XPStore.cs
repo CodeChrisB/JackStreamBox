@@ -16,40 +16,53 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         {
             LoadDataFromFile();
         }
-        public static ulong AddXp(ulong id)
+        public static int AddXp(ulong id)
         {
             
             Random random = new Random(DateTime.Now.Millisecond); 
-            ulong xpToAdd = (ulong)BotData.ReadData(BotVals.XP_AMOUNT,10);
-            xpToAdd += (ulong)random.Next(0, BotData.ReadData(BotVals.XP_RANDOM, 0));
-            if(XPStoreData.ContainsKey(id))
+            int xpToAdd = BotData.ReadData(BotVals.XP_AMOUNT,10);
+            xpToAdd += random.Next(0, BotData.ReadData(BotVals.XP_RANDOM, 0));
+            if(XPStoreData.ContainsKey(id.ToString()))
             {
-                XPStoreData[id] += xpToAdd;
+                XPStoreData[id.ToString()] += xpToAdd;
             }
             else
             {
-                XPStoreData.Add(id, xpToAdd);
+                XPStoreData.Add(id.ToString(), xpToAdd);
             }
             SaveDataToFile();
 
             return xpToAdd;
         }
 
-        public static ulong GetById(ulong id)
+        public static int GetById(ulong id)
         {
-            return XPStoreData[id];
+            return XPStoreData[id.ToString()];
+        }
+        public static int GetPosById(ulong id)
+        {
+            return XPStoreData.ToList().OrderBy(user => user.Value).ToList().FindIndex(pair => pair.Key == id.ToString());
         }
 
-        public static void GetTop(int n)
+        public static Dictionary<string,int> GetTop(int n)
         {
             //gets top n user by xp
+
+            var sortedList = XPStoreData.ToList().OrderBy(user => user.Value).Take(n);
+            return sortedList.ToDictionary(pair => pair.Key, pair => pair.Value);
+
         }
 
+        internal static void DELETEALLXP()
+        {
+            XPStoreData = new Dictionary<string, int>();
+            SaveDataToFile(); // :(
+        }
 
         /* End Of Public API */
 
         const string FileName = "xpSheet";
-        private static Dictionary<ulong, ulong> XPStoreData = new Dictionary<ulong, ulong>();
+        private static Dictionary<string, int> XPStoreData = new Dictionary<string, int>();
         private static void SaveDataToFile()
         {
             try
@@ -71,7 +84,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 
         private static void LoadDataFromFile()
         {
-            XPStoreData = new Dictionary<ulong, ulong>();
+            XPStoreData = new Dictionary<string, int>();
 
             if (File.Exists(FileName))
             {
@@ -81,8 +94,8 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
                     var parts = line.Split(',');
                     if (parts.Length == 2)
                     {
-                        var key = ulong.Parse(parts[0]);
-                        var value = ulong.Parse(parts[1]);
+                        var key = parts[0];
+                        var value = int.Parse(parts[1]);
                         XPStoreData[key] = value;
                     }
                 }
@@ -92,6 +105,11 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         internal static string GetAsString()
         {
             return File.ReadAllText(FileName);
+        }
+
+        internal static Dictionary<string, int> GetAll()
+        {
+            return XPStoreData;
         }
     }
 }

@@ -12,7 +12,6 @@
           "DSharpPlus.CommandsNext": "4.4.1",
           "DSharpPlus.Interactivity": "4.4.1",
           "DSharpPlus.SlashCommands": "4.4.1",
-          "JackStreamBox.ConApp": "1.0.0",
           "JackStreamBox.Util": "1.0.0",
           "Microsoft.Extensions.Logging": "7.0.0",
           "Newtonsoft.Json": "13.0.3",

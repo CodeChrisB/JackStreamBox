@@ -27,6 +27,7 @@ using JackStreamBox.Bot.Logic.Commands.UserCommands.Menu;
 using JackStreamBox.Bot.Logic.Commands.UserCommands;
 using JackStreamBox.Bot.Logic.Commands._Helper.Ascii;
 using JackStreamBox.Bot.Logic.Scheduled.Overwatch;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.XP;
 
 namespace JackStreamBox.Bot
 {
@@ -124,6 +125,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<ShowModCommand>();
             Commands.RegisterCommands<DailyQuestionCommand>();
             Commands.RegisterCommands<MenuCommand>();
+            Commands.RegisterCommands<XPStaffCommand>();
 
             //Slash Commands
             Slash.RegisterCommands<HelpSlash>();
@@ -131,6 +133,7 @@ namespace JackStreamBox.Bot
             Slash.RegisterCommands<ReportSlash>();
             Slash.RegisterCommands<VoteSlash>();
             Slash.RegisterCommands<MenuSlash>();
+            Slash.RegisterCommands<XPSlash>();
 
 
             //Register for Help Page
