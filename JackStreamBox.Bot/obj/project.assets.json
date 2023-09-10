@@ -1598,19 +1598,6 @@
           }
         }
       },
-      "JackStreamBox.ConApp/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "JackStreamBox.Util": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/JackStreamBox.ConApp.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/JackStreamBox.ConApp.dll": {}
-        }
-      },
       "JackStreamBox.Util/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -4963,11 +4950,6 @@
         "system.threading.timer.nuspec"
       ]
     },
-    "JackStreamBox.ConApp/1.0.0": {
-      "type": "project",
-      "path": "../JackStreamBox.ConApp/JackStreamBox.ConApp.csproj",
-      "msbuildProject": "../JackStreamBox.ConApp/JackStreamBox.ConApp.csproj"
-    },
     "JackStreamBox.Util/1.0.0": {
       "type": "project",
       "path": "../JackStreamBox.Util/JackStreamBox.Util.csproj",
@@ -4980,7 +4962,6 @@
       "DSharpPlus.CommandsNext >= 4.4.1",
       "DSharpPlus.Interactivity >= 4.4.1",
       "DSharpPlus.SlashCommands >= 4.4.1",
-      "JackStreamBox.ConApp >= 1.0.0",
       "JackStreamBox.Util >= 1.0.0",
       "Microsoft.Extensions.Logging >= 7.0.0",
       "Newtonsoft.Json >= 13.0.3",
@@ -5020,9 +5001,6 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "projectReferences": {
-            "D:\\Git\\JackBoxStream\\JackStreamBox.ConApp\\JackStreamBox.ConApp.csproj": {
-              "projectPath": "D:\\Git\\JackBoxStream\\JackStreamBox.ConApp\\JackStreamBox.ConApp.csproj"
-            },
             "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\JackStreamBox.Util.csproj": {
               "projectPath": "D:\\Git\\JackBoxStream\\JackStreamBox.Util\\JackStreamBox.Util.csproj"
             }
