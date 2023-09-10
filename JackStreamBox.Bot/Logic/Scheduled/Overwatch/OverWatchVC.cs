@@ -26,28 +26,34 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         private static bool anyChange=false;
         public static async Task DistributeXP()
         {
-            DiscordGuild guild = await Bot.Client.GetGuildAsync(guildId);
-            if (guild == null) return;
-
-            var channels = await guild.GetChannelsAsync();
-            foreach (var channel in channels)
+            try
             {
-                if (channel.Type == ChannelType.Voice)
+                DiscordGuild guild = await Bot.Client.GetGuildAsync(guildId);
+                if (guild == null) return;
+
+                var channels = await guild.GetChannelsAsync();
+                foreach (var channel in channels)
                 {
-                    CheckChannel(channel);
+                    if (channel.Type == ChannelType.Voice)
+                    {
+                        CheckChannel(channel);
+                    }
                 }
-            }
 
-            if (!anyChange) return;
-            anyChange = false;
+                if (!anyChange) return;
+                anyChange = false;
 
-            Console.WriteLine("Gave XP to some people");
+                Console.WriteLine("Gave XP to some people");
 
-            cycleCount++;
-            if(cycleCount >= 4)
+                cycleCount++;
+                if (cycleCount >= 4)
+                {
+                    SendBackUp(guild);
+                    cycleCount = 0;
+                }
+            }catch (Exception ex)
             {
-                SendBackUp(guild);
-                cycleCount = 0;
+                Console.WriteLine(ex.ToString());
             }
         }
 
