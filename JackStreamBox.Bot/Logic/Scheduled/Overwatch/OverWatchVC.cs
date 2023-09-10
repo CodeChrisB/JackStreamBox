@@ -46,7 +46,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
                 Console.WriteLine("Gave XP to some people");
 
                 cycleCount++;
-                if (cycleCount >= 4)
+                if (cycleCount >= 10)
                 {
                     SendBackUp(guild);
                     cycleCount = 0;
@@ -77,7 +77,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         {
 
             //Requiremnts 3 People
-            if (channel.Users.Count < 3) return;
+            if (channel.Users.Count < BotData.ReadData(BotVals.XP_MIN_VC_SIZE, 3)) return;
             //1 and only 1 Streaming
             
             List<DiscordMember> channelStreamer = new List<DiscordMember>();

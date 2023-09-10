@@ -76,7 +76,7 @@ namespace JackStreamBox.Bot
                 Token = configJson.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
-                //LoggerFactory = logFactory
+                LoggerFactory = logFactory
 
             };
 

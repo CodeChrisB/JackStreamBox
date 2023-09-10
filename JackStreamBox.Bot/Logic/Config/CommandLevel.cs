@@ -159,7 +159,6 @@ namespace JackStreamBox.Bot.Logic.Config
 
             foreach (DiscordRole role in roles)
             {
-                Console.WriteLine(role.Name);
                 switch (role.Name) {
                     //Trusted
                     case "Level 2":
