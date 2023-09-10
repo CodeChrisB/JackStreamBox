@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using JackStreamBox.Bot.Logic.Config;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using JackStreamBox.Util.Data;
 
 namespace JackStreamBox.Bot.Logic.Commands.DevCommands
 {
@@ -28,6 +29,9 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
         public async Task Update(CommandContext context)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.DEVELOPER)) return;
+
+            if (BotData.ReadData(BotVals.BOT_NAME, "").ToLower().IndexOf("dev") >= 0) return;
+
 
             await context.Channel.SendMessageAsync("Aight, getting newest version");
             // Get the current directory of the application
