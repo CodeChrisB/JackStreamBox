@@ -131,7 +131,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
                 foreach (var line in lines)
                 {
                     var parts = line.Split(',');
-                    if (parts.Length == 2)
+                    if (parts.Length == 3)
                     {
                         var playerId = ulong.Parse(parts[0]);
                         var hostXP = ulong.Parse(parts[1]);
