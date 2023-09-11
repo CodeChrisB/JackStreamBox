@@ -45,6 +45,9 @@ namespace JackStreamBox.Bot.Logic.Config
             }
             else
             {
+
+                builder.DescriptionAddLine($"You are Level {grantedLevel}");
+
                 if (grantedLevel >= (int)PermissionRole.ANYONE)
                 {
                     builder
@@ -80,6 +83,7 @@ namespace JackStreamBox.Bot.Logic.Config
                     builder
                         .DescriptionAddLine("- Get logs")
                         .DescriptionAddLine("- Update the bot")
+                        .DescriptionAddLine("- Literally be the god")
                         .Color(DiscordColor.Purple);
                 }  
             }
