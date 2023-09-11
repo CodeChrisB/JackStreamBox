@@ -201,7 +201,7 @@ namespace JackStreamBox.Bot.Logic.Config
             if(hasNegativeRole) level  = (int)PermissionRole.NOBOT;
             //Rage Quitter
             //NoBot
-            return (int)PermissionRole.TRUSTED;
+            return level;
         }
 
         public static string RoleName(PermissionRole role)
