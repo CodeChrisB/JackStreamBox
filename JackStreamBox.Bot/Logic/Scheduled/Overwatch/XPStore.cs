@@ -1,4 +1,5 @@
-﻿using JackStreamBox.Util.Data;
+﻿using DSharpPlus.Entities;
+using JackStreamBox.Util.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,61 +17,100 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         {
             LoadDataFromFile();
         }
-        public static int AddXp(ulong id)
-        {
-            
-            Random random = new Random(DateTime.Now.Millisecond); 
-            int xpToAdd = BotData.ReadData(BotVals.XP_AMOUNT,10);
-            xpToAdd += random.Next(0, BotData.ReadData(BotVals.XP_RANDOM, 0));
-            if(XPStoreData.ContainsKey(id.ToString()))
-            {
-                XPStoreData[id.ToString()] += xpToAdd;
-            }
-            else
-            {
-                XPStoreData.Add(id.ToString(), xpToAdd);
-            }
-            SaveDataToFile();
 
-            return xpToAdd;
+        public static async Task<ulong> AddPlayXP(ulong id)
+        {
+            return await AddXP(id, false, true);
         }
 
-        public static int GetById(ulong id)
+        public static async Task<ulong> AddBothXP(ulong id)
         {
-            return XPStoreData[id.ToString()];
+            return await AddXP(id, true, true);
+        }
+
+        private static async Task<ulong> AddXP(ulong id,bool hostXp,bool playXP)
+        {
+
+            Random random = new Random(DateTime.Now.Millisecond);
+            ulong xpToAdd = (ulong)BotData.ReadData(BotVals.XP_AMOUNT, 10);
+            xpToAdd += (ulong)random.Next(0, BotData.ReadData(BotVals.XP_RANDOM, 0));
+
+            int index = PlayerStructList.FindIndex(player => player.Id == id);
+
+            if (index < 0) return 0;
+
+            Player playerForXP= PlayerStructList.Find(player => player.Id == id);
+
+
+            if (hostXp) playerForXP.HostXP += xpToAdd;
+            if (playXP) playerForXP.PlayXP += xpToAdd;
+
+            //Just to be safe
+            int newIndex = PlayerStructList.FindIndex(player => player.Id == id);
+            PlayerStructList[newIndex] = playerForXP;
+
+            return xpToAdd;
+
+
+        }
+
+        public static object GetPlayXpById(ulong id)
+        {
+            Player? player = PlayerStructList.FirstOrDefault(player => player.Id == id);
+            if (player == null) return 0;
+
+            if (player.HasValue)
+            {
+                return player.Value.PlayXP;
+            }
+
+            return 0;
+        }
+
+        public static ulong GetHostXPById(ulong id)
+        {
+            Player? player = PlayerStructList.FirstOrDefault(player => player.Id == id);
+            if (player == null) return 0;
+
+            if (player.HasValue)
+            {
+                return player.Value.HostXP;
+            }
+
+            return 0;
         }
         public static int GetPosById(ulong id)
         {
-            return XPStoreData.ToList().OrderBy(user => user.Value).ToList().FindIndex(pair => pair.Key == id.ToString());
+            return PlayerStructList.OrderByDescending(user => user.HostXP).ToList().FindIndex(pair => pair.Id == id);
         }
 
-        public static IEnumerable<KeyValuePair<string, int>> GetTop(int n)
+        public static List<Player> GetTop(int n)
         {
             //gets top n user by xp
 
-            return XPStoreData.ToList().OrderByDescending(kv => kv.Value).Take(n);
+            return PlayerStructList.OrderByDescending(kv => kv.HostXP).Take(n).ToList();
 
         }
 
         internal static void DELETEALLXP()
         {
-            XPStoreData = new Dictionary<string, int>();
+            PlayerStructList = new List<Player>();
             SaveDataToFile(); // :(
         }
 
         /* End Of Public API */
 
         const string FileName = "xpSheet";
-        private static Dictionary<string, int> XPStoreData = new Dictionary<string, int>();
+        private static List<Player> PlayerStructList = new List<Player>();
         private static void SaveDataToFile()
         {
             try
             {
                 using (StreamWriter writer = new StreamWriter(FileName))
                 {
-                    foreach (var data in XPStoreData)
+                    foreach (var player in PlayerStructList)
                     {
-                        writer.WriteLine($"{data.Key},{data.Value}");
+                        writer.WriteLine(player.ToString());
                     }
                     writer.Flush();
                 }
@@ -83,7 +123,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 
         private static void LoadDataFromFile()
         {
-            XPStoreData = new Dictionary<string, int>();
+            PlayerStructList = new List<Player>();
 
             if (File.Exists(FileName))
             {
@@ -93,9 +133,10 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
                     var parts = line.Split(',');
                     if (parts.Length == 2)
                     {
-                        var key = parts[0];
-                        var value = int.Parse(parts[1]);
-                        XPStoreData[key] = value;
+                        var playerId = ulong.Parse(parts[0]);
+                        var hostXP = ulong.Parse(parts[1]);
+                        var playXP = ulong.Parse(parts[1]);
+                        PlayerStructList.Add(new Player(playerId, hostXP, playXP));
                     }
                 }
             }
@@ -106,9 +147,9 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             return File.ReadAllText(FileName);
         }
 
-        internal static Dictionary<string, int> GetAll()
+        internal static List<Player> GetAll()
         {
-            return XPStoreData;
+            return PlayerStructList.ToList();
         }
     }
 }

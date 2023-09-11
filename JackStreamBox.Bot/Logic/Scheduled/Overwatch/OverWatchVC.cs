@@ -80,34 +80,49 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             if (channel.Users.Count < BotData.ReadData(BotVals.XP_MIN_VC_SIZE, 3)) return;
             //1 and only 1 Streaming
             
-            List<DiscordMember> channelStreamer = new List<DiscordMember>();
-            for (int i= 0; i < channel.Users.Count; i++)
-            {
-                if (Streamer.Contains(channel.Users[i].Id))
-                {
-                    channelStreamer.Add(channel.Users[i]);
-                }
-            }
+            List<DiscordMember> channelStreamer  = channel.Users
+                .Where(user => Streamer.Contains(user.Id))
+                .ToList();
 
-            if (channelStreamer.Count == 1)
+            if (channelStreamer.Count != 1) return;
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"[{BotData.ReadData(BotVals.BOT_NAME, "TB1")}]");
+            for (int i = 0; i < channel.Users.Count; i++)
             {
-                AddXP(channelStreamer.FirstOrDefault());
-                anyChange = true;
+                bool streamer = false;
+                DiscordMember member = channel.Users[i];
+                ulong xp = 0;
+                if (Streamer.Contains(member.Id))
+                {
+                    streamer = true;
+                    xp = await XPStore.AddBothXP(member.Id);
+                    sb.AppendLine($"Added **HostXP** to {member.Username} : {xp} --> XP Now : {XPStore.GetPlayXpById(member.Id)}");
+                }
+                else
+                {
+                    xp = await XPStore.AddPlayXP(member.Id);
+                }
+
+                sb.AppendLine($"Added **PlayXP** to {member.Username} : {xp} --> XP Now : {XPStore.GetPlayXpById(member.Id)}");
+
             }
+            anyChange = true;
+            LogAddXP(sb.ToString());
         }
 
-        private static async void AddXP(DiscordMember? discordMember)
+        private static async void LogAddXP(string message)
         {
-            if (discordMember == null) return;
             var guild = await Bot.Client.GetGuildAsync(guildId);
-            int xpAdded = XPStore.AddXp(discordMember.Id);
 
             if (guildId > 0)
             {
                 DiscordChannel channel = guild.GetChannel(ChannelId.LogChannel);
-                await channel.SendMessageAsync($"[{BotData.ReadData(BotVals.BOT_NAME,"TB1")}] Added XP to {discordMember.Username} : {xpAdded} --> XP Now : {XPStore.GetById(discordMember.Id)}");
+                await channel.SendMessageAsync(message);
             }
         }
+
+
 
         internal static Task VoiceStateUpdatedAsync(DiscordClient sender, VoiceStateUpdateEventArgs args)
         {

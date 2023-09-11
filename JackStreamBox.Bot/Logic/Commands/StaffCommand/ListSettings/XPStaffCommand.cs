@@ -51,7 +51,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
         }
 
 
-        [Command("xpRaffle")]
+        [Command("hostRaffle")]
         [CoammandDescription("Deletes XP for all users", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task xpRaffle(CommandContext context)
@@ -59,18 +59,18 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
 
 
-            Dictionary<string, int> all = XPStore.GetAll();
+            List<Player> AllPlayers = XPStore.GetAll();
 
-            List<string> allTickets = new List<string>();
+            List<ulong> allTickets = new List<ulong>();
             ulong xp = 0;
-            int xpToTicketRatio = BotData.ReadData(BotVals.RAFFLEXP, 100);
-            foreach (var kvp in all)
+            ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);
+            foreach (var player in AllPlayers)
             {
-                xp += (ulong)kvp.Value;
-                int tickets = kvp.Value / xpToTicketRatio;
+                xp += (ulong)player.HostXP;
+                int tickets = (int)(player.HostXP / xpToTicketRatio);
                 for(int i= 0; i < tickets; i++)
                 {
-                    allTickets.Add(kvp.Key);
+                    allTickets.Add(player.Id);
                 }
             }
 
@@ -95,11 +95,11 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             int totalTickets = allTickets.Count;
             int winningTicket = random.Next(1, totalTickets + 1);
 
-            ulong winnerId = ulong.Parse(allTickets.ElementAt(winningTicket));
+            ulong winnerId = allTickets.ElementAt(winningTicket);
 
 
             var user = await context.Guild.GetMemberAsync(winnerId);
-            int userXp = XPStore.GetById(user.Id);
+            ulong userXp = XPStore.GetHostXPById(user.Id);
             string top = await XPCommandLogic.TopMessage(context.ToCustomContext());
 
              await PlainEmbed.CreateEmbed(context)

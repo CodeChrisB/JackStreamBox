@@ -32,14 +32,14 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.XP
 
         public static async Task<string> TopMessage(CustomContext context)
         {
-            IEnumerable<KeyValuePair<string, int>> list = XPStore.GetTop(5);
+            List<Player> list = XPStore.GetTop(5);
             int i = 1;
             StringBuilder sb = new StringBuilder();
-            foreach (var kvp in list)
+            foreach (var player in list)
             {
-                var user = await context.Guild.GetMemberAsync(ulong.Parse(kvp.Key));
+                var user = await context.Guild.GetMemberAsync(player.Id);
 
-                sb.AppendLine($"#{i}| {user.Mention} XP: **{kvp.Value}**");
+                sb.AppendLine($"Host XP| #{i}| {user.Mention} XP: **{player.HostXP}**");
                 i++;
             }
 
@@ -48,7 +48,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.XP
 
         public static async void ShowOwnXP(InteractionContext ctx)
         {
-            int xp = XPStore.GetById(ctx.User.Id);
+            ulong xp = XPStore.GetHostXPById(ctx.User.Id);
             int pos = XPStore.GetPosById(ctx.User.Id);
             await PlainEmbed.CreateEmbed(ctx.ToCustomContext())
                 .Title($"Host XP of {ctx.User.Username}")
