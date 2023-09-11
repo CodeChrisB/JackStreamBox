@@ -40,6 +40,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.XP
                 var user = await context.Guild.GetMemberAsync(ulong.Parse(kvp.Key));
 
                 sb.AppendLine($"#{i}| {user.Mention} XP: **{kvp.Value}**");
+                i++;
             }
 
             return sb.ToString();   
