@@ -97,7 +97,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
                 {
                     streamer = true;
                     xp = await XPStore.AddBothXP(member.Id);
-                    sb.AppendLine($"Added **HostXP** to {member.Username} : {xp} --> XP Now : {XPStore.GetPlayXpById(member.Id)}");
+                    sb.AppendLine($"Added **HostXP** to {member.Username} : {xp} --> XP Now : {XPStore.GetHostXPById(member.Id)}");
                 }
                 else
                 {
