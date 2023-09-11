@@ -32,7 +32,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.XP
 
         public static async Task<string> TopMessage(CustomContext context)
         {
-            Dictionary<string, int> list = XPStore.GetTop(5);
+            IEnumerable<KeyValuePair<string, int>> list = XPStore.GetTop(5);
             int i = 1;
             StringBuilder sb = new StringBuilder();
             foreach (var kvp in list)

@@ -44,12 +44,11 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             return XPStoreData.ToList().OrderBy(user => user.Value).ToList().FindIndex(pair => pair.Key == id.ToString());
         }
 
-        public static Dictionary<string,int> GetTop(int n)
+        public static IEnumerable<KeyValuePair<string, int>> GetTop(int n)
         {
             //gets top n user by xp
 
-            var sortedList = XPStoreData.ToList().OrderBy(user => user.Value).Take(n);
-            return sortedList.ToDictionary(pair => pair.Key, pair => pair.Value);
+            return XPStoreData.ToList().OrderByDescending(kv => kv.Value).Take(n);
 
         }
 
