@@ -135,7 +135,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
                     {
                         var playerId = ulong.Parse(parts[0]);
                         var hostXP = ulong.Parse(parts[1]);
-                        var playXP = ulong.Parse(parts[1]);
+                        var playXP = ulong.Parse(parts[2]);
                         PlayerStructList.Add(new Player(playerId, hostXP, playXP));
                     }
                 }
