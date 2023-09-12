@@ -36,10 +36,10 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             xpToAdd += (ulong)random.Next(0, BotData.ReadData(BotVals.XP_RANDOM, 0));
 
             int index = PlayerStructList.FindIndex(player => player.Id == id);
+            
 
-            if (index < 0) return 0;
 
-            Player playerForXP= PlayerStructList.Find(player => player.Id == id);
+            Player playerForXP= index>= 0 ? PlayerStructList.Find(player => player.Id == id) : new Player(id,0,0);
 
 
             if (hostXp) playerForXP.HostXP += xpToAdd;
@@ -47,8 +47,16 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 
             //Just to be safe
             int newIndex = PlayerStructList.FindIndex(player => player.Id == id);
-            PlayerStructList[newIndex] = playerForXP;
+            if(newIndex >= 0)
+            {
+                PlayerStructList[newIndex] = playerForXP;
+            }
+            else
+            {
+                PlayerStructList.Add(playerForXP);
+            }
 
+            SaveDataToFile();
             return xpToAdd;
 
 
