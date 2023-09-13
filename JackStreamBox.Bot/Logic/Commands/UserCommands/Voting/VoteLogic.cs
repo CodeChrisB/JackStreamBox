@@ -50,7 +50,6 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         {
             PackVotes = new Dictionary<string, string>();
             GameVotes = new Dictionary<ulong, int>();
-            games = null;
             currentlyVoting = false;
             PackVoteMessage = null;
             PrePollMessageData = null;
@@ -452,6 +451,12 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         {
             DiscordEmoji[] emojis = GetEmojis(context);
             StringBuilder sb = new StringBuilder();
+
+            if(games == null)
+            {
+                sb.AppendLine("Sorry something went wrong idk why sometimes discord doesnt send me the correct data i need, i picked pack 7 as a backup, me sorry :(");
+                games = PackInfo.GetVotePack("7");
+            }
 
             for (int i = 0; i < emojis.Length; i++)
             {
