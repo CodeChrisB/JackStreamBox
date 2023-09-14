@@ -64,7 +64,6 @@ namespace JackStreamBox.Bot.Logic.Config
                 if (grantedLevel >= (int)PermissionRole.HIGHLYTRUSTED)
                 {
                     builder
-                         .DescriptionAddLine("- Report rights")
                          .DescriptionAddLine("- Pause games for toilet breaks")
                          .DescriptionAddLine("- Restart the bot")
                          .Color(DiscordColor.Blue);
@@ -182,6 +181,7 @@ namespace JackStreamBox.Bot.Logic.Config
                     //Staff
                     case "Jack":
                     case "Box":
+                    case "BotMod":
                         level = Math.Max(level, (int)PermissionRole.STAFF); 
                         break;
                     //Developer
