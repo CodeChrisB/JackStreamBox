@@ -51,6 +51,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         [Command("input")]
         public async Task RealInput(CommandContext context, string input, int times)
         {
+
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             DoInput(input, times);
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
@@ -67,6 +68,8 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         [Command("a")] public async Task ainput(CommandContext context, int times) => await RealInput(context, "l",times);
         [Command("s")] public async Task sinput(CommandContext context, int times) => await RealInput(context, "d",times);
         [Command("d")] public async Task dinput(CommandContext context, int times) => await RealInput(context, "r",times);
+        [Command("esc")] public async Task escinput(CommandContext context, int times) => await RealInput(context, "esc", times);
+        [Command("enter")] public async Task enterinput(CommandContext context, int times) => await RealInput(context, "enter", times);
 
         private void DoInput(string input, int times)
         {

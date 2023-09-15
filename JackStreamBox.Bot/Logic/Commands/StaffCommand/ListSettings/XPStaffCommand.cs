@@ -51,20 +51,29 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             await context.Channel.SendMessageAsync($"{context.User.Mention} just deleted all XP...");
         }
 
-        [Command("ticketFile")]
+        [Command("csv")]
         [ModCommand(PermissionRole.STAFF)]
 
         public async Task ticketFile(CommandContext context)
         {
             List<Player> AllPlayers = XPStore.GetAll();
+            IEnumerable<DiscordMember> allMembers = await context.Guild.GetAllMembersAsync();
+
+
 
             ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);
             StringBuilder sb = new StringBuilder();
             foreach (var player in AllPlayers)
             {
 
-                var user = await context.Guild.GetMemberAsync(player.Id);
-                sb.AppendLine($"{(player.HostXP / xpToTicketRatio)},{user.Username}");
+                DiscordMember? member = allMembers.FirstOrDefault(member => member.Id == player.Id);
+                if (member == null)
+                {
+                    await context.Channel.SendMessageAsync($"The user with the id {player.Id} seems to be no longer part of the server");
+                }else
+                {
+                    sb.AppendLine($"{(player.HostXP / xpToTicketRatio)},{member.Username}");
+                }
             }
 
 
