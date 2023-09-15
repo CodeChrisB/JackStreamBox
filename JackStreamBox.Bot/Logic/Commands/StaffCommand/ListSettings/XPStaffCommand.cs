@@ -61,7 +61,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
 
 
 
-            ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);
+            ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);1
             StringBuilder sb = new StringBuilder();
             foreach (var player in AllPlayers)
             {
@@ -72,7 +72,11 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
                     await context.Channel.SendMessageAsync($"The user with the id {player.Id} seems to be no longer part of the server");
                 }else
                 {
-                    sb.AppendLine($"{(player.HostXP / xpToTicketRatio)},{member.Username}");
+                    int tickets = (int)(player.HostXP / xpToTicketRatio);
+                    if (tickets > 0)
+                    {
+                        sb.AppendLine($"{(player.HostXP / xpToTicketRatio)},{member.Username}");
+                    }
                 }
             }
 
