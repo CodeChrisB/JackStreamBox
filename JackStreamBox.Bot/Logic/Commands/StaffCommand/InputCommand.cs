@@ -56,6 +56,16 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
             Destroyer.Message(context.Message, DestroyTime.INSTANT);
         }
 
+        [Command("w")] public async Task winput(CommandContext context) => await RealInput(context, "u");
+        [Command("a")] public async Task ainput(CommandContext context) => await RealInput(context, "l");
+        [Command("s")] public async Task sinput(CommandContext context) => await RealInput(context, "d");
+        [Command("d")] public async Task dinput(CommandContext context) => await RealInput(context, "r");
+
+        [Command("w")] public async Task winput(CommandContext context, int times) => await RealInput(context, "u",times);
+        [Command("a")] public async Task ainput(CommandContext context, int times) => await RealInput(context, "l",times);
+        [Command("s")] public async Task sinput(CommandContext context, int times) => await RealInput(context, "d",times);
+        [Command("d")] public async Task dinput(CommandContext context, int times) => await RealInput(context, "r",times);
+
         private void DoInput(string input, int times)
         {
             string? internalInput = null;

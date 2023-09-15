@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
@@ -50,9 +51,36 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             await context.Channel.SendMessageAsync($"{context.User.Mention} just deleted all XP...");
         }
 
+        [Command("ticketFile")]
+        [ModCommand(PermissionRole.STAFF)]
+
+        public async Task ticketFile(CommandContext context)
+        {
+            List<Player> AllPlayers = XPStore.GetAll();
+
+            ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);
+            StringBuilder sb = new StringBuilder();
+            foreach (var player in AllPlayers)
+            {
+
+                var user = await context.Guild.GetMemberAsync(player.Id);
+                sb.AppendLine($"{(player.HostXP / xpToTicketRatio)},{user.Username}");
+            }
+
+
+            byte[] byteArray = Encoding.UTF8.GetBytes(sb.ToString());
+            MemoryStream stream = new MemoryStream(byteArray);
+
+            var msg = new DiscordMessageBuilder()
+            .WithContent("Tickets of all Hosts")
+            .AddFile("tickets.csv", stream);
+
+            await context.Channel.SendMessageAsync(msg);
+        }
+
 
         [Command("hostRaffle")]
-        [CoammandDescription("Deletes XP for all users", ":point_right:")]
+        [CoammandDescription("Hosts the Raffle", ":point_right:")]
         [ModCommand(PermissionRole.STAFF)]
         public async Task xpRaffle(CommandContext context)
         {
