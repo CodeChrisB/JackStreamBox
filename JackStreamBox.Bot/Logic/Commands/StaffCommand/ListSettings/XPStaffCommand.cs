@@ -61,7 +61,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
 
 
 
-            ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);1
+            ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);
             StringBuilder sb = new StringBuilder();
             foreach (var player in AllPlayers)
             {
