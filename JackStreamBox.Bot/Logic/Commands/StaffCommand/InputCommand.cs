@@ -60,6 +60,8 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand
         [Command("a")] public async Task ainput(CommandContext context) => await RealInput(context, "l");
         [Command("s")] public async Task sinput(CommandContext context) => await RealInput(context, "d");
         [Command("d")] public async Task dinput(CommandContext context) => await RealInput(context, "r");
+        [Command("esc")] public async Task escinput(CommandContext context) => await RealInput(context, "esc");
+        [Command("enter")] public async Task enterinput(CommandContext context) => await RealInput(context, "enter");
 
         [Command("w")] public async Task winput(CommandContext context, int times) => await RealInput(context, "u",times);
         [Command("a")] public async Task ainput(CommandContext context, int times) => await RealInput(context, "l",times);
