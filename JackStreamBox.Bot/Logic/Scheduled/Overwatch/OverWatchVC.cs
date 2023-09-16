@@ -19,6 +19,9 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 {
     public class OverwatchVC
     {
+
+         public static int JackBotCount { get; private set; }
+        public static ulong[] JackBotPlayers { get; private set; } = new ulong[1];
         private static List<ulong> Streamer = new List<ulong>();    
         public static ulong guildId = 0;
 
@@ -127,6 +130,27 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         internal static Task VoiceStateUpdatedAsync(DiscordClient sender, VoiceStateUpdateEventArgs args)
         {
             if (args.After.User.IsBot) return Task.CompletedTask;
+
+                
+            //Joined JackBot VC
+            DiscordChannel channel = (args.After.Channel == null ? args.Before.Channel : args.After.Channel);
+            bool leftVC = args.After.Channel == null;
+
+            if (channel.Id == ChannelId.JackBotVC)
+            {
+                if(channel.Users.Where(user => user.Id ==  ChannelId.BotAccount).ToList().Any()) 
+                {
+                    //streamer is  in vc 
+                    JackBotCount = channel.Users.Count-1;
+                }else
+                {
+                    //streamer is not in vc
+                    JackBotCount = channel.Users.Count;
+                }
+
+                JackBotPlayers = channel.Users.Select(user => user.Id).ToArray();
+            }
+
             if (args.After.IsSelfStream)
             {
                 if (!Streamer.Contains(args.After.Member.Id))
@@ -143,6 +167,12 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             }
 
             return Task.CompletedTask;
+        }
+
+
+        public static bool IsInBotVC(ulong id)
+        {
+            return JackBotPlayers.Contains(id);
         }
     }
 }

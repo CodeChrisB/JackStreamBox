@@ -6,6 +6,7 @@ using JackStreamBox.Bot.Logic.Commands._Helper.EmbedBuilder;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
 using JackStreamBox.Bot.Logic.Data;
+using JackStreamBox.Bot.Logic.Scheduled.Overwatch;
 using JackStreamBox.Util;
 using JackStreamBox.Util.Data;
 using System;
@@ -86,6 +87,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
         //Methods for Player Voting
         public static async void Vote(CustomContext ccontext, string voteCategory,ulong id = 0)
         {
+
+            if (OverwatchVC.IsInBotVC(id) == false) return;
+
             if (DateTime.Now < lockOutTill)
             {
                 ResetVote();
@@ -112,7 +116,8 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
 
 
-            //Valid Set Vote
+            //Already votes dont do it again discord doesnt like spamming commands;
+            if (PackVotes.ContainsKey(id.ToString())) return;
 
             PackVotes[id>0 ? id.ToString() : ccontext.Member.Id.ToString()] = voteCategory;
 
@@ -166,6 +171,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
         public static void OnGameVote(CustomContext context, string id )
         {
+            ulong userId = context.User.Id;
+            if (!OverwatchVC.IsInBotVC(userId)) return;
+            if (GameVotes.ContainsKey(userId)) return;
             int gameId = 0;
             switch (id)
             {
@@ -188,7 +196,10 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             sb.AppendLine($"Time Left: {timeTillVoteEnd}s");
 
+
+            //If there are not enough players use lobby size as required
             int requiredVotes = BotData.ReadData(BotVals.REQUIRED_VOTES, 4);
+            requiredVotes = Math.Min(OverwatchVC.JackBotCount, requiredVotes);
 
             if (PackVotes.Values.Count < requiredVotes)
                 sb.AppendLine($"Required Votes: {PackVotes.Values.Count}/{requiredVotes} :x:");
@@ -260,7 +271,10 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
 
             List<string> votes = PackVotes.Values.ToList();
 
-            if (votes.Count >= BotData.ReadData(BotVals.REQUIRED_VOTES, 3))
+            //If there are not enough players use lobby size as required
+            int requiredVotes = BotData.ReadData(BotVals.REQUIRED_VOTES, 4);
+            requiredVotes = Math.Min(OverwatchVC.JackBotCount, requiredVotes);
+            if (votes.Count >= requiredVotes)
             {
                 string vote = votes[new Random().Next(votes.Count)];
                 games = PackInfo.GetVotePack(vote);
@@ -274,7 +288,7 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Voting
                     .CreateEmbed(context)
                     .Title("Not Enough Votes !")
                     .DescriptionAddLine($"Yikes... we need some more votes to start a game\n")
-                    .DescriptionAddLine($"Next time try it with atleast {BotData.ReadData(BotVals.REQUIRED_VOTES, 3)} votes")
+                    .DescriptionAddLine($"Next time try it with atleast {requiredVotes} votes")
                     .DescriptionAddLine("Just trying to start a new vote to end the current game will revoke your bot rights.")
                     .BuildNDestroy(DestroyTime.SLOW);
             }
