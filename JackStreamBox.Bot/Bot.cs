@@ -28,6 +28,7 @@ using JackStreamBox.Bot.Logic.Commands.UserCommands;
 using JackStreamBox.Bot.Logic.Commands._Helper.Ascii;
 using JackStreamBox.Bot.Logic.Scheduled.Overwatch;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.XP;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.Screenshot;
 
 namespace JackStreamBox.Bot
 {
@@ -126,6 +127,7 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<DailyQuestionCommand>();
             Commands.RegisterCommands<MenuCommand>();
             Commands.RegisterCommands<XPStaffCommand>();
+            Commands.RegisterCommands<ScreenshotCommand>();
 
             //Slash Commands
             Slash.RegisterCommands<HelpSlash>();
@@ -151,6 +153,8 @@ namespace JackStreamBox.Bot
             BotCommand.Register<SetValue>();
             BotCommand.Register<BannerCommands>();
             BotCommand.Register<RuleCommands>();
+            BotCommand.Register<ScreenshotCommand>();
+
 
             Console.WriteLine("Reflection - Register Commands");
 
