@@ -18,19 +18,26 @@ namespace JackStreamBox.Util.Logic
         [DllImport("user32.dll")]
         private static extern bool GetWindowRect(IntPtr hwnd, out Rectangle rect);
 
-        public static MemoryStream CaptureScreenshotAsStream()
+        public static MemoryStream? CaptureScreenshotAsStream()
         {
-            IntPtr hwnd = WindowNavigator.GameProcess.Handle;
-            GetWindowRect(hwnd, out Rectangle bounds);
-
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
-            using (Graphics g = Graphics.FromImage(bitmap))
+            try
             {
-                g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-                MemoryStream stream = new MemoryStream();
-                bitmap.Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-                return stream;
+                IntPtr hwnd = WindowNavigator.GameProcess.Handle;
+                GetWindowRect(hwnd, out Rectangle bounds);
+
+                using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                    MemoryStream stream = new MemoryStream();
+                    bitmap.Save(stream, ImageFormat.Png);
+                    stream.Position = 0;
+                    return stream;
+                }
+            }
+            catch {
+                return null;
+            
             }
         }
     }

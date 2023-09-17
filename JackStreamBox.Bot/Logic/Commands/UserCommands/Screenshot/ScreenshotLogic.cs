@@ -23,7 +23,11 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Screenshot
             try
             {
                 var stream = GameScreenShot.CaptureScreenshotAsStream();
-
+                if (stream == null)
+                {
+                    await context.Channel.SendMessageAsync("Did not work :(");
+                    return;
+                }
 
                 var msg = new DiscordMessageBuilder()
                 .WithContent("Screenshot")
