@@ -22,4 +22,3 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Report
         }
     }
 }
-8
