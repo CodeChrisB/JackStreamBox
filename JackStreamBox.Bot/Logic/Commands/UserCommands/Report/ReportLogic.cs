@@ -14,10 +14,12 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Report
     {
         public static async Task ReportIssue(CustomContext context, string issue)
         {
-            var logChannel = await context.Client.GetChannelAsync(ChannelId.LogChannel);
+            var logChannel = await context.Client.GetChannelAsync(ChannelId.CCBBOTChannel);
 
             string username = context.Member.Nickname;
-            await logChannel.SendMessageAsync($"{username}\n{issue}");
+            await logChannel.SendMessageAsync($"{context.User.Mention} {username}:\n{issue}");
+            await context.Channel.SendMessageAsync($"{context.User.Mention} thx for reporting");
         }
     }
 }
+8
