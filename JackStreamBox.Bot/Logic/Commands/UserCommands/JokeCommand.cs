@@ -15,12 +15,13 @@ namespace JackStreamBox.Bot.Logic.Commands
     {
         [Command("joke")]
         [CoammandDescription("Get a bad jackbox related pun. (Using ChatGPT)",":tada:")]
-        [Requires(PermissionRole.TRUSTED)]
+        [Requires(PermissionRole.ANYONE)]
         public async Task MakeRizz(CommandContext context)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.TRUSTED))
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE))
             {
                 await context.Channel.SendMessageAsync("Wanna hear a joke? You can't use this command.");
+                return;
             }
             var message = await context.Channel.SendMessageAsync(Joke.GetJoke());
 

@@ -18,22 +18,33 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands.Screenshot
     {
         public static async Task MakeScreenShot(CustomContext context)
         {
-            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
+            
 
             try
             {
-                var stream = GameScreenShot.CaptureScreenshotAsStream();
+                var stream = GameScreenShot.CaptureWindowScreenshot();
                 if (stream == null)
                 {
                     await context.Channel.SendMessageAsync("Did not work :(");
                     return;
                 }
 
-                var msg = new DiscordMessageBuilder()
-                .WithContent("Screenshot")
-                .AddFile("game.png", stream);
+                using (MemoryStream screenshotStream = GameScreenShot.CaptureWindowScreenshot())
+                {
+                    // Send the screenshot using DiscordMessageBuilder
 
-                await context.Channel.SendMessageAsync(msg);
+                    MemoryStream copyStream = new MemoryStream(screenshotStream.ToArray());
+                    var msg = new DiscordMessageBuilder()
+                        .WithContent("Screenshot")
+                        .AddFile("game.png", copyStream);
+
+                    // Send the msg using your Discord library
+                    // discordClient.SendMessageAsync(channelId, msg);
+                    await context.Channel.SendMessageAsync(msg);
+                }
+
+
+
             }catch
             {
                 await context.Channel.SendMessageAsync("Did not work :(");

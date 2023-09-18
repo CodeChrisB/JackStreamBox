@@ -14,6 +14,7 @@ namespace JackStreamBox.Bot.Logic.Config.ExtensionMethods
     {
         public static CustomContext ToCustomContext(this CommandContext context)
         {
+            
             return new CustomContext(context);
         }
 

@@ -15,30 +15,63 @@ namespace JackStreamBox.Util.Logic
 {
     public class GameScreenShot
     {
-        [DllImport("user32.dll")]
-        private static extern bool GetWindowRect(IntPtr hwnd, out Rectangle rect);
-
-        public static MemoryStream? CaptureScreenshotAsStream()
+        public static MemoryStream CaptureWindowScreenshot()
         {
-            try
-            {
-                IntPtr hwnd = WindowNavigator.GameProcess.Handle;
-                GetWindowRect(hwnd, out Rectangle bounds);
+            if (WindowNavigator.GameProcess == null) return null;
 
-                using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
-                using (Graphics g = Graphics.FromImage(bitmap))
+
+            IntPtr hwnd = WindowNavigator.GameProcess.MainWindowHandle;
+
+            if (hwnd == IntPtr.Zero)
+            {
+                throw new ArgumentException("The specified process does not have a main window.");
+            }
+
+            RECT bounds;
+            GetClientRect(hwnd, out bounds);
+
+            if (bounds.Right > bounds.Left && bounds.Bottom > bounds.Top)
+            {
+                using (Bitmap bitmap = new Bitmap(bounds.Right - bounds.Left, bounds.Bottom - bounds.Top))
                 {
-                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-                    MemoryStream stream = new MemoryStream();
-                    bitmap.Save(stream, ImageFormat.Png);
-                    stream.Position = 0;
-                    return stream;
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                    {
+                        IntPtr hdcBitmap = g.GetHdc();
+
+                        PrintWindow(hwnd, hdcBitmap, 0);
+
+                        g.ReleaseHdc(hdcBitmap);
+
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            bitmap.Save(stream, ImageFormat.Png);
+                            stream.Position = 0;
+                            return stream;
+                        }
+                    }
                 }
             }
-            catch {
+            else
+            {
                 return null;
-            
             }
+        }
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool PrintWindow(IntPtr hwnd, IntPtr hdcBlt, int nFlags);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+        [Serializable]
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
         }
     }
 }
