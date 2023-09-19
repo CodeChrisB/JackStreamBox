@@ -8,15 +8,16 @@ After a game players can vote for the next game, after the voting the next game 
 |--------------|--------------------|
 | **!commands**| List all commands you can use.|
 | **!help**| Explains what the bot does and how to get further help.|
+| **!joke**| Get a bad jackbox related pun. (Using ChatGPT)|
 | **!level**| Checks what permission level you have.|
 | **!pack**| View a pack and it's games. **E.g !pack 5**|
 | **!packs**| Displays an image containing all games in all packs|
 | **!rules**| Show all rules|
+| **!screenshot**| Make a  full res screenshot of the game |
 | **!vote**| Vote for the pack/category you want to play, when 4 players vote one of the voted categories will be picked. |
 ## Level 2  Trused Users 
 | Command      | Description        |
 |--------------|--------------------|
-| **!joke**| Get a bad jackbox related pun. (Using ChatGPT)|
 | **!report**| !report **Your Issue**|
 | **!version**| Check bot version|
 ## Level 3  Top Hosts 
