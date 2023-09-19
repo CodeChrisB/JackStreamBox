@@ -1,0 +1,29 @@
+name: Update PlayerBots
+
+on:
+  repository_dispatch:
+    types: [update-playerbots]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Update PlayerBots
+        run: |
+          # Create directory if it doesn't exist
+          mkdir -p PlayerBots
+          
+          # Clone the public repository
+          git clone https://github.com/CodeChrisB/Jackbox-Bot PlayerBots
+
+          # Commit and push changes if there are any
+          cd PlayerBots
+          if [[ $(git status --porcelain) ]]; then
+            git add .
+            git commit -m "Update from public repository"
+            git push
+          fi
