@@ -96,6 +96,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
                 bool streamer = false;
                 DiscordMember member = channel.Users[i];
                 ulong xp = 0;
+                if (member.Roles.Where(role => role.Name.ToLower() == "noxp").Count() > 0) return;
                 if (Streamer.Contains(member.Id))
                 {
                     streamer = true;
