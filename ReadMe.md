@@ -33,9 +33,11 @@ After a game players can vote for the next game, after the voting the next game 
 | **!banner-**| Removes a banner shown while at multiple pages|
 | **!banner+**| Adds a banner shown while at multiple pages|
 | **!banners**| Shows all banners|
+| **!csv**| |
 | **!daily**| Show staff commands|
 | **!embed**| Use the bot to speak. Title in "Qutation Marks" Message without them, can even use line breaks for the message.|
 | **!embed+**| !embed+ "[Image Url]" "[Title]"  [Message]|
+| **!hostRaffle**| Hosts the Raffle|
 | **!input**| Let's you navigate the game yourself. Used to change settings.|
 | **!menu**| Opens a menu that let's you vote and do other stuff|
 | **!poll**| !poll [Question] [Answer1] [Answer2] [Answer3] [Answer4] [Answer5] [Answer6]    (At least 1 Answer Max 6 Answers)|
@@ -49,6 +51,9 @@ After a game players can vote for the next game, after the voting the next game 
 | **!staff**| Show staff commands|
 | **!start**| Starts any game you want to. Be aware this instantly closes any current game!|
 | **!troll**| Use the bot to speak. You can even use line breaks and mentions people!!|
+| **!xpCheck**| |
+| **!xpDelete**| Deletes XP for all users|
+| **!xpDelete**| |
 ## Level 5  Developers 
 | Command      | Description        |
 |--------------|--------------------|

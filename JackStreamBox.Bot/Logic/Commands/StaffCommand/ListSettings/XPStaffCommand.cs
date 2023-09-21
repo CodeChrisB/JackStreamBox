@@ -52,10 +52,12 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             await context.Channel.SendMessageAsync($"{context.User.Mention} just deleted all XP...");
         }
 
-        [Command("updateEligible")]
+        [Command("xpCheck")]
         [ModCommand(PermissionRole.STAFF)]
-        public async Task updateEligble(CommandContext context, string confirmMessage)
+        public async Task updateEligble(CommandContext context)
         {
+            if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+            await context.Channel.SendMessageAsync("Gonna sort out users that sould not be inside the XP List anymore");
             List<Player> AllPlayers = XPStore.GetAll();
             IEnumerable<DiscordMember> allMembers = await context.Guild.GetAllMembersAsync();
 
@@ -79,6 +81,8 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
                 }
             }
         }
+
+
 
         [Command("csv")]
         [ModCommand(PermissionRole.STAFF)]
