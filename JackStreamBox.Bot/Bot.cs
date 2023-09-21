@@ -163,6 +163,7 @@ namespace JackStreamBox.Bot
             Console.WriteLine("Reflection - Register Fake Mod Commands");
             BotCommand.Register<ShowModCommand>();
             BotCommand.Register<DailyQuestionCommand>();
+            BotCommand.Register<XPStaffCommand>();
 
 
             //Generate Command Markdown
