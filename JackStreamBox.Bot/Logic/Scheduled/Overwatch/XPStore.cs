@@ -96,7 +96,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         {
             //gets top n user by xp
 
-            return PlayerStructList.Where(player=> player.) .OrderByDescending(kv => kv.HostXP).Take(n).ToList();
+            return PlayerStructList.OrderByDescending(kv => kv.HostXP).Take(n).ToList();
 
         }
 
