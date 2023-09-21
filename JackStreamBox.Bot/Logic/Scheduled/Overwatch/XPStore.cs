@@ -96,7 +96,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
         {
             //gets top n user by xp
 
-            return PlayerStructList.OrderByDescending(kv => kv.HostXP).Take(n).ToList();
+            return PlayerStructList.Where(player=> player.) .OrderByDescending(kv => kv.HostXP).Take(n).ToList();
 
         }
 
@@ -106,6 +106,14 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
             SaveDataToFile(); // :(
         }
 
+        internal static void WipeUser(ulong id)
+        {
+            int index = PlayerStructList.FindIndex(player => player.Id == id);
+            if (index >= 0)
+            {
+                PlayerStructList.RemoveAt(index);
+            }
+        }
         /* End Of Public API */
 
         const string FileName = "xpSheet";

@@ -37,6 +37,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
         }
 
         [Command("xpDelete")]
+        [ModCommand(PermissionRole.STAFF)]
         public async Task actualDelete(CommandContext context, string confirmMessage)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
@@ -49,6 +50,34 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             XPStore.DELETEALLXP();
 
             await context.Channel.SendMessageAsync($"{context.User.Mention} just deleted all XP...");
+        }
+
+        [Command("updateEligible")]
+        [ModCommand(PermissionRole.STAFF)]
+        public async Task updateEligble(CommandContext context, string confirmMessage)
+        {
+            List<Player> AllPlayers = XPStore.GetAll();
+            IEnumerable<DiscordMember> allMembers = await context.Guild.GetAllMembersAsync();
+
+
+
+            ulong xpToTicketRatio = (ulong)BotData.ReadData(BotVals.RAFFLEXP, 100);
+            StringBuilder sb = new StringBuilder();
+            foreach (var player in AllPlayers)
+            {
+
+                DiscordMember? member = allMembers.FirstOrDefault(member => member.Id == player.Id);
+                if (member == null)
+                {
+                    await context.Channel.SendMessageAsync($"Wiped the user {player.Id} due to not being part of the server anymore");
+                    XPStore.WipeUser(player.Id);
+                }
+                else if (member.Roles.Any(role => role.Name == "NoBot"))
+                {
+                    await context.Channel.SendMessageAsync($"Wiped the user {player.Id} due to having NoBot Role");
+                    XPStore.WipeUser(player.Id);
+                }
+            }
         }
 
         [Command("csv")]
@@ -66,11 +95,19 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
             foreach (var player in AllPlayers)
             {
 
+
                 DiscordMember? member = allMembers.FirstOrDefault(member => member.Id == player.Id);
                 if (member == null)
                 {
-                    await context.Channel.SendMessageAsync($"The user with the id {player.Id} seems to be no longer part of the server");
-                }else
+                    await context.Channel.SendMessageAsync($"Wiped the user {player.Id} due to not being part of the server anymore");
+                    XPStore.WipeUser(player.Id);
+                }
+                else if(member.Roles.Any(role=> role.Name == "NoBot"))
+                {
+                    await context.Channel.SendMessageAsync($"Wiped the user {player.Id} due to having NoBot Role");
+                    XPStore.WipeUser(player.Id);
+                }
+                else
                 {
                     int tickets = (int)(player.HostXP / xpToTicketRatio);
                     if (tickets > 0)
