@@ -102,9 +102,8 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 
         internal static void DELETEALLXP()
         {
-            PlayerStructList = new List<Player>();
-            SaveDataToFile(); // :(
-        }
+			File.WriteAllText(FileName, string.Empty);
+		}
 
         internal static void WipeUser(ulong id)
         {
@@ -118,7 +117,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 
         const string FileName = "xpSheet";
         private static List<Player> PlayerStructList = new List<Player>();
-        private static void SaveDataToFile()
+        public static void SaveDataToFile()
         {
             try
             {

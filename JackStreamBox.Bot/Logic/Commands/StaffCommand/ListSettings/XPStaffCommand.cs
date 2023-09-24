@@ -38,7 +38,7 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
 
         [Command("xpDelete")]
         [ModCommand(PermissionRole.STAFF)]
-        public async Task actualDelete(CommandContext context, string confirmMessage)
+        public async Task actualDelete(CommandContext context, [RemainingText] string confirmMessage)
         {
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
             if(confirmMessage != DELETE_TEXT)
@@ -80,6 +80,9 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
                     XPStore.WipeUser(player.Id);
                 }
             }
+
+			await context.Channel.SendMessageAsync($"Purged the unworthy :) ");
+			XPStore.SaveDataToFile();
         }
 
 
@@ -89,7 +92,9 @@ namespace JackStreamBox.Bot.Logic.Commands.StaffCommand.ListSettings
 
         public async Task ticketFile(CommandContext context)
         {
-            List<Player> AllPlayers = XPStore.GetAll();
+			if (!CommandLevel.CanExecuteCommand(context, PermissionRole.STAFF)) return;
+
+			List<Player> AllPlayers = XPStore.GetAll();
             IEnumerable<DiscordMember> allMembers = await context.Guild.GetAllMembersAsync();
 
 
