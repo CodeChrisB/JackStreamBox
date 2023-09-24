@@ -20,7 +20,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
     public class OverwatchVC
     {
 
-         public static int JackBotCount { get; private set; }
+        public static int JackBotCount { get; private set; }
         public static ulong[] JackBotPlayers { get; private set; } = new ulong[1];
         private static List<ulong> Streamer = new List<ulong>();    
         public static ulong guildId = 0;

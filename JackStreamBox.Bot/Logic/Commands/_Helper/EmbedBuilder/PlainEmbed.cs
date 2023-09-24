@@ -89,10 +89,39 @@ public class FluentBuilder
         return this;
     }
 
+	public FluentBuilder Thumbnail(string url)
+	{
+		builder.Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+		{
+			Url = url
+		};
+		return this;
+	}
 
+	public FluentBuilder Footer(string footer,string iconUrl)
+	{
+		builder.Footer = new DiscordEmbedBuilder.EmbedFooter
+		{
+			Text = footer,
+			IconUrl = iconUrl
+		};
 
-    //End Commands
-    public DiscordEmbedBuilder GetBuilder() => builder;
+		return this;
+	}
+
+	public FluentBuilder Author(string name, string iconUrl)
+	{
+		builder.Author = new DiscordEmbedBuilder.EmbedAuthor
+		{
+			Name = name,
+			IconUrl = iconUrl
+		};
+
+		return this;
+	}
+
+	//End Commands
+	public DiscordEmbedBuilder GetBuilder() => builder;
 
     public async Task<DiscordMessage> Build()
     {

@@ -32,9 +32,4 @@ public class Scheduler
             }
         }
     }
-
-    internal static void RegisterScheduler(string v, Task task, TimeSpan timeSpan)
-    {
-        throw new NotImplementedException();
-    }
 }

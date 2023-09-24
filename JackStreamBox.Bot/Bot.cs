@@ -29,6 +29,7 @@ using JackStreamBox.Bot.Logic.Commands._Helper.Ascii;
 using JackStreamBox.Bot.Logic.Scheduled.Overwatch;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.XP;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Screenshot;
+using JackStreamBox.Bot.Logic.Scheduled.AliveMessage;
 
 namespace JackStreamBox.Bot
 {
@@ -195,17 +196,24 @@ namespace JackStreamBox.Bot
             Console.WriteLine("Setting up - Scheduler");
             XPStore.LoadData();
             OverwatchVC.guildId = 697504479834275898;
-            Scheduler.RegisterScheduler("XPDistribution", async () =>
-            {
-                await OverwatchVC.DistributeXP();
-            }, TimeSpan.FromMinutes(BotData.ReadData(BotVals.XP_TIME,15)));
+
+            RegisterScheduledCommands();
 
             await Task.Delay(-1);
         }
 
-        private Task OnClientReady(ReadyEventArgs e)
-        {
-            return Task.CompletedTask;
-        }
+		private void RegisterScheduledCommands()
+		{
+			Scheduler.RegisterScheduler("XPDistribution", async () =>
+			{
+				await OverwatchVC.DistributeXP();
+			}, TimeSpan.FromMinutes(BotData.ReadData(BotVals.XP_TIME, 15)));
+
+			Scheduler.RegisterScheduler("AliveCall", async () =>
+			{
+				await AliveCall.CheckIfNeeded();
+			}, TimeSpan.FromMinutes(BotData.ReadData(BotVals.ALIVE_TIME, 60)));
+		}
+
     }
 }
