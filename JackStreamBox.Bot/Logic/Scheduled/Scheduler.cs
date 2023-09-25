@@ -13,7 +13,7 @@ public class Scheduler
             action.Invoke();
         };
 
-        Timer timer = new Timer(callback, null, TimeSpan.Zero, interval);
+        Timer timer = new Timer(callback, null, interval, interval);
 
         lock (timers)
         {
@@ -27,9 +27,10 @@ public class Scheduler
         {
             if (timers.ContainsKey(key))
             {
-                timers[key].Dispose();
-                timers.Remove(key);
-            }
+				Timer timer = timers[key];
+				timer.Dispose(); // This stops the timer and releases associated resources
+				timers.Remove(key); // Remove the timer from the dictionary
+			}
         }
     }
 }
