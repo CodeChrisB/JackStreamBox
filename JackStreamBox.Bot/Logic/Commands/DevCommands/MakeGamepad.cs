@@ -18,4 +18,5 @@ namespace JackStreamBox.Bot.Logic.Commands.DevCommands
 		public async Task Update(CommandContext context)
 		{
 		}
+	}
 }
