@@ -59,5 +59,6 @@ After a game players can vote for the next game, after the voting the next game 
 |--------------|--------------------|
 | **!close**| Will close the bot. Use in emergency such as the bot streaming a wrong window.|
 | **!dev**| Show developer commands|
+| **!gamepad**| Creates the buttons|
 | **!toggle**| Toggle the whole bot, used for debugging without needing to access the server.|
 | **!update**| Update the bot|

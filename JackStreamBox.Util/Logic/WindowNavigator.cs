@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace JackStreamBox.Util.logic
 {
@@ -20,7 +22,8 @@ namespace JackStreamBox.Util.logic
 
         public static string WindowName {get;private set;}
         public static Process GameProcess { get;private set;}
-        public static Process DiscordProcess { get; private set; }
+        public static Process CustomGameProcess { get;private set; }
+		public static Process DiscordProcess { get; private set; }
 
         public static void SetWindow(string windowName)
         {
@@ -35,8 +38,29 @@ namespace JackStreamBox.Util.logic
             Process[] ps = Process.GetProcessesByName("Discord");
             DiscordProcess = ps.FirstOrDefault();
         }
+		public static void SetCustomGame(string name)
+		{
+			Process[] ps = Process.GetProcessesByName(name);
+			CustomGameProcess = ps.FirstOrDefault();
+		}
+		public static bool SendCustomGameInput(string key,int holdTime)
+		{
+			if (CustomGameProcess == null) return false;
 
-        public static bool SendGameInput(String input)
+			//bring the window to the foreground
+			IntPtr h = CustomGameProcess.MainWindowHandle;
+			SetForegroundWindow(h);
+
+		    SendKeys.SendWait("{A}");
+
+			Thread.Sleep(holdTime);
+
+			SendKeys.SendWait("{" + key + " up}");
+
+			return true;
+		}
+
+		public static bool SendGameInput(String input)
         {
             
             if (GameProcess == null) SetDiscord();

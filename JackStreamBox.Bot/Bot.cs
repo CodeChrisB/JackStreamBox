@@ -129,9 +129,10 @@ namespace JackStreamBox.Bot
             Commands.RegisterCommands<MenuCommand>();
             Commands.RegisterCommands<XPStaffCommand>();
             Commands.RegisterCommands<ScreenshotCommand>();
+            Commands.RegisterCommands<MakeGamepad>();
 
-            //Slash Commands
-            Slash.RegisterCommands<HelpSlash>();
+			//Slash Commands
+			Slash.RegisterCommands<HelpSlash>();
             Slash.RegisterCommands<PackSlash>();
             Slash.RegisterCommands<ReportSlash>();
             Slash.RegisterCommands<VoteSlash>();
@@ -165,10 +166,12 @@ namespace JackStreamBox.Bot
             BotCommand.Register<ShowModCommand>();
             BotCommand.Register<DailyQuestionCommand>();
             BotCommand.Register<XPStaffCommand>();
+			BotCommand.Register<MakeGamepad>();
 
 
-            //Generate Command Markdown
-            Console.WriteLine("Generator - Check for changes in Commands");
+
+			//Generate Command Markdown
+			Console.WriteLine("Generator - Check for changes in Commands");
 
             await BotCommand.GenerateMarkdown();
 

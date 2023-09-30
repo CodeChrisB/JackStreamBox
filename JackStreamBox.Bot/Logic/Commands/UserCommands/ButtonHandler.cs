@@ -2,6 +2,7 @@
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JackStreamBox.Bot.Logic.Commands._Helper;
+using JackStreamBox.Bot.Logic.Commands.UserCommands.Gamepad;
 using JackStreamBox.Bot.Logic.Commands.UserCommands.Voting;
 using JackStreamBox.Bot.Logic.Config;
 using JackStreamBox.Bot.Logic.Config.ExtensionMethods;
@@ -19,14 +20,15 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
     {
         internal static async Task OnInteraction(DiscordClient s, ComponentInteractionCreateEventArgs e)
         {
+            string id = e.Id;
+			if (id.StartsWith("gamepad")) GamepadLogic.OnGamePadClick(id);
 
             CustomContext context = e.ToCustomContext();
             if (!CommandLevel.CanExecuteCommand(context, PermissionRole.ANYONE)) return;
 
             await e.Interaction.CreateResponseAsync(InteractionResponseType.DeferredMessageUpdate);
-            string id = e.Id;
 
-            DateTime dt = e.Interaction.CreationTimestamp.DateTime;
+			DateTime dt = e.Interaction.CreationTimestamp.DateTime;
 
             switch(id)
             {
@@ -49,9 +51,9 @@ namespace JackStreamBox.Bot.Logic.Commands.UserCommands
                 case ButtonId.VOTE5:
                     VoteLogic.OnGameVote(context, id);
                     break;
-
-
             }
+
+           
         }
     }
 }

@@ -112,21 +112,7 @@ namespace JackStreamBox.Bot.Logic.Scheduled.Overwatch
 
             }
             anyChange = true;
-            LogAddXP(sb.ToString());
         }
-
-        private static async void LogAddXP(string message)
-        {
-            var guild = await Bot.Client.GetGuildAsync(guildId);
-
-            if (guildId > 0)
-            {
-                DiscordChannel channel = guild.GetChannel(ChannelId.LogChannel);
-                await channel.SendMessageAsync(message);
-            }
-        }
-
-
 
         internal static Task VoiceStateUpdatedAsync(DiscordClient sender, VoiceStateUpdateEventArgs args)
         {
